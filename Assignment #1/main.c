@@ -60,10 +60,13 @@ int sumOfOddPlace( int64_t number )
 //Return if the card number is valid 
 int isValid(int64_t number)
 {
-	// TODO: Finish this function.
 	int m_sumOfDoubleEvenPlace;
 	int m_sumOfOddPlace;
-	int firstTwoNumber = getPrefix(number, 2);
+    int size;
+    int firstTwoNumber = getPrefix(number, 2);
+    size = getSize(number);
+    if (size < 13) return FALSE;
+    if (size > 16) return FALSE;
 	// Check if the prefix meets the assertion.
 	if (firstTwoNumber != 37 ) // For American Express cards
 	{
