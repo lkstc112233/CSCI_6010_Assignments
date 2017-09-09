@@ -8,7 +8,6 @@
 #ifndef Symbol_hpp
 #define Symbol_hpp
 
-#include <stdio.h>
 #include <string>
 #include <iostream>
 

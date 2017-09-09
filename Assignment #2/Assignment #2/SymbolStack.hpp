@@ -8,7 +8,6 @@
 #ifndef SymbolStack_hpp
 #define SymbolStack_hpp
 
-#include <stdio.h>
 #include "Symbol.hpp"
 
 /* This stack could be a template.

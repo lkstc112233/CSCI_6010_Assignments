@@ -8,7 +8,6 @@
 #ifndef LexicalAnalyser_hpp
 #define LexicalAnalyser_hpp
 
-#include <stdio.h>
 #include <iostream>
 #include "Symbol.hpp"
 
