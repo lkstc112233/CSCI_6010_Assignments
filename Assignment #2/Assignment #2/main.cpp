@@ -50,6 +50,8 @@ void machineTest()
             cout << endl;
             machine.compile(inputs);
             cout << machine.getCompiledExpression() << endl;
+            cout << "Result:" << machine.evaluateExpression() << endl;
+            
             inputs.clear();
         }
         else

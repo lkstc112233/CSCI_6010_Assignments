@@ -13,6 +13,27 @@
 #include "SymbolStack.hpp"
 
 namespace Assignment2 {
+    CSymbol operate(CSymbol operand1, CSymbol operand2, EOperatorType ot)
+    {
+        CSymbol result;
+        switch (ot)
+        {
+            case ADD:
+                // TODO: convert on floating!!!
+                result.setSymbol(operand1.getAdditionalInformation().m_integer +
+                                 operand2.getAdditionalInformation().m_integer);
+                break;
+            case SUB:
+                // TODO: convert on floating!!!
+                result.setSymbol(operand1.getAdditionalInformation().m_integer -
+                                 operand2.getAdditionalInformation().m_integer);
+                break;
+            default:
+                throw CSymbol();
+        }
+        return result;
+    }
+    
     void CExpressionMachine::compile(std::deque<CSymbol>& line)
     {
         if (compiledExpression.size())
@@ -53,7 +74,40 @@ namespace Assignment2 {
     
     CSymbol CExpressionMachine::evaluateExpression()
     {
-        return CSymbol();
+        CStackForSymbol stack;
+        for (CSymbol sym : compiledExpression)
+        {
+            CSymbol operand1;
+            CSymbol operand2;
+            
+            switch (sym.getType()) {
+                case FLOATING:
+                case INTEGER:
+                case VARIABLE:
+                    stack.push(sym);
+                    break;
+                case OPERATOR:
+                    switch (sym.getAdditionalInformation().m_operator) {
+                        case ADD:
+                        case SUB:
+                            operand2 = stack.pop();
+                            operand1 = stack.pop();
+                            stack.push(operate(operand1,
+                                               operand2,
+                                               sym.getAdditionalInformation().m_operator)
+                                       );
+                            break;
+                        default:
+                            break;
+                    }
+                default:
+                    break;
+            }
+        }
+        auto result = stack.pop();
+        if (!stack.empty())
+            throw CSymbol();
+        return result;
     }
     
 }
