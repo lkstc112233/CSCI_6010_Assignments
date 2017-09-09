@@ -6,9 +6,13 @@
 //
 
 #include <iostream>
+#include "Symbol.hpp"
 
 int main(int argc, const char * argv[]) {
     // insert code here...
+    
+    Assignment2::CSymbol sym;
+    
     std::cout << "Hello, World!\n";
     return 0;
 }

@@ -13,13 +13,31 @@
 namespace Assignment2 {
     enum ESymbolType
     {
-        NUMBER,
-        
+        INTEGER,
+        FLOATING,
+        OPERATOR,
+        VARIABLE,
+    };
+    
+    enum EOperatorType
+    {
+        ADD, // A + B
+        SUB, // A - B
+    };
+    
+    union UAdditionInformation
+    {
+        __int64_t m_integer;
+        double m_floating;
+        EOperatorType m_operator;
+        char* m_variable;     // Variable Name
     };
     
     class CSymbol
     {
-        
+    private:
+        ESymbolType type;
+        UAdditionInformation information;
     };
 }
 

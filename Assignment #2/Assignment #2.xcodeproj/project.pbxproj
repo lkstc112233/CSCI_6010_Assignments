@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0ACD9F811F63663800D8927A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD9F801F63663800D8927A /* main.cpp */; };
 		0ACD9F891F63667900D8927A /* Symbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD9F871F63667900D8927A /* Symbol.cpp */; };
+		0ACD9F8C1F636ECC00D8927A /* LexicalAnalyser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD9F8A1F636ECC00D8927A /* LexicalAnalyser.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,6 +29,8 @@
 		0ACD9F801F63663800D8927A /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		0ACD9F871F63667900D8927A /* Symbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Symbol.cpp; sourceTree = "<group>"; };
 		0ACD9F881F63667900D8927A /* Symbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Symbol.hpp; sourceTree = "<group>"; };
+		0ACD9F8A1F636ECC00D8927A /* LexicalAnalyser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LexicalAnalyser.cpp; sourceTree = "<group>"; };
+		0ACD9F8B1F636ECC00D8927A /* LexicalAnalyser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LexicalAnalyser.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +66,8 @@
 				0ACD9F801F63663800D8927A /* main.cpp */,
 				0ACD9F871F63667900D8927A /* Symbol.cpp */,
 				0ACD9F881F63667900D8927A /* Symbol.hpp */,
+				0ACD9F8A1F636ECC00D8927A /* LexicalAnalyser.cpp */,
+				0ACD9F8B1F636ECC00D8927A /* LexicalAnalyser.hpp */,
 			);
 			path = "Assignment #2";
 			sourceTree = "<group>";
@@ -126,6 +131,7 @@
 			files = (
 				0ACD9F811F63663800D8927A /* main.cpp in Sources */,
 				0ACD9F891F63667900D8927A /* Symbol.cpp in Sources */,
+				0ACD9F8C1F636ECC00D8927A /* LexicalAnalyser.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
