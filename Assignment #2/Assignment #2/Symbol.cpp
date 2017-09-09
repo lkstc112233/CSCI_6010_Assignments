@@ -13,6 +13,7 @@ namespace Assignment2 {
     SAdditionInformation::SAdditionInformation() {}
     SAdditionInformation::SAdditionInformation(EOperatorType ot) { m_operator = ot; }
     SAdditionInformation::SAdditionInformation(__int64_t integer) { m_integer = integer; }
+    SAdditionInformation::SAdditionInformation(std::string vin) { m_variable = vin; }
     
     std::ostream& operator<<(std::ostream &ost, const CSymbol& in)
     {

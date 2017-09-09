@@ -10,6 +10,15 @@
 #include <sstream>
 
 namespace Assignment2 {
+    EOperatorType getOT(std::string input)
+    {
+        if (input == "quit")
+            return QUIT;
+        if (input == "exit")
+            return QUIT;
+        return NOTMATCH;
+    }
+    
     CLexicalAnalyser::CLexicalAnalyser(std::istream& ist)
         : inputStream(ist)
     {
@@ -34,13 +43,15 @@ namespace Assignment2 {
     {
         CSymbol result;
         std::string buffer;
-        while (isdigit(inputStream.peek()))
+        do
+        {
             buffer += inputStream.get();
-        std::stringstream converter;
-        converter << buffer;
-        __int64_t conv;
-        converter >> conv;
-        result.setSymbol(conv);
+        }while(isalnum(inputStream.peek()));
+        auto checker = getOT(buffer);
+        if (checker != NOTMATCH)
+            result.setSymbol(OPERATOR, checker);
+        else
+            result.setSymbol(VARIABLE, buffer);
         return result;
     }
     
