@@ -23,6 +23,7 @@ namespace Assignment2 {
     enum EOperatorType
     {
         NOTMATCH, // Indicates if something is not an operator.
+        NEWLINE,
         
         ADD, // A + B
         SUB, // A - B

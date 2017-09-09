@@ -36,6 +36,9 @@ namespace Assignment2 {
                     case SUB:
                         ost << "-";
                         break;
+                    case NEWLINE:
+                        ost << std::endl;
+                        break;
                     default:
                         break;
                 }

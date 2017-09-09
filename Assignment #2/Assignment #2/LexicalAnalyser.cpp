@@ -61,7 +61,11 @@ namespace Assignment2 {
         int nextChar = inputStream.peek();
         while (isspace(nextChar))
         {
-            inputStream.get();
+            if (inputStream.get() == '\n')
+            {
+                result.setSymbol(OPERATOR, NEWLINE);
+                return result;
+            }
             nextChar = inputStream.peek();
         }
         switch (nextChar)

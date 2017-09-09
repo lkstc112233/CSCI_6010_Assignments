@@ -6,6 +6,8 @@
 //
 
 #include <iostream>
+#include <deque>
+#include "ExpressionMachine.hpp"
 #include "LexicalAnalyser.hpp"
 
 using std::cout;
@@ -31,10 +33,34 @@ void engineTest()
     }
 }
 
+void machineTest()
+{
+    Assignment2::CLexicalAnalyser engine(std::cin);
+    Assignment2::CExpressionMachine machine;
+    
+    std::deque<Assignment2::CSymbol> inputs;
+    while (true)
+    {
+        auto c = engine.getNextToken();
+        if (c.getType() == Assignment2::OPERATOR
+            && c.getAdditionalInformation().m_operator == Assignment2::NEWLINE)
+        {
+            for (auto c : inputs)
+                cout << c << " ";
+            cout << endl;
+            machine.compile(inputs);
+            cout << machine.getCompiledExpression() << endl;
+            inputs.clear();
+        }
+        else
+            inputs.push_back(c);
+    }
+}
+
 int main(int argc, const char * argv[]) {
     // insert code here...
     
-    engineTest();
+    machineTest();
     
     return 0;
 }

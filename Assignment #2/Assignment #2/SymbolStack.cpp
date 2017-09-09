@@ -50,4 +50,9 @@ namespace Assignment2 {
         --m_size;
         return result;
     }
+    
+    bool CStackForSymbol::empty()
+    {
+        return m_size == 0;
+    }
 }
