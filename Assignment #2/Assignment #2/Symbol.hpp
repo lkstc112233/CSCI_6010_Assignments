@@ -22,13 +22,20 @@ namespace Assignment2 {
     
     enum EOperatorType
     {
-        NOTMATCH, // Indicates if something is not an operator.
+        // Controlling Symbols
+        NOTMATCH = 0, // Indicates if something is not an operator.
         NEWLINE,
+        QUIT, // Quits main loop somehow.
         
-        ADD, // A + B
+        LEFT_BRACKET,
+        RIGHT_BRACKET,
+        
+        ADD = 0x100, // A + B
         SUB, // A - B
         
-        QUIT, // Quits main loop somehow.
+        MULTIPLY = 0x200,
+        DIVISION,
+        
     };
     
     struct SAdditionInformation

@@ -13,6 +13,12 @@
 #include "SymbolStack.hpp"
 
 namespace Assignment2 {
+    bool morePriority(EOperatorType ot1, EOperatorType ot2)
+    {
+        return (ot1 >> 8) > (ot2 >> 8);
+    }
+    
+    
     CSymbol operate(CSymbol operand1, CSymbol operand2, EOperatorType ot)
     {
         CSymbol result;
@@ -26,6 +32,18 @@ namespace Assignment2 {
             case SUB:
                 // TODO: convert on floating!!!
                 result.setSymbol(operand1.getAdditionalInformation().m_integer -
+                                 operand2.getAdditionalInformation().m_integer);
+                break;
+            case MULTIPLY:
+                // TODO: convert on floating!!!
+                result.setSymbol(operand1.getAdditionalInformation().m_integer *
+                                 operand2.getAdditionalInformation().m_integer);
+                break;
+            case DIVISION:
+                // TODO: convert on floating!!!
+                if (operand2.getAdditionalInformation().m_integer == 0)
+                    throw CSymbol();
+                result.setSymbol(operand1.getAdditionalInformation().m_integer /
                                  operand2.getAdditionalInformation().m_integer);
                 break;
             default:
@@ -44,11 +62,16 @@ namespace Assignment2 {
         {
             switch (symbol.getType()) {
                 case OPERATOR:
-                    while (!stack.empty())
+                    if (symbol.getAdditionalInformation().m_operator == RIGHT_BRACKET)
                     {
-                        //if (stack.top()) // Priority check.
-                        compiledExpression.push_back(stack.pop());
+                        while (stack.top().getAdditionalInformation().m_operator != LEFT_BRACKET)
+                            compiledExpression.push_back(stack.pop());
+                        stack.pop();
                     }
+                    else if (symbol.getAdditionalInformation().m_operator != LEFT_BRACKET)
+                        // Priority check.
+                        while (!stack.empty() && !morePriority(symbol.getAdditionalInformation().m_operator,stack.top().getAdditionalInformation().m_operator))
+                            compiledExpression.push_back(stack.pop());
                     stack.push(symbol);
                     break;
                 case INTEGER:
@@ -90,6 +113,8 @@ namespace Assignment2 {
                     switch (sym.getAdditionalInformation().m_operator) {
                         case ADD:
                         case SUB:
+                        case MULTIPLY:
+                        case DIVISION:
                             operand2 = stack.pop();
                             operand1 = stack.pop();
                             stack.push(operate(operand1,

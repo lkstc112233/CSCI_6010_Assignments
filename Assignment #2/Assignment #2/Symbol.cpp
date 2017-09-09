@@ -36,6 +36,18 @@ namespace Assignment2 {
                     case SUB:
                         ost << "-";
                         break;
+                    case MULTIPLY:
+                        ost << "*";
+                        break;
+                    case DIVISION:
+                        ost << "/";
+                        break;
+                    case LEFT_BRACKET:
+                        ost << "(";
+                        break;
+                    case RIGHT_BRACKET:
+                        ost << ")";
+                        break;
                     case NEWLINE:
                         ost << std::endl;
                         break;

@@ -81,6 +81,22 @@ namespace Assignment2 {
                 result.setSymbol(OPERATOR, SUB);
                 inputStream.get();
                 break;
+            case '*':
+                result.setSymbol(OPERATOR, MULTIPLY);
+                inputStream.get();
+                break;
+            case '/':
+                result.setSymbol(OPERATOR, DIVISION);
+                inputStream.get();
+                break;
+            case '(':
+                result.setSymbol(OPERATOR, LEFT_BRACKET);
+                inputStream.get();
+                break;
+            case ')':
+                result.setSymbol(OPERATOR, RIGHT_BRACKET);
+                inputStream.get();
+                break;
             default:
                 if (isdigit(nextChar))
                     return formDigit();
