@@ -10,7 +10,36 @@
 
 namespace Assignment2 {
     
-    UAdditionInformation::UAdditionInformation() { memset(this, 0, sizeof(UAdditionInformation)); }
-    UAdditionInformation::UAdditionInformation(EOperatorType ot) { m_operator = ot; }
-    UAdditionInformation::UAdditionInformation(__int64_t integer) { m_integer = integer; }
+    SAdditionInformation::SAdditionInformation() {}
+    SAdditionInformation::SAdditionInformation(EOperatorType ot) { m_operator = ot; }
+    SAdditionInformation::SAdditionInformation(__int64_t integer) { m_integer = integer; }
+    
+    std::ostream& operator<<(std::ostream &ost, const CSymbol& in)
+    {
+        switch (in.getType())
+        {
+            case INTEGER:
+                ost << in.getAdditionalInformation().m_integer;
+                break;
+            case FLOATING:
+                ost << in.getAdditionalInformation().m_floating;
+                break;
+            case VARIABLE:
+                ost << in.getAdditionalInformation().m_variable;
+                break;
+            case OPERATOR:
+                switch (in.getAdditionalInformation().m_operator) {
+                    case ADD:
+                        ost << "+";
+                        break;
+                    case SUB:
+                        ost << "-";
+                        break;
+                    default:
+                        break;
+                }
+        }
+        return ost;
+    }
+    
 }

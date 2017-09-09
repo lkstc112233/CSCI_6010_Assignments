@@ -20,6 +20,9 @@ namespace Assignment2 {
     public:
         CLexicalAnalyser(std::istream& ist);
         CSymbol getNextToken();
+    private:
+        CSymbol formDigit();
+        CSymbol formString();
     };
 }
 

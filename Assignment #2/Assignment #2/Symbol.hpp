@@ -9,6 +9,8 @@
 #define Symbol_hpp
 
 #include <stdio.h>
+#include <string>
+#include <iostream>
 
 namespace Assignment2 {
     enum ESymbolType
@@ -27,30 +29,33 @@ namespace Assignment2 {
         QUIT, // Quits main loop somehow.
     };
     
-    union UAdditionInformation
+    struct SAdditionInformation
     {
-        UAdditionInformation();
-        UAdditionInformation(EOperatorType ot);
-        UAdditionInformation(__int64_t ot);
+        SAdditionInformation();
+        SAdditionInformation(EOperatorType ot);
+        SAdditionInformation(__int64_t ot);
         
         __int64_t m_integer;
         double m_floating;
         EOperatorType m_operator;
-        char* m_variable;     // Variable Name
+        std::string m_variable;     // Variable Name
     };
     
     class CSymbol
     {
     private:
         ESymbolType type;
-        UAdditionInformation information;
+        SAdditionInformation information;
     public:
         ESymbolType getType() const {return type;}
-        UAdditionInformation getAdditionalInformation() const {return information;}
-        void setSymbol(ESymbolType typeIn, UAdditionInformation informationIn) { type = typeIn; information = informationIn;}
+        const SAdditionInformation& getAdditionalInformation() const {return information;}
+        void setSymbol(ESymbolType typeIn, SAdditionInformation informationIn) { type = typeIn; information = informationIn;}
         void setSymbol(__int64_t valueIn){type = INTEGER; information.m_integer = valueIn;}
         void setSymbol(double valueIn){type = FLOATING; information.m_integer = valueIn;}
     };
+    
+    std::ostream& operator<<(std::ostream&, const CSymbol& in);
+    
 }
 
 

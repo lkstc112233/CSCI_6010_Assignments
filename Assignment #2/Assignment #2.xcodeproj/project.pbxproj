@@ -10,6 +10,7 @@
 		0ACD9F811F63663800D8927A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD9F801F63663800D8927A /* main.cpp */; };
 		0ACD9F891F63667900D8927A /* Symbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD9F871F63667900D8927A /* Symbol.cpp */; };
 		0ACD9F8C1F636ECC00D8927A /* LexicalAnalyser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD9F8A1F636ECC00D8927A /* LexicalAnalyser.cpp */; };
+		0ACD9F8F1F64558300D8927A /* SymbolStack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD9F8D1F64558300D8927A /* SymbolStack.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,6 +32,8 @@
 		0ACD9F881F63667900D8927A /* Symbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Symbol.hpp; sourceTree = "<group>"; };
 		0ACD9F8A1F636ECC00D8927A /* LexicalAnalyser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LexicalAnalyser.cpp; sourceTree = "<group>"; };
 		0ACD9F8B1F636ECC00D8927A /* LexicalAnalyser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LexicalAnalyser.hpp; sourceTree = "<group>"; };
+		0ACD9F8D1F64558300D8927A /* SymbolStack.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SymbolStack.cpp; sourceTree = "<group>"; };
+		0ACD9F8E1F64558300D8927A /* SymbolStack.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SymbolStack.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +71,8 @@
 				0ACD9F881F63667900D8927A /* Symbol.hpp */,
 				0ACD9F8A1F636ECC00D8927A /* LexicalAnalyser.cpp */,
 				0ACD9F8B1F636ECC00D8927A /* LexicalAnalyser.hpp */,
+				0ACD9F8D1F64558300D8927A /* SymbolStack.cpp */,
+				0ACD9F8E1F64558300D8927A /* SymbolStack.hpp */,
 			);
 			path = "Assignment #2";
 			sourceTree = "<group>";
@@ -129,6 +134,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0ACD9F8F1F64558300D8927A /* SymbolStack.cpp in Sources */,
 				0ACD9F811F63663800D8927A /* main.cpp in Sources */,
 				0ACD9F891F63667900D8927A /* Symbol.cpp in Sources */,
 				0ACD9F8C1F636ECC00D8927A /* LexicalAnalyser.cpp in Sources */,

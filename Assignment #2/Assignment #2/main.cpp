@@ -6,13 +6,35 @@
 //
 
 #include <iostream>
-#include "Symbol.hpp"
+#include "LexicalAnalyser.hpp"
+
+using std::cout;
+using std::endl;
+
+void engineTest()
+{
+    Assignment2::CLexicalAnalyser engine(std::cin);
+    
+    while (true)
+    {
+        auto c = engine.getNextToken();
+        switch (c.getType()) {
+            case Assignment2::OPERATOR:
+                cout << "Operator: " << c << endl;
+                break;
+            case Assignment2::INTEGER:
+                cout << "Integer: " << c << endl;
+                break;
+            default:
+                break;
+        }
+    }
+}
 
 int main(int argc, const char * argv[]) {
     // insert code here...
     
-    Assignment2::CSymbol sym;
+    engineTest();
     
-    std::cout << "Hello, World!\n";
     return 0;
 }
