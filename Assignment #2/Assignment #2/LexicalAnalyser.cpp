@@ -28,14 +28,36 @@ namespace Assignment2 {
     CSymbol CLexicalAnalyser::formDigit()
     {
         CSymbol result;
+        bool isFloating = false;
         std::string buffer;
         while (isdigit(inputStream.peek()))
             buffer += inputStream.get();
+        if (inputStream.peek() == '.')
+        {
+            isFloating = true;
+            buffer += inputStream.get();
+            while (isdigit(inputStream.peek()))
+                buffer += inputStream.get();
+        }
+        if (buffer == ".")
+        {
+            result.setSymbol(OPERATOR, DOT);
+            return result;
+        }
         std::stringstream converter;
         converter << buffer;
-        __int64_t conv;
-        converter >> conv;
-        result.setSymbol(conv);
+        if (isFloating)
+        {
+            floating_type conv;
+            converter >> conv;
+            result.setSymbol(conv);
+        }
+        else
+        {
+            integer_type conv;
+            converter >> conv;
+            result.setSymbol(conv);
+        }
         return result;
     }
     
@@ -87,6 +109,14 @@ namespace Assignment2 {
                 break;
             case '/':
                 result.setSymbol(OPERATOR, DIVISION);
+                inputStream.get();
+                break;
+            case '%':
+                result.setSymbol(OPERATOR, MOD);
+                inputStream.get();
+                break;
+            case '^':
+                result.setSymbol(OPERATOR, POWER);
                 inputStream.get();
                 break;
             case '(':

@@ -9,6 +9,7 @@
 #include <deque>
 #include "ExpressionMachine.hpp"
 #include "LexicalAnalyser.hpp"
+#include "Exceptions.hpp"
 
 using std::cout;
 using std::endl;
@@ -41,12 +42,14 @@ void machineTest()
     std::deque<Assignment2::CSymbol> inputs;
     while (true)
     {
+        try
+        {
         auto c = engine.getNextToken();
         if (c.getType() == Assignment2::OPERATOR
             && c.getAdditionalInformation().m_operator == Assignment2::NEWLINE)
         {
             for (auto c : inputs)
-                cout << c << " ";
+                cout << c;
             cout << endl;
             machine.compile(inputs);
             cout << machine.getCompiledExpression() << endl;
@@ -56,6 +59,26 @@ void machineTest()
         }
         else
             inputs.push_back(c);
+        }
+        catch(Assignment2::NeedToExitException)
+        {
+            break;
+        }
+        catch(Assignment2::SyntaxErrorException)
+        {
+            std::cerr << "Syntax error." << endl;
+            inputs.clear();
+        }
+        catch(Assignment2::MathErrorException)
+        {
+            std::cerr << "Math error." << endl;
+            inputs.clear();
+        }
+        catch(Assignment2::UnexpectedOperatorException)
+        {
+            std::cerr << "Unexpected Operation" << endl;
+            inputs.clear();
+        }
     }
 }
 

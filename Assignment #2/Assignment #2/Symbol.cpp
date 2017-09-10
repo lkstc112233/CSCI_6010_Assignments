@@ -12,7 +12,7 @@ namespace Assignment2 {
     
     SAdditionInformation::SAdditionInformation() {}
     SAdditionInformation::SAdditionInformation(EOperatorType ot) { m_operator = ot; }
-    SAdditionInformation::SAdditionInformation(__int64_t integer) { m_integer = integer; }
+    SAdditionInformation::SAdditionInformation(integer_type integer) { m_integer = integer; }
     SAdditionInformation::SAdditionInformation(std::string vin) { m_variable = vin; }
     
     std::ostream& operator<<(std::ostream &ost, const CSymbol& in)
@@ -56,6 +56,34 @@ namespace Assignment2 {
                 }
         }
         return ost;
+    }
+    
+    integer_type CSymbol::toInteger()
+    {
+        switch (getType()) {
+            case INTEGER:
+                return getAdditionalInformation().m_integer;
+            case FLOATING:
+                return getAdditionalInformation().m_floating;
+            case OPERATOR:
+            case VARIABLE:
+            default:
+                return 0;
+        }
+    }
+    
+    floating_type CSymbol::toFloating()
+    {
+        switch (getType()) {
+            case INTEGER:
+                return getAdditionalInformation().m_integer;
+            case FLOATING:
+                return getAdditionalInformation().m_floating;
+            case OPERATOR:
+            case VARIABLE:
+            default:
+                return 0;
+        }
     }
     
 }

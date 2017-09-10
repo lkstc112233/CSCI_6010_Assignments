@@ -12,6 +12,7 @@
 		0ACD9F8C1F636ECC00D8927A /* LexicalAnalyser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD9F8A1F636ECC00D8927A /* LexicalAnalyser.cpp */; };
 		0ACD9F8F1F64558300D8927A /* SymbolStack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD9F8D1F64558300D8927A /* SymbolStack.cpp */; };
 		0ACD9F951F64658300D8927A /* ExpressionMachine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD9F931F64658300D8927A /* ExpressionMachine.cpp */; };
+		0ACD9F981F65DA1300D8927A /* Exceptions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD9F961F65DA1300D8927A /* Exceptions.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -37,6 +38,8 @@
 		0ACD9F8E1F64558300D8927A /* SymbolStack.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SymbolStack.hpp; sourceTree = "<group>"; };
 		0ACD9F931F64658300D8927A /* ExpressionMachine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExpressionMachine.cpp; sourceTree = "<group>"; };
 		0ACD9F941F64658300D8927A /* ExpressionMachine.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExpressionMachine.hpp; sourceTree = "<group>"; };
+		0ACD9F961F65DA1300D8927A /* Exceptions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Exceptions.cpp; sourceTree = "<group>"; };
+		0ACD9F971F65DA1300D8927A /* Exceptions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Exceptions.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +81,8 @@
 				0ACD9F8E1F64558300D8927A /* SymbolStack.hpp */,
 				0ACD9F931F64658300D8927A /* ExpressionMachine.cpp */,
 				0ACD9F941F64658300D8927A /* ExpressionMachine.hpp */,
+				0ACD9F961F65DA1300D8927A /* Exceptions.cpp */,
+				0ACD9F971F65DA1300D8927A /* Exceptions.hpp */,
 			);
 			path = "Assignment #2";
 			sourceTree = "<group>";
@@ -144,6 +149,7 @@
 				0ACD9F891F63667900D8927A /* Symbol.cpp in Sources */,
 				0ACD9F8C1F636ECC00D8927A /* LexicalAnalyser.cpp in Sources */,
 				0ACD9F951F64658300D8927A /* ExpressionMachine.cpp in Sources */,
+				0ACD9F981F65DA1300D8927A /* Exceptions.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

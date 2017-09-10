@@ -12,6 +12,10 @@
 #include <iostream>
 
 namespace Assignment2 {
+    typedef __int64_t integer_type;
+    typedef double floating_type;
+    
+    
     enum ESymbolType
     {
         INTEGER,
@@ -30,23 +34,29 @@ namespace Assignment2 {
         LEFT_BRACKET,
         RIGHT_BRACKET,
         
-        ADD = 0x100, // A + B
-        SUB, // A - B
+        DOT,                // I have no idea how to use this symbol yet.
         
-        MULTIPLY = 0x200,
-        DIVISION,
+        ASSIGNMENT = 0x100, // =
         
+        ADD = 0x200,        // +
+        SUB,                // -
+        
+        MULTIPLY = 0x300,   // *
+        DIVISION,           // /
+        MOD,                // %
+        
+        POWER = 0x400,      // ^
     };
     
     struct SAdditionInformation
     {
         SAdditionInformation();
         SAdditionInformation(EOperatorType ot);
-        SAdditionInformation(__int64_t ot);
+        SAdditionInformation(integer_type ot);
         SAdditionInformation(std::string ot);
         
-        __int64_t m_integer;
-        double m_floating;
+        integer_type m_integer;
+        floating_type m_floating;
         EOperatorType m_operator;
         std::string m_variable;     // Variable Name
     };
@@ -60,8 +70,10 @@ namespace Assignment2 {
         ESymbolType getType() const {return type;}
         const SAdditionInformation& getAdditionalInformation() const {return information;}
         void setSymbol(ESymbolType typeIn, SAdditionInformation informationIn) { type = typeIn; information = informationIn;}
-        void setSymbol(__int64_t valueIn){type = INTEGER; information.m_integer = valueIn;}
-        void setSymbol(double valueIn){type = FLOATING; information.m_integer = valueIn;}
+        void setSymbol(integer_type valueIn){type = INTEGER; information.m_integer = valueIn;}
+        void setSymbol(floating_type valueIn){type = FLOATING; information.m_floating = valueIn;}
+        integer_type toInteger();
+        floating_type toFloating();
     };
     
     std::ostream& operator<<(std::ostream&, const CSymbol& in);

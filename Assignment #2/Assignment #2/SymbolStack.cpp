@@ -6,6 +6,7 @@
 //
 
 #include "SymbolStack.hpp"
+#include "Exceptions.hpp"
 
 namespace Assignment2 {
     CStackForSymbol::CStackForSymbol()
@@ -40,7 +41,7 @@ namespace Assignment2 {
     CSymbol& CStackForSymbol::top()
     {
         if (m_size <= 0) // Prevent this from happening!
-            throw CSymbol();
+            throw SyntaxErrorException();
         return array[m_size - 1];
     }
     
