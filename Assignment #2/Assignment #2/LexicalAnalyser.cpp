@@ -95,6 +95,10 @@ namespace Assignment2 {
             case EOF:
                 result.setSymbol(OPERATOR, QUIT);
                 break;
+            case '=':
+                result.setSymbol(OPERATOR, ASSIGNMENT);
+                inputStream.get();
+                break;
             case '+':
                 result.setSymbol(OPERATOR, ADD);
                 inputStream.get();

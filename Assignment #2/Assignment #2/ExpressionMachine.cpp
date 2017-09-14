@@ -105,7 +105,12 @@ namespace Assignment2 {
                         if (symbol.getAdditionalInformation().m_operator != LEFT_BRACKET)
                             // Priority check.
                             while (!stack.empty() && !morePriority(symbol.getAdditionalInformation().m_operator,stack.top().getAdditionalInformation().m_operator))
+                            {
+                                if (!morePriority(stack.top().getAdditionalInformation().m_operator, symbol.getAdditionalInformation().m_operator))
+                                    if (stack.top().getAdditionalInformation().m_operator & 0x100)
+                                        break;
                                 compiledExpression.push_back(stack.pop());
+                            }
                         stack.push(symbol);
                     }
                     break;
@@ -152,12 +157,18 @@ namespace Assignment2 {
                         case DIVISION:
                         case MOD:
                         case POWER:
-                            operand2 = stack.pop();
-                            operand1 = stack.pop();
+                            operand2 = stack.pop().getRValue(variablesTable);
+                            operand1 = stack.pop().getRValue(variablesTable);
                             stack.push(operate(operand1,
                                                operand2,
                                                sym.getAdditionalInformation().m_operator)
                                        );
+                            break;
+                        case ASSIGNMENT:
+                            operand2 = stack.pop().getRValue(variablesTable);
+                            operand1 = stack.pop().getLValue();
+                            variablesTable[operand1.getAdditionalInformation().m_variable] = operand2;
+                            stack.push(operand1);
                             break;
                         default:
                             break;
@@ -169,7 +180,7 @@ namespace Assignment2 {
         auto result = stack.pop();
         if (!stack.empty())
             throw SyntaxErrorException();
-        return result;
+        return result.getRValue(variablesTable);
     }
     
 }

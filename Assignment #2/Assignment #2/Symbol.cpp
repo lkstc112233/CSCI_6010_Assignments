@@ -7,6 +7,7 @@
 
 #include "Symbol.hpp"
 #include <memory>
+#include "Exceptions.hpp"
 
 namespace Assignment2 {
     
@@ -48,6 +49,15 @@ namespace Assignment2 {
                     case RIGHT_BRACKET:
                         ost << ")";
                         break;
+                    case POWER:
+                        ost << "^";
+                        break;
+                    case MOD:
+                        ost << "%";
+                        break;
+                    case ASSIGNMENT:
+                        ost << "=";
+                        break;
                     case NEWLINE:
                         ost << std::endl;
                         break;
@@ -58,7 +68,7 @@ namespace Assignment2 {
         return ost;
     }
     
-    integer_type CSymbol::toInteger()
+    integer_type CSymbol::toInteger() const
     {
         switch (getType()) {
             case INTEGER:
@@ -72,7 +82,7 @@ namespace Assignment2 {
         }
     }
     
-    floating_type CSymbol::toFloating()
+    floating_type CSymbol::toFloating() const
     {
         switch (getType()) {
             case INTEGER:
@@ -86,4 +96,19 @@ namespace Assignment2 {
         }
     }
     
+    CSymbol CSymbol::getRValue(const std::map<std::string,CSymbol>& data) const
+    {
+        if (getType() != VARIABLE)
+            return *this;
+        auto i = data.find(getAdditionalInformation().m_variable);
+        if (i != data.end())
+            return i->second.getRValue(data);
+        throw IdentifierNotFoundException();
+    }
+    CSymbol CSymbol::getLValue() const
+    {
+        if (getType() != VARIABLE)
+            throw NotValidLeftValueException();
+        return *this;
+    }
 }

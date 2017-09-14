@@ -152,6 +152,20 @@ int main(int argc, const char * argv[]) {
             if (!fromFile)
                 cout << ">> ";
         }
+        catch(Assignment2::IdentifierNotFoundException)
+        {
+            std::cerr << "Not Defined Variable" << endl;
+            inputs.clear();
+            if (!fromFile)
+                cout << ">> ";
+        }
+        catch(Assignment2::NotValidLeftValueException)
+        {
+            std::cerr << "Not Valid Variable" << endl;
+            inputs.clear();
+            if (!fromFile)
+                cout << ">> ";
+        }
     }
     return 0;
 }

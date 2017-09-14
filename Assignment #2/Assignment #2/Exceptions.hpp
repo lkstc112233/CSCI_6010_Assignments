@@ -15,6 +15,8 @@ namespace Assignment2 {
     class MathErrorException : public Exception {};
     class NeedToExitException : public Exception {};
     class UnexpectedOperatorException : public Exception {};
+    class IdentifierNotFoundException : public Exception {};
+    class NotValidLeftValueException : public Exception {};
     
 }
 

@@ -10,6 +10,7 @@
 
 #include <deque>
 #include <string>
+#include <map>
 #include "Symbol.hpp"
 
 namespace Assignment2 {
@@ -17,6 +18,7 @@ namespace Assignment2 {
     {
     private:
         std::deque<CSymbol> compiledExpression;
+        std::map<std::string, CSymbol> variablesTable;
     public:
         void compile(std::deque<CSymbol>& line);
         std::string getCompiledExpression();

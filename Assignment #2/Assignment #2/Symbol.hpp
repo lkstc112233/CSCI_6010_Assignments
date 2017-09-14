@@ -10,6 +10,7 @@
 
 #include <string>
 #include <iostream>
+#include <map>
 
 namespace Assignment2 {
     typedef __int64_t integer_type;
@@ -41,11 +42,11 @@ namespace Assignment2 {
         ADD = 0x200,        // +
         SUB,                // -
         
-        MULTIPLY = 0x300,   // *
+        MULTIPLY = 0x400,   // *
         DIVISION,           // /
         MOD,                // %
         
-        POWER = 0x400,      // ^
+        POWER = 0x600,      // ^
     };
     
     struct SAdditionInformation
@@ -72,8 +73,10 @@ namespace Assignment2 {
         void setSymbol(ESymbolType typeIn, SAdditionInformation informationIn) { type = typeIn; information = informationIn;}
         void setSymbol(integer_type valueIn){type = INTEGER; information.m_integer = valueIn;}
         void setSymbol(floating_type valueIn){type = FLOATING; information.m_floating = valueIn;}
-        integer_type toInteger();
-        floating_type toFloating();
+        integer_type toInteger() const;
+        floating_type toFloating() const;
+        CSymbol getRValue(const std::map<std::string,CSymbol>&) const;
+        CSymbol getLValue() const;
     };
     
     std::ostream& operator<<(std::ostream&, const CSymbol& in);
