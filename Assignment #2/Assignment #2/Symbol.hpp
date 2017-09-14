@@ -62,7 +62,11 @@ namespace Assignment2 {
         INTEGER_FUNCTION_CALL_BASE = 0x780,
         FUNCTION_ABS,
         
-        PI = 0x800,
+        POSITIVE = 0x900,
+        NEGATIVE,
+        
+        CONSTANTS = 0xA00,
+        PI,
         E,
     };
     

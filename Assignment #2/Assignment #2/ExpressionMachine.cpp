@@ -86,6 +86,8 @@ namespace Assignment2 {
                 return &log2;
             case FUNCTION_LN:
                 return &log;
+            case NEGATIVE:
+                return [](T i)->T{return -i;};
             default:
                 throw UnexpectedOperatorException();
         }
@@ -98,6 +100,8 @@ namespace Assignment2 {
         {
             case FUNCTION_ABS:
                 return &llabs;
+            case NEGATIVE:
+                return [](integer_type i)->integer_type{return -i;};
             default:
                 throw UnexpectedOperatorException();
         }
@@ -155,6 +159,7 @@ namespace Assignment2 {
     
     void CExpressionMachine::compile(std::deque<CSymbol>& line)
     {
+        bool operateeLast = false;
         if (compiledExpression.size())
             compiledExpression.clear();
         // Create a stack which holds the operators.
@@ -164,11 +169,20 @@ namespace Assignment2 {
             switch (symbol.getType()) {
                 case OPERATOR:
                     if (symbol.getAdditionalInformation().m_operator == QUIT) throw NeedToExitException();
+                    if (!operateeLast)
+                        if (symbol.getAdditionalInformation().m_operator == ADD || symbol.getAdditionalInformation().m_operator == SUB)
+                        {
+                            if (symbol.getAdditionalInformation().m_operator == ADD)
+                                symbol.setSymbol(OPERATOR, POSITIVE);
+                            else
+                                symbol.setSymbol(OPERATOR, NEGATIVE);
+                        }
                     if (symbol.getAdditionalInformation().m_operator == RIGHT_BRACKET)
                     {
                         while (stack.top().getAdditionalInformation().m_operator != LEFT_BRACKET)
                             compiledExpression.push_back(stack.pop());
                         stack.pop();
+                        operateeLast = true;
                     }
                     else
                     {
@@ -182,11 +196,13 @@ namespace Assignment2 {
                                 compiledExpression.push_back(stack.pop());
                             }
                         stack.push(symbol);
+                        operateeLast = symbol.getAdditionalInformation().m_operator > CONSTANTS;
                     }
                     break;
                 case INTEGER:
                 case FLOATING:
                 case VARIABLE:
+                    operateeLast = true;
                     compiledExpression.push_back(symbol);
                     break;
                 default:
@@ -250,8 +266,11 @@ namespace Assignment2 {
                         case FUNCTION_LOG2:
                         case FUNCTION_LN:
                         case FUNCTION_ABS:
+                        case NEGATIVE:
                             operand1 = stack.pop().getRValue(variablesTable);
                             stack.push(operate(operand1, sym.getAdditionalInformation().m_operator));
+                            break;
+                        case POSITIVE:
                             break;
                         case PI:
                             operand1.setSymbol(M_PI);

@@ -97,6 +97,12 @@ namespace Assignment2 {
                     case E:
                         ost << "e";
                         break;
+                    case POSITIVE:
+                        ost << "+(P)";
+                        break;
+                    case NEGATIVE:
+                        ost << "-(N)";
+                        break;
                     default:
                         break;
                 }
