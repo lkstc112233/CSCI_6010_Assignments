@@ -26,6 +26,16 @@ namespace Assignment2 {
         return (ot1 >> 8) > (ot2 >> 8);
     }
     
+    integer_type HandleInteger(integer_type int1, std::function<integer_type(integer_type)> func)
+    {
+        return func(int1);
+    }
+    
+    floating_type HandleFloating(floating_type float1, std::function<floating_type(floating_type)> func)
+    {
+        return func(float1);
+    }
+    
     integer_type HandleTwoIntegers(integer_type int1, integer_type int2, std::function<integer_type(integer_type,integer_type)> func)
     {
         return func(int1, int2);
@@ -52,7 +62,49 @@ namespace Assignment2 {
     OPERATOR_SIGNATURE(pow, op1, op2, {return pow(op1, op2);})
     
     template<typename T>
-    static std::function<T(T, T)> getApproprateFunction(EOperatorType ot)
+    static std::function<T(T)> getApproprateFunction(EOperatorType ot)
+    {
+        switch (ot)
+        {
+            case FUNCTION_ABS:
+                return &fabs;
+            case FUNCTION_SIN:
+                return &sin;
+            case FUNCTION_COS:
+                return &cos;
+            case FUNCTION_TAN:
+                return &tan;
+            case FUNCTION_ASIN:
+                return &asin;
+            case FUNCTION_ACOS:
+                return &acos;
+            case FUNCTION_ATAN:
+                return &atan;
+            case FUNCTION_LOG:
+                return &log10;
+            case FUNCTION_LOG2:
+                return &log2;
+            case FUNCTION_LN:
+                return &log;
+            default:
+                throw UnexpectedOperatorException();
+        }
+    }
+    
+    template<>
+    std::function<integer_type(integer_type)> getApproprateFunction(EOperatorType ot)
+    {
+        switch (ot)
+        {
+            case FUNCTION_ABS:
+                return &llabs;
+            default:
+                throw UnexpectedOperatorException();
+        }
+    }
+    
+    template<typename T>
+    static std::function<T(T, T)> getApproprateFunction2(EOperatorType ot)
     {
         switch (ot)
         {
@@ -77,9 +129,27 @@ namespace Assignment2 {
     {
         CSymbol result;
         if (operand1.getType() == INTEGER && operand2.getType() == INTEGER)
-            result.setSymbol(HandleTwoIntegers(operand1.toInteger(), operand2.toInteger(), getApproprateFunction<integer_type>(ot)));
+            result.setSymbol(HandleTwoIntegers(operand1.toInteger(), operand2.toInteger(), getApproprateFunction2<integer_type>(ot)));
         else
-            result.setSymbol(HandleTwoFloatings(operand1.toFloating(), operand2.toFloating(), getApproprateFunction<floating_type>(ot)));
+            result.setSymbol(HandleTwoFloatings(operand1.toFloating(), operand2.toFloating(), getApproprateFunction2<floating_type>(ot)));
+        return result;
+    }
+    
+    CSymbol operate(CSymbol operand1, EOperatorType ot)
+    {
+        CSymbol result;
+        try{
+            if (operand1.getType() == INTEGER)
+            {
+                result.setSymbol(HandleInteger(operand1.toInteger(), getApproprateFunction<integer_type>(ot)));
+                return result;
+            }
+        }
+        catch(UnexpectedOperatorException)
+        {
+            // Do nothing - Slipped to floating number.
+        }
+        result.setSymbol(HandleFloating(operand1.toFloating(), getApproprateFunction<floating_type>(ot)));
         return result;
     }
     
@@ -168,6 +238,27 @@ namespace Assignment2 {
                             operand2 = stack.pop().getRValue(variablesTable);
                             operand1 = stack.pop().getLValue();
                             variablesTable[operand1.getAdditionalInformation().m_variable] = operand2;
+                            stack.push(operand1);
+                            break;
+                        case FUNCTION_SIN:
+                        case FUNCTION_COS:
+                        case FUNCTION_TAN:
+                        case FUNCTION_ASIN:
+                        case FUNCTION_ACOS:
+                        case FUNCTION_ATAN:
+                        case FUNCTION_LOG:
+                        case FUNCTION_LOG2:
+                        case FUNCTION_LN:
+                        case FUNCTION_ABS:
+                            operand1 = stack.pop().getRValue(variablesTable);
+                            stack.push(operate(operand1, sym.getAdditionalInformation().m_operator));
+                            break;
+                        case PI:
+                            operand1.setSymbol(M_PI);
+                            stack.push(operand1);
+                            break;
+                        case E:
+                            operand1.setSymbol(M_E);
                             stack.push(operand1);
                             break;
                         default:

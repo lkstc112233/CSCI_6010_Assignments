@@ -61,6 +61,42 @@ namespace Assignment2 {
                     case NEWLINE:
                         ost << std::endl;
                         break;
+                    case FUNCTION_SIN:
+                        ost << "sin";
+                        break;
+                    case FUNCTION_COS:
+                        ost << "cos";
+                        break;
+                    case FUNCTION_TAN:
+                        ost << "tan";
+                        break;
+                    case FUNCTION_ASIN:
+                        ost << "asin";
+                        break;
+                    case FUNCTION_ACOS:
+                        ost << "acos";
+                        break;
+                    case FUNCTION_ATAN:
+                        ost << "atan";
+                        break;
+                    case FUNCTION_LOG:
+                        ost << "log";
+                        break;
+                    case FUNCTION_LOG2:
+                        ost << "log2";
+                        break;
+                    case FUNCTION_LN:
+                        ost << "ln";
+                        break;
+                    case FUNCTION_ABS:
+                        ost << "abs";
+                        break;
+                    case PI:
+                        ost << "pi";
+                        break;
+                    case E:
+                        ost << "e";
+                        break;
                     default:
                         break;
                 }

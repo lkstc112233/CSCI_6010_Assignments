@@ -16,6 +16,34 @@ namespace Assignment2 {
             return QUIT;
         if (input == "exit")
             return QUIT;
+        if (input == "sin")
+            return FUNCTION_SIN;
+        if (input == "cos")
+            return FUNCTION_COS;
+        if (input == "tan")
+            return FUNCTION_TAN;
+        if (input == "asin")
+            return FUNCTION_ASIN;
+        if (input == "acos")
+            return FUNCTION_ACOS;
+        if (input == "atan")
+            return FUNCTION_ATAN;
+        if (input == "log")
+            return FUNCTION_LOG;
+        if (input == "log2")
+            return FUNCTION_LOG2;
+        if (input == "ln")
+            return FUNCTION_LN;
+        if (input == "abs")
+            return FUNCTION_ABS;
+        if (input == "pi")
+            return PI;
+        if (input == "PI")
+            return PI;
+        if (input == "e")
+            return E;
+        if (input == "E")
+            return E;
         return NOTMATCH;
     }
     

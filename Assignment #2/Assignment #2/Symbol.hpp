@@ -11,11 +11,11 @@
 #include <string>
 #include <iostream>
 #include <map>
+#include <cmath>
 
 namespace Assignment2 {
     typedef __int64_t integer_type;
     typedef double floating_type;
-    
     
     enum ESymbolType
     {
@@ -47,6 +47,23 @@ namespace Assignment2 {
         MOD,                // %
         
         POWER = 0x600,      // ^
+        
+        FLOATING_FUNCTION_CALL_BASE = 0x700,
+        FUNCTION_SIN,
+        FUNCTION_COS,
+        FUNCTION_TAN,
+        FUNCTION_ASIN,
+        FUNCTION_ACOS,
+        FUNCTION_ATAN,
+        FUNCTION_LOG,
+        FUNCTION_LOG2,
+        FUNCTION_LN,
+        
+        INTEGER_FUNCTION_CALL_BASE = 0x780,
+        FUNCTION_ABS,
+        
+        PI = 0x800,
+        E,
     };
     
     struct SAdditionInformation
