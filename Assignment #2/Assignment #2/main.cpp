@@ -112,7 +112,7 @@ int main(int argc, const char * argv[]) {
                 {
                     cout << "Input: ";
                     for (auto c : inputs)
-                        cout << c;
+                        cout << c << ' ';
                     cout << endl;
                 }
                 machine.compile(inputs);
