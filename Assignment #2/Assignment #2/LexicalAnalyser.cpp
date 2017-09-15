@@ -159,6 +159,8 @@ namespace Assignment2 {
                 result.setSymbol(OPERATOR, RIGHT_BRACKET);
                 inputStream.get();
                 break;
+            case '.':
+                return formDigit();
             default:
                 if (isdigit(nextChar))
                     return formDigit();

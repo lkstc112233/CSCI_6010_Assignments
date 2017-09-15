@@ -46,7 +46,7 @@ namespace Assignment2 {
         DIVISION,           // /
         MOD,                // %
         
-        POWER = 0x600,      // ^
+        POWER = 0x500,      // ^
         
         FLOATING_FUNCTION_CALL_BASE = 0x700,
         FUNCTION_SIN,
