@@ -8,8 +8,6 @@
 #ifndef SymbolStack_hpp
 #define SymbolStack_hpp
 
-#include "Symbol.hpp"
-
 /* This stack could be a template.
  * But in this assignment, the only
  * useage of the stack would be the
@@ -17,6 +15,7 @@
  */
 
 namespace Assignment2 {
+    class CSymbol;
     class CStackForSymbol
     {
     public:

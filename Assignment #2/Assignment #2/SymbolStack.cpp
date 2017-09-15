@@ -7,6 +7,7 @@
 
 #include "SymbolStack.hpp"
 #include "Exceptions.hpp"
+#include "Symbol.hpp"
 
 namespace Assignment2 {
     CStackForSymbol::CStackForSymbol()

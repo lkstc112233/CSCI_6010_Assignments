@@ -9,9 +9,9 @@
 #define LexicalAnalyser_hpp
 
 #include <iostream>
-#include "Symbol.hpp"
 
 namespace Assignment2 {
+    class CSymbol;
     class CLexicalAnalyser
     {
     private:

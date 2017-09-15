@@ -9,6 +9,8 @@
 #include <string>
 #include <sstream>
 
+#include "Symbol.hpp"
+
 namespace Assignment2 {
     EOperatorType getOT(std::string input)
     {

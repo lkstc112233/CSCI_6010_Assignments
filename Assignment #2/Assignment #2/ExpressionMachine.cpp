@@ -13,6 +13,7 @@
 
 #include "SymbolStack.hpp"
 #include "Exceptions.hpp"
+#include "Symbol.hpp"
 
 #define OPERATOR_SIGNATURE(name, op1, op2, implement) \
 static auto name##_int = [](integer_type op1, integer_type op2)->integer_type implement ; \
