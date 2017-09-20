@@ -8,10 +8,11 @@
 #ifndef Matrix_hpp
 #define Matrix_hpp
 
-#include <stdio.h>
+#include <iostream>
 #include <vector>
 
 namespace Assignment3 {
+    const double SMALL_VALUE = 1e-200;
     class CMatrix
     {
     private:
@@ -24,7 +25,13 @@ namespace Assignment3 {
         void elementaryRowOperations(size_t row_id, double raito);
         // D += S * R
         void elementaryRowOperations(size_t destination, double raito, size_t source);
+        bool pivot(size_t row_id, size_t column_id);
+        const std::vector<double>& operator[](size_t i) const;
+        double getAt(size_t i, size_t j) const;
+        void setAt(size_t i, size_t j, double value);
     };
+    
+    std::ostream& operator<<(std::ostream&, const CMatrix&);
 }
 
 
