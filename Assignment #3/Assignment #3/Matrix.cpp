@@ -14,7 +14,7 @@ namespace Assignment3 {
         size_t i = 0;
         do
             mat.emplace_back(size + 1, 0.0);
-        while (i++ < size);
+        while (++i < size);
     }
     // Switch two rows.
     void CMatrix::elementaryRowOperations(size_t row_id, size_t row_id2)
@@ -33,7 +33,7 @@ namespace Assignment3 {
     void CMatrix::elementaryRowOperations(size_t destination, double raito, size_t source)
     {
         for (int i = 0; i < mat[0].size(); ++i)
-            mat[destination][i] += mat[source][i] *= raito;
+            mat[destination][i] += mat[source][i] * raito;
     }
     
     bool CMatrix::pivot(size_t row_id, size_t column_id)
@@ -43,7 +43,7 @@ namespace Assignment3 {
         double raito = 1 / mat[row_id][column_id];
         for (int i = 0; i < mat.size(); ++i)
             if (i != row_id)
-                elementaryRowOperations(i, raito*mat[i][column_id], row_id);
+                elementaryRowOperations(i, -raito*mat[i][column_id], row_id);
         elementaryRowOperations(row_id, raito);
         return true;
     }
@@ -63,9 +63,13 @@ namespace Assignment3 {
         j %= mat[0].size();
         mat[i][j] = value;
     }
+    size_t CMatrix::size() const
+    {
+        return mat.size();
+    }
     std::ostream& operator<<(std::ostream& ost, const CMatrix &mat)
     {
-        size_t size = mat[0].size() - 1;
+        size_t size = mat.size();
         for (int i = 0; i < size; ++i)
         {
             for (auto d : mat[i])

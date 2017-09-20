@@ -29,6 +29,7 @@ namespace Assignment3 {
         const std::vector<double>& operator[](size_t i) const;
         double getAt(size_t i, size_t j) const;
         void setAt(size_t i, size_t j, double value);
+        size_t size() const;
     };
     
     std::ostream& operator<<(std::ostream&, const CMatrix&);
