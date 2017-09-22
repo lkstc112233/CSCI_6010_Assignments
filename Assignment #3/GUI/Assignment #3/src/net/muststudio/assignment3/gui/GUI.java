@@ -6,7 +6,6 @@
 package net.muststudio.assignment3.gui;
 
 import java.awt.FlowLayout;
-import javafx.scene.layout.StackPane;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -26,6 +25,7 @@ import net.muststudio.assignment3.Matrix;
 public class GUI extends javax.swing.JFrame {
     Matrix mat;
     JTextField[][] equationInputFields;
+    boolean contentChanged = false;
     
     /**
      * Creates new form GUI
@@ -52,8 +52,8 @@ public class GUI extends javax.swing.JFrame {
         equationsCountInputField = new javax.swing.JTextField();
         equationsPane = new javax.swing.JScrollPane();
         equationsPanel = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        OneStepButton = new javax.swing.JButton();
+        SolveAllButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -79,7 +79,7 @@ public class GUI extends javax.swing.JFrame {
         equationsPanel.setLayout(equationsPanelLayout);
         equationsPanelLayout.setHorizontalGroup(
             equationsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 764, Short.MAX_VALUE)
+            .addGap(0, 801, Short.MAX_VALUE)
         );
         equationsPanelLayout.setVerticalGroup(
             equationsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -88,9 +88,9 @@ public class GUI extends javax.swing.JFrame {
 
         equationsPane.setViewportView(equationsPanel);
 
-        jButton2.setText("One Step");
+        OneStepButton.setText("One Step");
 
-        jButton3.setText("Solve");
+        SolveAllButton.setText("Solve");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -99,7 +99,7 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(equationsPane)
+                    .addComponent(equationsPane, javax.swing.GroupLayout.DEFAULT_SIZE, 803, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(ShowFieldsButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -111,9 +111,9 @@ public class GUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(equationsCountInputField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)
+                        .addComponent(OneStepButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3)
+                        .addComponent(SolveAllButton)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -127,10 +127,10 @@ public class GUI extends javax.swing.JFrame {
                     .addComponent(variablesCountInputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(equationsCountInputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(OneStepButton)
+                    .addComponent(SolveAllButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(equationsPane, javax.swing.GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE)
+                .addComponent(equationsPane)
                 .addContainerGap())
         );
 
@@ -140,36 +140,63 @@ public class GUI extends javax.swing.JFrame {
     private void ShowFieldsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ShowFieldsButtonActionPerformed
         // This function will handle the status of the matrix - 
         //     creates a matrix, handling all matrix text fields, and so on.
-        
-        int variableCnt = Integer.valueOf(variablesCountInputField.getText());
-        int equationCnt = Integer.valueOf(equationsCountInputField.getText());
-        int finalSize = Math.max(variableCnt, equationCnt);
-        mat = new Matrix(finalSize);
-        
-        equationInputFields = new JTextField[finalSize][finalSize + 1];
-        equationsPanel.setLayout(new BoxLayout(equationsPanel, BoxLayout.Y_AXIS));
-        
-        for (int i = 0; i < finalSize; ++i)
-        {
-            JPanel panelX = new JPanel();
-            panelX.setLayout(new FlowLayout());
+        if (mat == null) {
+            int variableCnt = Integer.valueOf(variablesCountInputField.getText());
+            int equationCnt = Integer.valueOf(equationsCountInputField.getText());
+            int finalSize = Math.max(variableCnt, equationCnt);
+            mat = new Matrix(finalSize);
+
+            equationInputFields = new JTextField[finalSize][finalSize + 1];
+            equationsPanel.setLayout(new BoxLayout(equationsPanel, BoxLayout.Y_AXIS));
             
-            for (int j = 0; j < finalSize + 1; ++j)
+            FloatFliter fliter = new FloatFliter();
+            
+            for (int i = 0; i < finalSize; ++i)
             {
-                panelX.add(equationInputFields[i][j] = new JTextField("0",7));
-                JLabel x = new JLabel();
-                String text = "x" + (j+1) + " +";
-                if (j == finalSize - 1)
-                    text = "x" + (j+1) + " =";
-                x.setText(text);
-                if (j < finalSize)
-                    panelX.add(x);
+                JPanel panelX = new JPanel();
+                panelX.setLayout(new FlowLayout());
+
+                for (int j = 0; j < finalSize + 1; ++j)
+                {
+                    panelX.add(equationInputFields[i][j] = new JTextField("0",7));
+                    ((PlainDocument)equationInputFields[i][j].getDocument()).setDocumentFilter(fliter);
+                    JLabel x = new JLabel();
+                    String text = "x" + (j+1) + " +";
+                    if (j == finalSize - 1)
+                        text = "x" + (j+1) + " =";
+                    x.setText(text);
+                    if (j < finalSize)
+                        panelX.add(x);
+                }
+                equationsPanel.add(panelX);
+                panelX.validate();
             }
-            equationsPanel.add(panelX);
-            panelX.validate();
+            equationsPane.validate();
+            
+            equationsCountInputField.setEditable(false);
+            variablesCountInputField.setEditable(false);
+            OneStepButton.setEnabled(true);
+            SolveAllButton.setEnabled(true);
+            ShowFieldsButton.setText("Remove Text Fields");
+        } else if (contentChanged) {
+            for (JTextField[] fs:equationInputFields)
+                for (JTextField f:fs)
+                    f.setText("0");
+            ShowFieldsButton.setText("Remove Text Fields");
+            contentChanged = false;
+        } else {
+            mat = null;
+            equationInputFields = null;
+            contentChanged = false;
+            equationsPanel.removeAll();
+            equationsCountInputField.setEditable(true);
+            variablesCountInputField.setEditable(true);
+            OneStepButton.setEnabled(false);
+            SolveAllButton.setEnabled(false);
+            ShowFieldsButton.setText("Show Text Fields");
+            equationsPanel.revalidate();
+            equationsPanel.repaint();
         }
-        equationsPane.validate();
-        
     }//GEN-LAST:event_ShowFieldsButtonActionPerformed
 
     /**
@@ -206,14 +233,93 @@ public class GUI extends javax.swing.JFrame {
             }
         });
     }
+    
+    private void callChanged() {
+        contentChanged = true;
+        ShowFieldsButton.setText("Clear Equations");
+    }
+    
+    class FloatFliter extends DocumentFilter {
+    @Override
+    public void insertString(DocumentFilter.FilterBypass fb, int offset, String string,
+            AttributeSet attr) throws BadLocationException {
+
+        Document doc = fb.getDocument();
+        StringBuilder sb = new StringBuilder();
+        sb.append(doc.getText(0, doc.getLength()));
+        sb.insert(offset, string);
+
+        if (test(sb.toString())) {
+            super.insertString(fb, offset, string, attr);
+            callChanged();
+        } else {
+            showError();
+        }
+    }
+
+    private boolean test(String text) {
+        try {
+            Double.parseDouble(text);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+    
+    private void showError() {
+        JOptionPane.showMessageDialog(null,  "You can only enter a floating number here",
+                "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    @Override
+    public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text,
+            AttributeSet attrs) throws BadLocationException {
+
+        Document doc = fb.getDocument();
+        StringBuilder sb = new StringBuilder();
+        sb.append(doc.getText(0, doc.getLength()));
+        sb.replace(offset, offset + length, text);
+
+        if (test(sb.toString())) {
+            super.replace(fb, offset, length, text, attrs);
+            callChanged();
+        } else {
+            showError();
+        }
+
+    }
+
+    @Override
+    public void remove(DocumentFilter.FilterBypass fb, int offset, int length)
+            throws BadLocationException {
+        Document doc = fb.getDocument();
+        StringBuilder sb = new StringBuilder();
+        sb.append(doc.getText(0, doc.getLength()));
+        sb.delete(offset, offset + length);
+
+        if (test(sb.toString())) {
+            super.remove(fb, offset, length);
+            callChanged();
+        } else {
+            if (sb.toString().equals("")) {
+                super.remove(fb, offset, length);
+                super.insertString(fb, 0, "0", null);
+                callChanged();
+            }
+            else {
+                showError();
+            }
+        }
+    }
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton OneStepButton;
     private javax.swing.JButton ShowFieldsButton;
+    private javax.swing.JButton SolveAllButton;
     private javax.swing.JTextField equationsCountInputField;
     private javax.swing.JScrollPane equationsPane;
     private javax.swing.JPanel equationsPanel;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JTextField variablesCountInputField;
@@ -287,6 +393,5 @@ class IntFliter extends DocumentFilter {
                 showError();
             }
         }
-
     }
 }
