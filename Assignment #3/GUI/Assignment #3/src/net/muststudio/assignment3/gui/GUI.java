@@ -5,25 +5,35 @@
  */
 package net.muststudio.assignment3.gui;
 
+import java.awt.FlowLayout;
+import javafx.scene.layout.StackPane;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.DocumentFilter;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.text.PlainDocument;
 
+import net.muststudio.assignment3.Matrix;
 /**
  *
  * @author Kevin
  */
 public class GUI extends javax.swing.JFrame {
-
+    Matrix mat;
+    JTextField[][] equationInputFields;
+    
     /**
      * Creates new form GUI
      */
     public GUI() {
         initComponents();
-        ((PlainDocument)columnCountInputField.getDocument()).setDocumentFilter(new IntFliter());
+        ((PlainDocument)variablesCountInputField.getDocument()).setDocumentFilter(new IntFliter());
+        ((PlainDocument)equationsCountInputField.getDocument()).setDocumentFilter(new IntFliter());
     }
 
     /**
@@ -35,23 +45,52 @@ public class GUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
+        ShowFieldsButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        columnCountInputField = new javax.swing.JTextField();
+        variablesCountInputField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         equationsCountInputField = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        equationsPane = new javax.swing.JScrollPane();
+        equationsPanel = new javax.swing.JPanel();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("Show Text Fields");
+        ShowFieldsButton.setText("Show Text Fields");
+        ShowFieldsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ShowFieldsButtonActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Variables Count");
 
+        variablesCountInputField.setText("0");
+
         jLabel2.setText("Equations Count");
 
-        jScrollPane1.setBackground(new java.awt.Color(238, 238, 238));
-        jScrollPane1.setBorder(null);
+        equationsCountInputField.setText("1");
+
+        equationsPane.setBackground(new java.awt.Color(238, 238, 238));
+        equationsPane.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+
+        javax.swing.GroupLayout equationsPanelLayout = new javax.swing.GroupLayout(equationsPanel);
+        equationsPanel.setLayout(equationsPanelLayout);
+        equationsPanelLayout.setHorizontalGroup(
+            equationsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 764, Short.MAX_VALUE)
+        );
+        equationsPanelLayout.setVerticalGroup(
+            equationsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 355, Short.MAX_VALUE)
+        );
+
+        equationsPane.setViewportView(equationsPanel);
+
+        jButton2.setText("One Step");
+
+        jButton3.setText("Solve");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -60,18 +99,22 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(equationsPane)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(ShowFieldsButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(columnCountInputField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(variablesCountInputField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(equationsCountInputField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 51, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -79,18 +122,55 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(ShowFieldsButton)
                     .addComponent(jLabel1)
-                    .addComponent(columnCountInputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(variablesCountInputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
-                    .addComponent(equationsCountInputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(equationsCountInputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE)
+                .addComponent(equationsPane, javax.swing.GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void ShowFieldsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ShowFieldsButtonActionPerformed
+        // This function will handle the status of the matrix - 
+        //     creates a matrix, handling all matrix text fields, and so on.
+        
+        int variableCnt = Integer.valueOf(variablesCountInputField.getText());
+        int equationCnt = Integer.valueOf(equationsCountInputField.getText());
+        int finalSize = Math.max(variableCnt, equationCnt);
+        mat = new Matrix(finalSize);
+        
+        equationInputFields = new JTextField[finalSize][finalSize + 1];
+        equationsPanel.setLayout(new BoxLayout(equationsPanel, BoxLayout.Y_AXIS));
+        
+        for (int i = 0; i < finalSize; ++i)
+        {
+            JPanel panelX = new JPanel();
+            panelX.setLayout(new FlowLayout());
+            
+            for (int j = 0; j < finalSize + 1; ++j)
+            {
+                panelX.add(equationInputFields[i][j] = new JTextField("0",7));
+                JLabel x = new JLabel();
+                String text = "x" + (j+1) + " +";
+                if (j == finalSize - 1)
+                    text = "x" + (j+1) + " =";
+                x.setText(text);
+                if (j < finalSize)
+                    panelX.add(x);
+            }
+            equationsPanel.add(panelX);
+            panelX.validate();
+        }
+        equationsPane.validate();
+        
+    }//GEN-LAST:event_ShowFieldsButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -128,17 +208,19 @@ public class GUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField columnCountInputField;
+    private javax.swing.JButton ShowFieldsButton;
     private javax.swing.JTextField equationsCountInputField;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JScrollPane equationsPane;
+    private javax.swing.JPanel equationsPanel;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField variablesCountInputField;
     // End of variables declaration//GEN-END:variables
 }
 
-class IntFliter extends DocumentFilter
-{
+class IntFliter extends DocumentFilter {
     @Override
     public void insertString(FilterBypass fb, int offset, String string,
             AttributeSet attr) throws BadLocationException {
