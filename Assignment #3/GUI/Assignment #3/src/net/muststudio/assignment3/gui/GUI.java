@@ -6,6 +6,7 @@
 package net.muststudio.assignment3.gui;
 
 import java.awt.FlowLayout;
+import java.text.DecimalFormat;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -23,9 +24,12 @@ import net.muststudio.assignment3.Matrix;
  * @author Kevin
  */
 public class GUI extends javax.swing.JFrame {
-    Matrix mat;
-    JTextField[][] equationInputFields;
-    boolean contentChanged = false;
+    private Matrix mat;
+    private JTextField[][] equationInputFields;
+    private boolean contentChanged = false;
+    private boolean calculationBegun = false;
+    private boolean calculationFinished = false;
+    private int progress = 0;
     
     /**
      * Creates new form GUI
@@ -89,8 +93,18 @@ public class GUI extends javax.swing.JFrame {
         equationsPane.setViewportView(equationsPanel);
 
         OneStepButton.setText("One Step");
+        OneStepButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OneStepButtonActionPerformed(evt);
+            }
+        });
 
         SolveAllButton.setText("Solve");
+        SolveAllButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SolveAllButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -146,27 +160,25 @@ public class GUI extends javax.swing.JFrame {
             int finalSize = Math.max(variableCnt, equationCnt);
             mat = new Matrix(finalSize);
 
-            equationInputFields = new JTextField[finalSize][finalSize + 1];
+            equationInputFields = new JTextField[equationCnt][variableCnt + 1];
             equationsPanel.setLayout(new BoxLayout(equationsPanel, BoxLayout.Y_AXIS));
             
             FloatFliter fliter = new FloatFliter();
             
-            for (int i = 0; i < finalSize; ++i)
+            for (int i = 0; i < equationCnt; ++i)
             {
                 JPanel panelX = new JPanel();
                 panelX.setLayout(new FlowLayout());
 
-                for (int j = 0; j < finalSize + 1; ++j)
+                for (int j = 0; j < variableCnt + 1; ++j)
                 {
-                    panelX.add(equationInputFields[i][j] = new JTextField("0",7));
+                    panelX.add(equationInputFields[i][j] = new JTextField("0",8));
                     ((PlainDocument)equationInputFields[i][j].getDocument()).setDocumentFilter(fliter);
-                    JLabel x = new JLabel();
                     String text = "x" + (j+1) + " +";
-                    if (j == finalSize - 1)
+                    if (variableCnt - 1 == j)
                         text = "x" + (j+1) + " =";
-                    x.setText(text);
-                    if (j < finalSize)
-                        panelX.add(x);
+                    if (j < variableCnt)
+                        panelX.add(new JLabel(text));
                 }
                 equationsPanel.add(panelX);
                 panelX.validate();
@@ -180,14 +192,22 @@ public class GUI extends javax.swing.JFrame {
             ShowFieldsButton.setText("Remove Text Fields");
         } else if (contentChanged) {
             for (JTextField[] fs:equationInputFields)
-                for (JTextField f:fs)
+                for (JTextField f:fs) {
                     f.setText("0");
+                    f.setEditable(true);
+                }
             ShowFieldsButton.setText("Remove Text Fields");
             contentChanged = false;
+            calculationBegun = false;
+            calculationFinished = false;
+            OneStepButton.setEnabled(true);
+            SolveAllButton.setEnabled(true);
         } else {
             mat = null;
             equationInputFields = null;
             contentChanged = false;
+            calculationBegun = false;
+            calculationFinished = false;
             equationsPanel.removeAll();
             equationsCountInputField.setEditable(true);
             variablesCountInputField.setEditable(true);
@@ -199,6 +219,58 @@ public class GUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ShowFieldsButtonActionPerformed
 
+    private void OneStepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OneStepButtonActionPerformed
+        // This function will goes into the function for 1 step.
+        if (!calculationBegun) {
+            textFieldsToMat();
+            beginCalc();
+        }
+        if (oneStep()) {
+            calculationFinished = true;
+            OneStepButton.setEnabled(false);
+            SolveAllButton.setEnabled(false);
+        }
+        matToTextFields();
+    }//GEN-LAST:event_OneStepButtonActionPerformed
+
+    private void SolveAllButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SolveAllButtonActionPerformed
+        // This function will goes into the function for all steps.
+        if (!calculationBegun) {
+            textFieldsToMat();
+            beginCalc();
+        }
+        while (!oneStep()) {
+            matToTextFields();
+        }
+        calculationFinished = true;
+        OneStepButton.setEnabled(false);
+        SolveAllButton.setEnabled(false);
+    }//GEN-LAST:event_SolveAllButtonActionPerformed
+
+    /** 
+     * These two functions handles data transferation between GUI and data structures.
+     */
+    private void matToTextFields() {
+        DecimalFormat form = new DecimalFormat("#.#####");
+        int varCount = equationInputFields[0].length - 1;
+        for (int i = 0; i < equationInputFields.length; ++i) {
+            for (int j = 0; j < varCount; ++j)
+//                equationInputFields[i][j].setText(Double.toString(mat.getAt(i, j)));
+//            equationInputFields[i][varCount].setText(Double.toString(mat.getAt(i, mat.size())));
+                equationInputFields[i][j].setText(form.format(mat.getAt(i, j)));
+            equationInputFields[i][varCount].setText(form.format(mat.getAt(i, mat.size())));
+        }
+    }
+    
+    private void textFieldsToMat() {
+        int varCount = equationInputFields[0].length - 1;
+        for (int i = 0; i < equationInputFields.length; ++i) {
+            for (int j = 0; j < varCount; ++j)
+                mat.setAt(i, j, Double.parseDouble(equationInputFields[i][j].getText()));
+            mat.setAt(i, mat.size(), Double.parseDouble(equationInputFields[i][varCount].getText()));
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -238,6 +310,23 @@ public class GUI extends javax.swing.JFrame {
         contentChanged = true;
         ShowFieldsButton.setText("Clear Equations");
     }
+    private void beginCalc(){
+        calculationBegun = true;
+        calculationFinished = false;
+        for (JTextField[] fs:equationInputFields)
+            for (JTextField f:fs)
+                f.setEditable(false);
+        progress = 0;
+    }
+
+    private boolean oneStep() {
+        mat.pivot(progress, progress);
+        progress += 1;
+        if (progress >= equationInputFields.length)
+            return true;
+        return false;
+    }
+                    
     
     class FloatFliter extends DocumentFilter {
     @Override

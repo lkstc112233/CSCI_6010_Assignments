@@ -132,11 +132,17 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="One Step"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="OneStepButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="SolveAllButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Solve"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SolveAllButtonActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
