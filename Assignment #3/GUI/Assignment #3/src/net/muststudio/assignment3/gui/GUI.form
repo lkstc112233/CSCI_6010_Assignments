@@ -26,7 +26,7 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="equationsPane" pref="803" max="32767" attributes="0"/>
+                  <Component id="equationsPane" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Component id="ShowFieldsButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -131,6 +131,7 @@
     <Component class="javax.swing.JButton" name="OneStepButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="One Step"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="OneStepButtonActionPerformed"/>
@@ -139,6 +140,7 @@
     <Component class="javax.swing.JButton" name="SolveAllButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Solve"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SolveAllButtonActionPerformed"/>

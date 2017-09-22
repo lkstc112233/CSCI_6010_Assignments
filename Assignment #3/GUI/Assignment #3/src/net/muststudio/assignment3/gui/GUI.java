@@ -93,6 +93,7 @@ public class GUI extends javax.swing.JFrame {
         equationsPane.setViewportView(equationsPanel);
 
         OneStepButton.setText("One Step");
+        OneStepButton.setEnabled(false);
         OneStepButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 OneStepButtonActionPerformed(evt);
@@ -100,6 +101,7 @@ public class GUI extends javax.swing.JFrame {
         });
 
         SolveAllButton.setText("Solve");
+        SolveAllButton.setEnabled(false);
         SolveAllButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SolveAllButtonActionPerformed(evt);
@@ -113,7 +115,7 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(equationsPane, javax.swing.GroupLayout.DEFAULT_SIZE, 803, Short.MAX_VALUE)
+                    .addComponent(equationsPane)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(ShowFieldsButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -245,6 +247,7 @@ public class GUI extends javax.swing.JFrame {
         calculationFinished = true;
         OneStepButton.setEnabled(false);
         SolveAllButton.setEnabled(false);
+        matToTextFields();
     }//GEN-LAST:event_SolveAllButtonActionPerformed
 
     /** 
