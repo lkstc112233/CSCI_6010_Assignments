@@ -68,25 +68,25 @@ namespace Assignment2 {
         switch (ot)
         {
             case FUNCTION_ABS:
-                return &fabs;
+                return (T(*)(T))&fabs;
             case FUNCTION_SIN:
-                return &sin;
+                return (T(*)(T))&sin;
             case FUNCTION_COS:
-                return &cos;
+                return (T(*)(T))&cos;
             case FUNCTION_TAN:
-                return &tan;
+                return (T(*)(T))&tan;
             case FUNCTION_ASIN:
-                return &asin;
+                return (T(*)(T))&asin;
             case FUNCTION_ACOS:
-                return &acos;
+                return (T(*)(T))&acos;
             case FUNCTION_ATAN:
-                return &atan;
+                return (T(*)(T))&atan;
             case FUNCTION_LOG:
-                return &log10;
+                return (T(*)(T))&log10;
             case FUNCTION_LOG2:
-                return &log2;
+                return (T(*)(T))&log2;
             case FUNCTION_LN:
-                return &log;
+                return (T(*)(T))&log;
             case NEGATIVE:
                 return [](T i)->T{return -i;};
             default:
