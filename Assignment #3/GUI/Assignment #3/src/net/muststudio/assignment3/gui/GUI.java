@@ -22,7 +22,7 @@ import javax.swing.text.PlainDocument;
 
 import net.muststudio.assignment3.Matrix;
 /**
- *
+ * 
  * @author Kevin
  */
 public class GUI extends javax.swing.JFrame {
@@ -39,6 +39,8 @@ public class GUI extends javax.swing.JFrame {
      */
     public GUI() {
         initComponents();
+        // This helps me creating the fliters to ensure that the content 
+        // inputed into the two Textfields are integers.
         ((PlainDocument)variablesCountInputField.getDocument()).setDocumentFilter(new IntFliter());
         ((PlainDocument)equationsCountInputField.getDocument()).setDocumentFilter(new IntFliter());
     }
@@ -74,10 +76,20 @@ public class GUI extends javax.swing.JFrame {
         jLabel1.setText("Variables Count");
 
         variablesCountInputField.setText("0");
+        variablesCountInputField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                SelectAllWhenGainedControl(evt);
+            }
+        });
 
         jLabel2.setText("Equations Count");
 
         equationsCountInputField.setText("1");
+        equationsCountInputField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                SelectAllWhenGainedControl(evt);
+            }
+        });
 
         equationsPane.setBackground(new java.awt.Color(238, 238, 238));
         equationsPane.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
@@ -166,10 +178,14 @@ public class GUI extends javax.swing.JFrame {
             mat = new Matrix(finalSize);
 
             equationInputFields = new JTextField[equationCnt][variableCnt + 1];
+            // You have to use a layout manager to make all informations appear on the panel.
             equationsPanel.setLayout(new BoxLayout(equationsPanel, BoxLayout.Y_AXIS));
             
             FloatFliter fliter = new FloatFliter();
             
+            // This is for valid check in addition to the inputing check - 
+            // If user choose to enter a negative number, we have to let that pass;
+            // But if the user choose to enter a '-' then leave the rest, we have to fix that.
             FocusListener validCheck = new FocusListener(){
                 @Override
                 public void focusGained(FocusEvent e) {
@@ -247,10 +263,16 @@ public class GUI extends javax.swing.JFrame {
     private void OneStepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OneStepButtonActionPerformed
         // This function will goes into the function for 1 step.
         if (!calculationBegun) {
-            textFieldsToMat();
+            try {
+                textFieldsToMat();
+            } catch(NumberFormatException e) {
+                // Do nothing if we found there is an invalid number.
+                return;
+            }
             beginCalc();
         }
         if (oneStep()) {
+            // That means we don't have further equations to handle with.
             String result = IndicateResults();
             calculationFinished = true;
             OneStepButton.setEnabled(false);
@@ -265,9 +287,15 @@ public class GUI extends javax.swing.JFrame {
     private void SolveAllButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SolveAllButtonActionPerformed
         // This function will goes into the function for all steps.
         if (!calculationBegun) {
-            textFieldsToMat();
+            try {
+                textFieldsToMat();
+            } catch(NumberFormatException e) {
+                // Do nothing if we found there is an invalid number.
+                return;
+            }
             beginCalc();
         }
+        // Run until we have no equation to deal with.
         while (!oneStep()) {
             matToTextFields();
         }
@@ -278,6 +306,10 @@ public class GUI extends javax.swing.JFrame {
         matToTextFields();
         JOptionPane.showMessageDialog(null, result);
     }//GEN-LAST:event_SolveAllButtonActionPerformed
+
+    private void SelectAllWhenGainedControl(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_SelectAllWhenGainedControl
+        ((JTextField)evt.getComponent()).selectAll();
+    }//GEN-LAST:event_SelectAllWhenGainedControl
 
     /** 
      * These two functions handles data transferation between GUI and data structures.
@@ -423,7 +455,7 @@ public class GUI extends javax.swing.JFrame {
                 || progress + offsetForColumn >= equationInputFields[0].length - 1;
     }
                     
-    
+    // Helper class for checking if the input is valid.
     class FloatFliter extends DocumentFilter {
     @Override
     public void insertString(DocumentFilter.FilterBypass fb, int offset, String string,
