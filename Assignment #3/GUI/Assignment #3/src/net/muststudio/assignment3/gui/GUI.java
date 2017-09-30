@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Scanner;
 import javax.swing.BoxLayout;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.text.AttributeSet;
@@ -29,6 +30,10 @@ import net.muststudio.assignment3.Matrix;
  * @author Kevin
  */
 public class GUI extends javax.swing.JFrame {
+    private enum StatusCode {
+        NotCreated, ResetMatrix, LockChanging, BeginChanging,
+    }
+    
     private Matrix mat;
     private JTextField[][] equationInputFields;
     private boolean contentChanged = false;
@@ -66,6 +71,7 @@ public class GUI extends javax.swing.JFrame {
         equationsPanel = new javax.swing.JPanel();
         OneStepButton = new javax.swing.JButton();
         SolveAllButton = new javax.swing.JButton();
+        LoadFromFileButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -101,7 +107,7 @@ public class GUI extends javax.swing.JFrame {
         equationsPanel.setLayout(equationsPanelLayout);
         equationsPanelLayout.setHorizontalGroup(
             equationsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 801, Short.MAX_VALUE)
+            .addGap(0, 874, Short.MAX_VALUE)
         );
         equationsPanelLayout.setVerticalGroup(
             equationsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -126,6 +132,13 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
+        LoadFromFileButton.setText("Load From File");
+        LoadFromFileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LoadFromFileButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -136,6 +149,8 @@ public class GUI extends javax.swing.JFrame {
                     .addComponent(equationsPane)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(ShowFieldsButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(LoadFromFileButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -162,7 +177,8 @@ public class GUI extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(equationsCountInputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(OneStepButton)
-                    .addComponent(SolveAllButton))
+                    .addComponent(SolveAllButton)
+                    .addComponent(LoadFromFileButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(equationsPane)
                 .addContainerGap())
@@ -180,86 +196,13 @@ public class GUI extends javax.swing.JFrame {
             int finalSize = Math.max(variableCnt, equationCnt);
             mat = new Matrix(finalSize);
 
-            equationInputFields = new JTextField[equationCnt][variableCnt + 1];
-            // You have to use a layout manager to make all informations appear on the panel.
-            equationsPanel.setLayout(new BoxLayout(equationsPanel, BoxLayout.Y_AXIS));
+            createTextFields(equationCnt, variableCnt);
             
-            FloatFliter fliter = new FloatFliter();
-            
-            // This is for valid check in addition to the inputing check - 
-            // If user choose to enter a negative number, we have to let that pass;
-            // But if the user choose to enter a '-' then leave the rest, we have to fix that.
-            FocusListener validCheck = new FocusListener(){
-                @Override
-                public void focusGained(FocusEvent e) {
-                    ((JTextField)e.getComponent()).selectAll();
-                }
-
-                @Override
-                public void focusLost(FocusEvent e) {
-                    if (((JTextField)e.getComponent()).getText().equals("-")){
-                        JOptionPane.showMessageDialog(null,
-                                "You can only enter a floating number here",
-                                "Error", JOptionPane.ERROR_MESSAGE);
-                        (e.getComponent()).requestFocus();
-                    }
-                        
-                }
-            };
-            
-            // Create the text fields for inputs.
-            for (int i = 0; i < equationCnt; ++i)
-            {
-                JPanel panelX = new JPanel();
-                panelX.setLayout(new FlowLayout());
-
-                for (int j = 0; j < variableCnt + 1; ++j)
-                {
-                    panelX.add(equationInputFields[i][j] = new JTextField("0",8));
-                    ((PlainDocument)equationInputFields[i][j].getDocument()).setDocumentFilter(fliter);
-                    equationInputFields[i][j].addFocusListener(validCheck);
-                    String text = "x" + toSubscript(j+1) + " +";
-                    if (variableCnt - 1 == j)
-                        text = "x" + toSubscript(j+1) + " =";
-                    if (j < variableCnt)
-                        panelX.add(new JLabel(text));
-                }
-                equationsPanel.add(panelX);
-                panelX.validate();
-            }
-            equationsPane.validate();
-            
-            equationsCountInputField.setEditable(false);
-            variablesCountInputField.setEditable(false);
-            OneStepButton.setEnabled(true);
-            SolveAllButton.setEnabled(true);
-            ShowFieldsButton.setText("Remove Text Fields");
+            changeGuiStatus(StatusCode.BeginChanging);
         } else if (contentChanged) {
-            for (JTextField[] fs:equationInputFields)
-                for (JTextField f:fs) {
-                    f.setText("0");
-                    f.setEditable(true);
-                }
-            ShowFieldsButton.setText("Remove Text Fields");
-            contentChanged = false;
-            calculationBegun = false;
-            calculationFinished = false;
-            OneStepButton.setEnabled(true);
-            SolveAllButton.setEnabled(true);
+            changeGuiStatus(StatusCode.ResetMatrix);
         } else {
-            mat = null;
-            equationInputFields = null;
-            contentChanged = false;
-            calculationBegun = false;
-            calculationFinished = false;
-            equationsPanel.removeAll();
-            equationsCountInputField.setEditable(true);
-            variablesCountInputField.setEditable(true);
-            OneStepButton.setEnabled(false);
-            SolveAllButton.setEnabled(false);
-            ShowFieldsButton.setText("Show Text Fields");
-            equationsPanel.revalidate();
-            equationsPanel.repaint();
+            changeGuiStatus(StatusCode.NotCreated);
         }
     }//GEN-LAST:event_ShowFieldsButtonActionPerformed
 
@@ -313,6 +256,12 @@ public class GUI extends javax.swing.JFrame {
     private void SelectAllWhenGainedControl(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_SelectAllWhenGainedControl
         ((JTextField)evt.getComponent()).selectAll();
     }//GEN-LAST:event_SelectAllWhenGainedControl
+
+    private void LoadFromFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoadFromFileButtonActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) 
+            loadFromFile(chooser.getSelectedFile());
+    }//GEN-LAST:event_LoadFromFileButtonActionPerformed
 
     /** 
      * These two functions handles data transferation between GUI and data structures.
@@ -388,8 +337,9 @@ public class GUI extends javax.swing.JFrame {
     }
     
     private void loadFromFile(File f) {
-        // TODO: finish this.
-        Runnable fileError = ()-> JOptionPane.showMessageDialog(null, "Cannot open this file.");
+        Runnable fileError = ()-> {
+            JOptionPane.showMessageDialog(null, "Cannot open this file.");
+        };
         try(Scanner scanner = new Scanner(f)){
             int variableCnt;
             int equationCnt;
@@ -407,27 +357,44 @@ public class GUI extends javax.swing.JFrame {
             }
             int finalSize = Math.max(variableCnt, equationCnt);
             Matrix ourmat = new Matrix(finalSize);
-            
-            for (int i = 0; i < equationCnt; ++i)
-            {
-                JPanel panelX = new JPanel();
-                panelX.setLayout(new FlowLayout());
-
-                for (int j = 0; j < variableCnt + 1; ++j)
-                {
-                    panelX.add(equationInputFields[i][j] = new JTextField("0",8));
-                    ((PlainDocument)equationInputFields[i][j].getDocument()).setDocumentFilter(fliter);
-                    equationInputFields[i][j].addFocusListener(validCheck);
-                    String text = "x" + toSubscript(j+1) + " +";
-                    if (variableCnt - 1 == j)
-                        text = "x" + toSubscript(j+1) + " =";
-                    if (j < variableCnt)
-                        panelX.add(new JLabel(text));
+            for (int i = 0; i < equationCnt; ++i){
+                for (int j = 0; j < variableCnt; ++j) {
+                    double term;
+                    if (scanner.hasNextDouble())
+                        term = scanner.nextDouble();
+                    else {
+                        fileError.run();
+                        return;
+                    }
+                    ourmat.setAt(i, j, term);
                 }
-                equationsPanel.add(panelX);
-                panelX.validate();
+                double term;
+                if (scanner.hasNextDouble())
+                    term = scanner.nextDouble();
+                else {
+                    fileError.run();
+                    return;
+                }
+                ourmat.setAt(i, ourmat.size(), term);
             }
+            // If we didn't make it here, all progress are discarded and nothing in the window is changed.
+            // And now the file is completely loaded, so we can apply these changes.
             
+            
+            changeGuiStatus(StatusCode.ResetMatrix);
+            changeGuiStatus(StatusCode.NotCreated);
+            
+            variablesCountInputField.setText(Integer.toString(variableCnt));
+            equationsCountInputField.setText(Integer.toString(equationCnt));
+            
+            mat = ourmat;
+            
+            createTextFields(equationCnt, variableCnt);
+            matToTextFields();
+            
+            changeGuiStatus(StatusCode.BeginChanging);
+            // I'm calling this because we are changing the texts.
+            callChanged();
         }catch(IOException e){
             fileError.run();
         }
@@ -450,15 +417,11 @@ public class GUI extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        
         //</editor-fold>
 
         File file = null;
@@ -474,6 +437,7 @@ public class GUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             File input = toPass;
+            @Override
             public void run() {
                 GUI g = new GUI();
                 if (toPass != null)
@@ -504,8 +468,7 @@ public class GUI extends javax.swing.JFrame {
                 && !mat.pivot(progress, progress + offsetForColumn)) toBreak: { // A dirty solution for goto.
             // Find if there is a number in this column 
             for (int i = progress; i < equationInputFields.length; ++i)
-                if (Math.abs(mat.getAt(i, progress + offsetForColumn)) > Matrix.SMALL_VALUE)
-                {
+                if (Math.abs(mat.getAt(i, progress + offsetForColumn)) > Matrix.SMALL_VALUE) {
                     mat.elementaryRowOperations(i, progress);
                     if(mat.pivot(progress, progress + offsetForColumn))
                         break toBreak;
@@ -518,7 +481,101 @@ public class GUI extends javax.swing.JFrame {
         return progress >= equationInputFields.length 
                 || progress + offsetForColumn >= equationInputFields[0].length - 1;
     }
-                    
+
+    private void createTextFields(int equationCnt, int variableCnt) {
+        equationInputFields = new JTextField[equationCnt][variableCnt + 1];
+        // You have to use a layout manager to make all informations appear on the panel.
+        equationsPanel.setLayout(new BoxLayout(equationsPanel, BoxLayout.Y_AXIS));
+
+        FloatFliter fliter = new FloatFliter();
+
+        // This is for valid check in addition to the inputing check - 
+        // If user choose to enter a negative number, we have to let that pass;
+        // But if the user choose to enter a '-' then leave the rest, we have to fix that.
+        FocusListener validCheck = new FocusListener(){
+            @Override
+            public void focusGained(FocusEvent e) {
+                ((JTextField)e.getComponent()).selectAll();
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (((JTextField)e.getComponent()).getText().equals("-")){
+                    JOptionPane.showMessageDialog(null,
+                            "You can only enter a floating number here",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    (e.getComponent()).requestFocus();
+                }
+            }
+        };
+
+        // Create the text fields for inputs.
+        for (int i = 0; i < equationCnt; ++i)
+        {
+            JPanel panelX = new JPanel();
+            panelX.setLayout(new FlowLayout());
+
+            for (int j = 0; j < variableCnt + 1; ++j)
+            {
+                panelX.add(equationInputFields[i][j] = new JTextField("0",8));
+                ((PlainDocument)equationInputFields[i][j].getDocument()).setDocumentFilter(fliter);
+                equationInputFields[i][j].addFocusListener(validCheck);
+                String text = "x" + toSubscript(j+1) + " +";
+                if (variableCnt - 1 == j)
+                    text = "x" + toSubscript(j+1) + " =";
+                if (j < variableCnt)
+                    panelX.add(new JLabel(text));
+            }
+            equationsPanel.add(panelX);
+            panelX.validate();
+        }
+        equationsPane.validate();
+    }
+    
+    private void changeGuiStatus(StatusCode code) {
+        switch(code) {
+            case NotCreated:
+                mat = null;
+                equationInputFields = null;
+                contentChanged = false;
+                calculationBegun = false;
+                calculationFinished = false;
+                equationsPanel.removeAll();
+                equationsCountInputField.setEditable(true);
+                variablesCountInputField.setEditable(true);
+                OneStepButton.setEnabled(false);
+                SolveAllButton.setEnabled(false);
+                ShowFieldsButton.setText("Show Text Fields");
+                equationsPanel.revalidate();
+                equationsPanel.repaint();
+                break;
+            case ResetMatrix:
+                for (JTextField[] fs:equationInputFields)
+                    for (JTextField f:fs) {
+                        f.setText("0");
+                        f.setEditable(true);
+                    }
+                ShowFieldsButton.setText("Remove Text Fields");
+                contentChanged = false;
+                calculationBegun = false;
+                calculationFinished = false;
+                OneStepButton.setEnabled(true);
+                SolveAllButton.setEnabled(true);
+                break;
+            case LockChanging:
+                break;
+            case BeginChanging:
+                equationsCountInputField.setEditable(false);
+                variablesCountInputField.setEditable(false);
+                OneStepButton.setEnabled(true);
+                SolveAllButton.setEnabled(true);
+                ShowFieldsButton.setText("Remove Text Fields");
+                break;
+            default:
+                throw new AssertionError(code.name());
+        }
+    }
+    
     // Helper class for checking if the input is valid.
     class FloatFliter extends DocumentFilter {
     @Override
@@ -595,6 +652,7 @@ public class GUI extends javax.swing.JFrame {
 }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton LoadFromFileButton;
     private javax.swing.JButton OneStepButton;
     private javax.swing.JButton ShowFieldsButton;
     private javax.swing.JButton SolveAllButton;

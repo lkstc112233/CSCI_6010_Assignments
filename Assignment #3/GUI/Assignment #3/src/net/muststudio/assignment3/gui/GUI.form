@@ -30,6 +30,8 @@
                   <Group type="102" attributes="0">
                       <Component id="ShowFieldsButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
+                      <Component id="LoadFromFileButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="variablesCountInputField" min="-2" pref="100" max="-2" attributes="0"/>
@@ -60,6 +62,7 @@
                   <Component id="equationsCountInputField" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="OneStepButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="SolveAllButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="LoadFromFileButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="equationsPane" max="32767" attributes="0"/>
@@ -122,7 +125,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="801" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="874" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -150,6 +153,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SolveAllButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="LoadFromFileButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Load From File"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="LoadFromFileButtonActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
