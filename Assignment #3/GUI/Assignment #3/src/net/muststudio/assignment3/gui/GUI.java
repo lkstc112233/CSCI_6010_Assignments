@@ -6,6 +6,8 @@
 package net.muststudio.assignment3.gui;
 
 import java.awt.FlowLayout;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.text.DecimalFormat;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -30,6 +32,7 @@ public class GUI extends javax.swing.JFrame {
     private boolean calculationBegun = false;
     private boolean calculationFinished = false;
     private int progress = 0;
+    private int offsetForColumn = 0;
     
     /**
      * Creates new form GUI
@@ -167,6 +170,25 @@ public class GUI extends javax.swing.JFrame {
             
             FloatFliter fliter = new FloatFliter();
             
+            FocusListener validCheck = new FocusListener(){
+                @Override
+                public void focusGained(FocusEvent e) {
+                    ((JTextField)e.getComponent()).selectAll();
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    if (((JTextField)e.getComponent()).getText().equals("-")){
+                        JOptionPane.showMessageDialog(null,
+                                "You can only enter a floating number here",
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                        (e.getComponent()).requestFocus();
+                    }
+                        
+                }
+            };
+            
+            // Create the text fields for inputs.
             for (int i = 0; i < equationCnt; ++i)
             {
                 JPanel panelX = new JPanel();
@@ -176,9 +198,10 @@ public class GUI extends javax.swing.JFrame {
                 {
                     panelX.add(equationInputFields[i][j] = new JTextField("0",8));
                     ((PlainDocument)equationInputFields[i][j].getDocument()).setDocumentFilter(fliter);
-                    String text = "x" + (j+1) + " +";
+                    equationInputFields[i][j].addFocusListener(validCheck);
+                    String text = "x" + toSubscript(j+1) + " +";
                     if (variableCnt - 1 == j)
-                        text = "x" + (j+1) + " =";
+                        text = "x" + toSubscript(j+1) + " =";
                     if (j < variableCnt)
                         panelX.add(new JLabel(text));
                 }
@@ -228,11 +251,15 @@ public class GUI extends javax.swing.JFrame {
             beginCalc();
         }
         if (oneStep()) {
+            String result = IndicateResults();
             calculationFinished = true;
             OneStepButton.setEnabled(false);
             SolveAllButton.setEnabled(false);
+            matToTextFields();
+            JOptionPane.showMessageDialog(null, result);
         }
-        matToTextFields();
+        else
+            matToTextFields();
     }//GEN-LAST:event_OneStepButtonActionPerformed
 
     private void SolveAllButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SolveAllButtonActionPerformed
@@ -245,9 +272,11 @@ public class GUI extends javax.swing.JFrame {
             matToTextFields();
         }
         calculationFinished = true;
+        String result = IndicateResults();
         OneStepButton.setEnabled(false);
         SolveAllButton.setEnabled(false);
         matToTextFields();
+        JOptionPane.showMessageDialog(null, result);
     }//GEN-LAST:event_SolveAllButtonActionPerformed
 
     /** 
@@ -258,8 +287,6 @@ public class GUI extends javax.swing.JFrame {
         int varCount = equationInputFields[0].length - 1;
         for (int i = 0; i < equationInputFields.length; ++i) {
             for (int j = 0; j < varCount; ++j)
-//                equationInputFields[i][j].setText(Double.toString(mat.getAt(i, j)));
-//            equationInputFields[i][varCount].setText(Double.toString(mat.getAt(i, mat.size())));
                 equationInputFields[i][j].setText(form.format(mat.getAt(i, j)));
             equationInputFields[i][varCount].setText(form.format(mat.getAt(i, mat.size())));
         }
@@ -272,6 +299,57 @@ public class GUI extends javax.swing.JFrame {
                 mat.setAt(i, j, Double.parseDouble(equationInputFields[i][j].getText()));
             mat.setAt(i, mat.size(), Double.parseDouble(equationInputFields[i][varCount].getText()));
         }
+    }
+    
+    // This function would return the subscript for better performance.
+    private String toSubscript(int input) {
+        if (input == 0)
+            return "\u2080";
+        final char[] charBase = new char[]{'\u2080','\u2081','\u2082','\u2083','\u2084','\u2085',
+            '\u2086','\u2087','\u2088','\u2089', };
+        StringBuilder sb = new StringBuilder();
+        while(input != 0) {
+            sb.append(charBase[input % 10]);
+            input /= 10;
+        }
+        sb.reverse();
+        return sb.toString();
+    }
+    
+    // And this function produces a string indicating the result.
+    private String IndicateResults() {
+        DecimalFormat form = new DecimalFormat("#.#####");
+        int varCount = equationInputFields[0].length - 1;
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < equationInputFields.length; ++i) {
+            char prefix = ' ';
+            int variableCnt = 0;
+            for (int j = 0; j < varCount; ++j) {
+                // Skip 0 variables.
+                if (Math.abs(mat.getAt(i, j)) < Matrix.SMALL_VALUE)
+                    continue;
+                result.append(prefix);
+                if (Math.abs(mat.getAt(i, j) - 1) > Matrix.SMALL_VALUE)
+                    result.append(form.format(mat.getAt(i, j)));
+                result.append("x");
+                result.append(toSubscript(j + 1));
+                result.append(" ");
+                prefix = '+';
+                variableCnt += 1;
+            }
+            if (variableCnt == 0) {
+                if (Math.abs(mat.getAt(i, mat.size())) > Matrix.SMALL_VALUE) {
+                    result = new StringBuilder();
+                    result.append("There is no solution to this system.");
+                    break;
+                }
+            } else {
+                result.append("= ");
+                result.append(form.format(mat.getAt(i, mat.size())));
+                result.append('\n');
+            }
+        }
+        return result.toString();
     }
     
     /**
@@ -314,20 +392,35 @@ public class GUI extends javax.swing.JFrame {
         ShowFieldsButton.setText("Clear Equations");
     }
     private void beginCalc(){
+        // Status Change. Get all variables ready for calculation.
         calculationBegun = true;
         calculationFinished = false;
         for (JTextField[] fs:equationInputFields)
             for (JTextField f:fs)
                 f.setEditable(false);
         progress = 0;
+        offsetForColumn = 0;
     }
 
     private boolean oneStep() {
-        mat.pivot(progress, progress);
+        // Test if we can pivot the current 
+        while (progress + offsetForColumn < equationInputFields[0].length - 1 
+                && !mat.pivot(progress, progress + offsetForColumn)) toBreak: { // A dirty solution for goto.
+            // Find if there is a number in this column 
+            for (int i = progress; i < equationInputFields.length; ++i)
+                if (Math.abs(mat.getAt(i, progress + offsetForColumn)) > Matrix.SMALL_VALUE)
+                {
+                    mat.elementaryRowOperations(i, progress);
+                    if(mat.pivot(progress, progress + offsetForColumn))
+                        break toBreak;
+                }
+            // If we hit here, we can't find a column has a non zero value in our column testing.
+            offsetForColumn += 1;
+        }
         progress += 1;
-        if (progress >= equationInputFields.length)
-            return true;
-        return false;
+        // Return true if we finished all pivoting process.
+        return progress >= equationInputFields.length 
+                || progress + offsetForColumn >= equationInputFields[0].length - 1;
     }
                     
     
@@ -354,7 +447,7 @@ public class GUI extends javax.swing.JFrame {
             Double.parseDouble(text);
             return true;
         } catch (NumberFormatException e) {
-            return false;
+            return text.equals("-");
         }
     }
     

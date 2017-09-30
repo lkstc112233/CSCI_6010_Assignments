@@ -10,7 +10,7 @@ package net.muststudio.assignment3;
  * @author Kevin
 */
 public class Matrix {
-    private final double SMALL_VALUE = 1e-200;
+    public static final double SMALL_VALUE = 1e-200;
     private double[][] mat;
     public Matrix(int size) {
         int i = 0;
