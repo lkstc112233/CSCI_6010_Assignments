@@ -89,6 +89,9 @@ public class GUI extends javax.swing.JFrame {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 SelectAllWhenGainedControl(evt);
             }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                CheckIfNegative(evt);
+            }
         });
 
         jLabel2.setText("Equations Count");
@@ -97,6 +100,9 @@ public class GUI extends javax.swing.JFrame {
         equationsCountInputField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 SelectAllWhenGainedControl(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                CheckIfNegative(evt);
             }
         });
 
@@ -193,6 +199,10 @@ public class GUI extends javax.swing.JFrame {
         if (mat == null) {
             int variableCnt = Integer.valueOf(variablesCountInputField.getText());
             int equationCnt = Integer.valueOf(equationsCountInputField.getText());
+            if (variableCnt < 0)
+                return;
+            if (equationCnt < 0)
+                return;
             int finalSize = Math.max(variableCnt, equationCnt);
             mat = new Matrix(finalSize);
 
@@ -206,6 +216,19 @@ public class GUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ShowFieldsButtonActionPerformed
 
+    private void ShowResult(String result){
+        if (result == null)
+            return;
+        if (!calculationFinished)
+            return;
+        if (result.equals("")) {
+            JOptionPane.showMessageDialog(null, "Please Enter Something into the equation.");
+            changeGuiStatus(StatusCode.ResetMatrix);
+        }
+        else
+            JOptionPane.showMessageDialog(null, result);
+    }
+    
     private void OneStepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OneStepButtonActionPerformed
         // This function will goes into the function for 1 step.
         if (!calculationBegun) {
@@ -224,7 +247,7 @@ public class GUI extends javax.swing.JFrame {
             OneStepButton.setEnabled(false);
             SolveAllButton.setEnabled(false);
             matToTextFields();
-            JOptionPane.showMessageDialog(null, result);
+            ShowResult(result);
         }
         else
             matToTextFields();
@@ -250,7 +273,7 @@ public class GUI extends javax.swing.JFrame {
         OneStepButton.setEnabled(false);
         SolveAllButton.setEnabled(false);
         matToTextFields();
-        JOptionPane.showMessageDialog(null, result);
+        ShowResult(result);
     }//GEN-LAST:event_SolveAllButtonActionPerformed
 
     private void SelectAllWhenGainedControl(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_SelectAllWhenGainedControl
@@ -262,6 +285,13 @@ public class GUI extends javax.swing.JFrame {
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) 
             loadFromFile(chooser.getSelectedFile());
     }//GEN-LAST:event_LoadFromFileButtonActionPerformed
+
+    private void CheckIfNegative(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_CheckIfNegative
+        if (Integer.parseInt(((JTextField)evt.getComponent()).getText()) < 0){
+            JOptionPane.showMessageDialog(null, "You can't input a negative number here!");
+            ((JTextField)evt.getComponent()).grabFocus();
+        }
+    }//GEN-LAST:event_CheckIfNegative
 
     /** 
      * These two functions handles data transferation between GUI and data structures.
@@ -420,8 +450,6 @@ public class GUI extends javax.swing.JFrame {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        
         //</editor-fold>
 
         File file = null;
