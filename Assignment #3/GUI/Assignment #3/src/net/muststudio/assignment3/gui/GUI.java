@@ -65,8 +65,8 @@ public class GUI extends javax.swing.JFrame {
                 if (t.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
                     try {
                         Object td = t.getTransferData(DataFlavor.javaFileListFlavor);
+                        acceptFile = true;
                         if (td instanceof List) {
-                            acceptFile = true;
                             for (Object value : ((List) td)) {
                                 if (value instanceof File) {
                                     File file = (File) value;
