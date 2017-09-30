@@ -8,7 +8,10 @@ package net.muststudio.assignment3.gui;
 import java.awt.FlowLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.Scanner;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -384,6 +387,53 @@ public class GUI extends javax.swing.JFrame {
         return result.toString();
     }
     
+    private void loadFromFile(File f) {
+        // TODO: finish this.
+        Runnable fileError = ()-> JOptionPane.showMessageDialog(null, "Cannot open this file.");
+        try(Scanner scanner = new Scanner(f)){
+            int variableCnt;
+            int equationCnt;
+            if (scanner.hasNextInt())
+                variableCnt = scanner.nextInt();
+            else{
+                fileError.run();
+                return;
+            }
+            if (scanner.hasNextInt())
+                equationCnt = scanner.nextInt();
+            else{
+                fileError.run();
+                return;
+            }
+            int finalSize = Math.max(variableCnt, equationCnt);
+            Matrix ourmat = new Matrix(finalSize);
+            
+            for (int i = 0; i < equationCnt; ++i)
+            {
+                JPanel panelX = new JPanel();
+                panelX.setLayout(new FlowLayout());
+
+                for (int j = 0; j < variableCnt + 1; ++j)
+                {
+                    panelX.add(equationInputFields[i][j] = new JTextField("0",8));
+                    ((PlainDocument)equationInputFields[i][j].getDocument()).setDocumentFilter(fliter);
+                    equationInputFields[i][j].addFocusListener(validCheck);
+                    String text = "x" + toSubscript(j+1) + " +";
+                    if (variableCnt - 1 == j)
+                        text = "x" + toSubscript(j+1) + " =";
+                    if (j < variableCnt)
+                        panelX.add(new JLabel(text));
+                }
+                equationsPanel.add(panelX);
+                panelX.validate();
+            }
+            
+        }catch(IOException e){
+            fileError.run();
+        }
+            
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -411,10 +461,24 @@ public class GUI extends javax.swing.JFrame {
         }
         //</editor-fold>
 
+        File file = null;
+        if (args.length > 0)
+        {
+            file = new File(args[0]);
+            if (!file.exists())
+                file = null;
+        }
+        // This final is very important to pass the argument into the anonymous class.
+        final File toPass = file;
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            File input = toPass;
             public void run() {
-                new GUI().setVisible(true);
+                GUI g = new GUI();
+                if (toPass != null)
+                    g.loadFromFile(input);
+                g.setVisible(true);
             }
         });
     }
