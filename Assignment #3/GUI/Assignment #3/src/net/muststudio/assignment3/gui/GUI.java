@@ -6,11 +6,20 @@
 package net.muststudio.assignment3.gui;
 
 import java.awt.FlowLayout;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetAdapter;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.List;
 import java.util.Scanner;
 import javax.swing.BoxLayout;
 import javax.swing.JFileChooser;
@@ -47,6 +56,59 @@ public class GUI extends javax.swing.JFrame {
      */
     public GUI() {
         initComponents();
+        // Add a drop target so you can drop files on the window.
+        DropTarget target = new DropTarget(this, DnDConstants.ACTION_COPY, new DropTargetAdapter() {
+            @Override
+            public void dragEnter(DropTargetDragEvent dtde) {
+                boolean acceptFile = false;
+                Transferable t = dtde.getTransferable();
+                if (t.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                    try {
+                        Object td = t.getTransferData(DataFlavor.javaFileListFlavor);
+                        if (td instanceof List) {
+                            acceptFile = true;
+                            for (Object value : ((List) td)) {
+                                if (value instanceof File) {
+                                    File file = (File) value;
+                                    if (!file.exists())
+                                        acceptFile = false;
+                                }
+                            }
+                        }
+                    } catch (UnsupportedFlavorException | IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+                if (acceptFile) {
+                    dtde.acceptDrag(DnDConstants.ACTION_COPY);
+                } else {
+                    dtde.rejectDrag();
+                }
+                repaint();
+            }
+            @Override
+            public void drop(DropTargetDropEvent dtde) {
+                dtde.acceptDrop(DnDConstants.ACTION_COPY);
+                Transferable t = dtde.getTransferable();
+                if (t.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                    try {
+                        Object td = t.getTransferData(DataFlavor.javaFileListFlavor);
+                        if (td instanceof List) {
+                            for (Object value : ((List) td)) {
+                                if (value instanceof File) {
+                                    File file = (File) value;
+                                    if (file.exists()) 
+                                        loadFromFile(file);
+                                }
+                            }
+                        }
+                    } catch (UnsupportedFlavorException | IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+                dtde.dropComplete(true);
+            }
+        });
         // This helps me creating the fliters to ensure that the content 
         // inputed into the two Textfields are integers.
         ((PlainDocument)variablesCountInputField.getDocument()).setDocumentFilter(new IntFliter());
@@ -554,6 +616,7 @@ public class GUI extends javax.swing.JFrame {
                 if (j < variableCnt)
                     panelX.add(new JLabel(text));
             }
+            panelX.setMaximumSize( panelX.getPreferredSize() );
             equationsPanel.add(panelX);
             panelX.validate();
         }
@@ -578,11 +641,12 @@ public class GUI extends javax.swing.JFrame {
                 equationsPanel.repaint();
                 break;
             case ResetMatrix:
-                for (JTextField[] fs:equationInputFields)
-                    for (JTextField f:fs) {
-                        f.setText("0");
-                        f.setEditable(true);
-                    }
+                if (equationInputFields != null)
+                    for (JTextField[] fs:equationInputFields)
+                        for (JTextField f:fs) {
+                            f.setText("0");
+                            f.setEditable(true);
+                        }
                 ShowFieldsButton.setText("Remove Text Fields");
                 contentChanged = false;
                 calculationBegun = false;
