@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 namespace DijkstrasAlgorithmPresentation
 {
     /// <summary>
-    /// MainWindow.xaml 的交互逻辑
+    /// MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
