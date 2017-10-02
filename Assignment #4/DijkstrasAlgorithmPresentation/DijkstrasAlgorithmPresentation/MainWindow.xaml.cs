@@ -67,6 +67,7 @@ namespace DijkstrasAlgorithmPresentation
             newOne.MouseDown += moveStart;
             newOne.MouseUp += moveEnd;
             newOne.MouseMove += moving;
+            
 
             monitor.Children.Add(newOne);
             Canvas.SetLeft(newOne, 10);
