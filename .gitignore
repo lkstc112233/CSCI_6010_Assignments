@@ -1,6 +1,6 @@
 /Assignment #3/GUI/Assignment #3/nbproject/private/
 /Assignment #3/GUI/Assignment #3/build/
 /Assignment #3/GUI/Assignment #3/dist/
-/Assignment #4/DijkstrasAlgorithmPresentation/DijkstrasAlgorithmPresentation/obj/
-/Assignment #4/DijkstrasAlgorithmPresentation/DijkstrasAlgorithmPresentation/bin/
-/Assignment #4/DijkstrasAlgorithmPresentation/.vs/
+/Assignment #4/DijkstrasAlgorithmPresentation/DijkstrasAlgorithmPresentation/obj/**
+/Assignment #4/DijkstrasAlgorithmPresentation/DijkstrasAlgorithmPresentation/bin/**
+/Assignment #4/DijkstrasAlgorithmPresentation/.vs/**
