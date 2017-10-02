@@ -6,7 +6,10 @@
         xmlns:local="clr-namespace:DijkstrasAlgorithmPresentation"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+    <StackPanel>
+        <Button Click="Add_Circle_Button_Click">Add Circle</Button>
+        <Canvas Name="monitor">
+            
+        </Canvas>
+    </StackPanel>
 </Window>
