@@ -8,5 +8,8 @@ namespace DijkstrasAlgorithmPresentation
 {
     class Edge
     {
+        public Vertex start { get; }
+        public Vertex end { get; }
+        public double weight { get; set; }
     }
 }

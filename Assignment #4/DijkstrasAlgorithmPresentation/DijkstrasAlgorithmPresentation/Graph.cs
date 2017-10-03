@@ -8,5 +8,7 @@ namespace DijkstrasAlgorithmPresentation
 {
     class Graph
     {
+        public List<Vertex> vectors;
+        public List<Edge> edges;
     }
 }
