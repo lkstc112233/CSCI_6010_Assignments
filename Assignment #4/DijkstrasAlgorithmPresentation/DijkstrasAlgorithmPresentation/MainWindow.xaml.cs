@@ -64,8 +64,14 @@ namespace DijkstrasAlgorithmPresentation
                 {
                     var element = (UIElement)varMoved;
                     var p2 = args.GetPosition(monitor);
-                    Canvas.SetLeft(element, p2.X - dragStart.Value.X);
-                    Canvas.SetTop(element, p2.Y - dragStart.Value.Y);
+                    if (p2.X - dragStart.Value.X > 0)
+                        Canvas.SetLeft(element, p2.X - dragStart.Value.X);
+                    else
+                        Canvas.SetLeft(element, 0);
+                    if (p2.Y - dragStart.Value.Y > 0)
+                        Canvas.SetTop(element, p2.Y - dragStart.Value.Y);
+                    else
+                        Canvas.SetTop(element, 0);
                 }
             };
 
