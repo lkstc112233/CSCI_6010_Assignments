@@ -1,0 +1,41 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:DijkstrasAlgorithmPresentation">
+    <DataTemplate x:Key="ControlPanelVertexPanel" DataType="{x:Type local:Vertex}">
+        <DataTemplate.Resources>
+            <local:ColorSelectionToIsCheckedConverter x:Key="ColorConverter"/>
+        </DataTemplate.Resources>
+        <StackPanel>
+            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.RED}}">Red</RadioButton>
+            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.GREEN}}">Green</RadioButton>
+            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.BLUE}}">Blue</RadioButton>
+            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.BLACK}}">Black</RadioButton>
+            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.WHITE}}">White</RadioButton>
+            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.CYAN}}">Cyan</RadioButton>
+            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.BROWN}}">Brown</RadioButton>
+            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.PINK}}">Pink</RadioButton>
+            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.YELLOW}}">Yellow</RadioButton>
+            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.AQUA}}">Aqua</RadioButton>
+            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.GREY}}">Grey</RadioButton>
+        </StackPanel>
+    </DataTemplate>
+    <DataTemplate x:Key="VertexNode" DataType="{x:Type local:Vertex}">
+        <DataTemplate.Resources>
+            <local:ColorSelectionToIsCheckedConverter x:Key="ColorConverter"/>
+        </DataTemplate.Resources>
+        <StackPanel>
+            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.RED}}">Red</RadioButton>
+            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.GREEN}}">Green</RadioButton>
+            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.BLUE}}">Blue</RadioButton>
+            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.BLACK}}">Black</RadioButton>
+            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.WHITE}}">White</RadioButton>
+            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.CYAN}}">Cyan</RadioButton>
+            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.BROWN}}">Brown</RadioButton>
+            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.PINK}}">Pink</RadioButton>
+            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.YELLOW}}">Yellow</RadioButton>
+            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.AQUA}}">Aqua</RadioButton>
+            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.GREY}}">Grey</RadioButton>
+        </StackPanel>
+    </DataTemplate>
+    <local:IsNullToVisibilityConverter x:Key="IsNullToVisibilityConverter"/>
+</ResourceDictionary>

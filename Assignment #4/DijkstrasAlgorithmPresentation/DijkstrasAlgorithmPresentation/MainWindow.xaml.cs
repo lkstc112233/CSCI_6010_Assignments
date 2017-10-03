@@ -25,13 +25,38 @@ namespace DijkstrasAlgorithmPresentation
 
         Nullable<Point> dragStart = null;
 
+        
+        Vertex m_vertexSelected
+        {
+            get
+            {
+                return (Vertex)GetValue(CurrentVertexSelected);
+            }
+            set
+            {
+                SetValue(CurrentVertexSelected, value);
+            }
+        }
+        public static readonly DependencyProperty CurrentVertexSelected = DependencyProperty.Register("CurrentVertexSelected", typeof(Vertex),typeof(MainWindow),new PropertyMetadata(null));
+        string CustomText
+        {
+            get
+            {
+                return (string)GetValue(m_CustomText);
+            }
+            set
+            {
+                SetValue(m_CustomText, value);
+            }
+        }
+        public static readonly DependencyProperty m_CustomText = DependencyProperty.Register("CustomText", typeof(string),typeof(MainWindow),new PropertyMetadata("123"));
+
 
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = this;
         }
-
-
 
         private void Add_Circle_Button_Click(object sender, RoutedEventArgs e)
         {
@@ -111,17 +136,30 @@ namespace DijkstrasAlgorithmPresentation
             monitor.Children.Add(connection);
         }
 
-        class EclipseConverter : IValueConverter
+        private void Set_Vertex_try(object sender, RoutedEventArgs e)
         {
-            public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-            {
-                return (double)value + 10;
-            }
+            m_vertexSelected = new Vertex();
+            m_vertexSelected.m_color = ColorSelection.GREEN;
+            m_vertexSelected = m_vertexSelected;
+        }
 
-            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-            {
-                return (double)value - 10;
-            }
+        private void Make_Vertex_Null(object sender, RoutedEventArgs e)
+        {
+            m_vertexSelected = null;
+            CustomText = "7654321";
+        }
+    }
+
+    class EclipseConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (double)value + 10;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (double)value - 10;
         }
     }
 }

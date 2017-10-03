@@ -4,13 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DijkstrasAlgorithmPresentation"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        mc:Ignorable="d" Name="parentWindow"
+        Title="Dijkstra's Algorithm Presentation" Height="350" Width="525">
     <DockPanel>
+        <DockPanel.Resources>
+            <ResourceDictionary Source="ControlPanelDisplayDictionary.xaml"/>
+        </DockPanel.Resources>
         <StackPanel
             DockPanel.Dock="Right">
-            <StackPanel Name="VertexSettingPanel" Visibility="Collapsed">
-                <Button>Set Color</Button>
+            <StackPanel Name="VertexSettingPanel" Visibility="{Binding Path=CurrentVertexSelected, Converter={StaticResource IsNullToVisibilityConverter}, TargetNullValue=Collapsed}">
+                <ContentPresenter ContentTemplate="{StaticResource ControlPanelVertexPanel}" Content="{Binding CurrentVertexSelected}"/>
             </StackPanel>
             <StackPanel Name="EdgeSettingPanel" Visibility="Collapsed">
                 <Button>Set Weight</Button>
@@ -18,7 +21,12 @@
         </StackPanel>
         <StackPanel
             DockPanel.Dock="Left">
-            <Button Click="Add_Circle_Button_Click">Add Circle</Button>
+            <StackPanel Orientation="Horizontal">
+                <Button Click="Add_Circle_Button_Click">Add Circle</Button>
+                <Button Click="Set_Vertex_try">Select</Button>
+                <Button Click="Make_Vertex_Null">Deselect</Button>
+                <TextBlock Text="{Binding Path=CustomText}"/>
+            </StackPanel>
             <Canvas Name="monitor">
 
             </Canvas>
