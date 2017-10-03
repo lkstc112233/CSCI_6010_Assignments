@@ -22,6 +22,7 @@ namespace DijkstrasAlgorithmPresentation
     public partial class MainWindow : Window
     {
         List<Ellipse> circles;
+        List<Vertex> vertexes;
 
         Nullable<Point> dragStart = null;
 
@@ -44,23 +45,20 @@ namespace DijkstrasAlgorithmPresentation
         {
             InitializeComponent();
             DataContext = this;
-        }
 
-        private void Add_Circle_Button_Click(object sender, RoutedEventArgs e)
-        {
-            MouseButtonEventHandler moveStart = (varMoved, args) =>
+            moveStart = (varMoved, args) =>
             {
                 var element = varMoved as UIElement;
                 dragStart = args.GetPosition(element);
                 element.CaptureMouse();
             };
-            MouseButtonEventHandler moveEnd = (varMoved, args) =>
+            moveEnd = (varMoved, args) =>
             {
                 var element = varMoved as UIElement;
                 dragStart = null;
                 element.ReleaseMouseCapture();
             };
-            MouseEventHandler moving = (varMoved, args) =>
+            moving = (varMoved, args) =>
             {
                 if (dragStart != null && args.LeftButton == MouseButtonState.Pressed)
                 {
@@ -68,10 +66,20 @@ namespace DijkstrasAlgorithmPresentation
                     var p2 = args.GetPosition(monitor);
                     Canvas.SetLeft(element, p2.X - dragStart.Value.X);
                     Canvas.SetTop(element, p2.Y - dragStart.Value.Y);
-
                 }
             };
 
+            selectPresenter = (varMoved, args) =>
+            {
+                var presenter = varMoved as ContentPresenter;
+                if (presenter.Content is Vertex)
+                    m_vertexSelected = presenter.Content as Vertex;
+            };
+
+        }
+
+        private void Add_Circle_Button_Click(object sender, RoutedEventArgs e)
+        {
             if (circles == null)
                 circles = new List<Ellipse>();
             Ellipse newOne = new Ellipse() { Fill = Brushes.Red, Width = 20, Height = 20 };
@@ -134,6 +142,37 @@ namespace DijkstrasAlgorithmPresentation
         private void Make_Vertex_Null(object sender, RoutedEventArgs e)
         {
             m_vertexSelected = null;
+        }
+
+        MouseButtonEventHandler moveStart;
+        MouseButtonEventHandler moveEnd;
+        MouseEventHandler moving;
+        
+        MouseButtonEventHandler selectPresenter;
+        MouseButtonEventHandler vertexMouseUp;
+        MouseEventHandler vertexMouseMoving;
+
+        private void Add_Vertex(object sender, RoutedEventArgs e)
+        {
+            var rd = new ResourceDictionary();
+            rd.Source = new Uri("ControlPanelDisplayDictionary.xaml", UriKind.RelativeOrAbsolute);
+            if (vertexes == null)
+                vertexes = new List<Vertex>();
+            vertexes.Add(new Vertex());
+            vertexes.Last().id = vertexes.Count;
+            m_vertexSelected = vertexes.Last();
+            var cont = new ContentPresenter();
+            cont.ContentTemplate = (DataTemplate)rd["VertexNode"];
+            cont.Content = vertexes.Last();
+
+            cont.MouseDown += selectPresenter;
+            cont.MouseDown += moveStart;
+          //  cont.MouseUp += vertexMouseUp;
+            cont.MouseUp += moveEnd;
+            cont.MouseMove += moving;
+
+            monitor.Children.Add(cont);
+            
         }
     }
 

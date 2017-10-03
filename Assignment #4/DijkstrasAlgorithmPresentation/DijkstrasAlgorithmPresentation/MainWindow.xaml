@@ -19,17 +19,17 @@
                 <Button>Set Weight</Button>
             </StackPanel>
         </StackPanel>
-        <StackPanel
+        <DockPanel
             DockPanel.Dock="Left">
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
                 <Button Click="Add_Circle_Button_Click">Add Circle</Button>
-                <Button Click="Set_Vertex_try">Select</Button>
+                <Button Click="Add_Vertex">Add Vertex</Button>
                 <Button Click="Make_Vertex_Null">Deselect</Button>
                 <TextBlock Text="{Binding Path=CustomText}"/>
             </StackPanel>
             <Canvas Name="monitor">
 
             </Canvas>
-        </StackPanel>
+        </DockPanel>
     </DockPanel>
 </Window>

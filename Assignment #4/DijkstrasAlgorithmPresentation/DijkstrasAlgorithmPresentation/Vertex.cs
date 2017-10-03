@@ -10,20 +10,6 @@ using System.Windows.Media;
 
 namespace DijkstrasAlgorithmPresentation
 {
-    enum ColorSelection
-    {
-        RED,
-        GREEN,
-        BLUE,
-        BLACK,
-        WHITE,
-        CYAN,
-        BROWN,
-        PINK,
-        YELLOW,
-        AQUA,
-        GREY,
-    }
     class Vertex : INotifyPropertyChanged
     {
         private Color m_color;
@@ -41,6 +27,11 @@ namespace DijkstrasAlgorithmPresentation
         }
 
         public int id { get; set; }
+
+        public Vertex()
+        {
+            color = Colors.Red;
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void NotifyPropertyChanged(string propName)
