@@ -37,9 +37,24 @@
     <DataTemplate x:Key="EdgePresent" DataType="{x:Type local:Edge}">
         <DataTemplate.Resources>
             <local:UIElementToXConverter x:Key="ElementToX"/>
+            <local:UIElementToYConverter x:Key="ElementToY"/>
+            <local:ValueConverterGroups x:Key="VertexToX">
+                <local:VertexToContentConverter/>
+                <local:UIElementToXConverter/>
+            </local:ValueConverterGroups>
+            <local:ValueConverterGroups x:Key="VertexToY">
+                <local:VertexToContentConverter/>
+                <local:UIElementToYConverter/>
+            </local:ValueConverterGroups>
         </DataTemplate.Resources>
         <Grid>
-            <Line X1="{Binding start, Converter={StaticResource ElementToX}}"/>
+            <Line X1="{Binding start, Converter={StaticResource VertexToX}}" 
+                  Y1="{Binding start, Converter={StaticResource VertexToY}}"
+                  X2="{Binding end, Converter={StaticResource VertexToX}}"
+                  Y2="{Binding end, Converter={StaticResource VertexToY}}" 
+                  Stroke="Cyan"
+                  StrokeThickness="2"
+                  />
         </Grid>
     </DataTemplate>
     <local:IsNullToVisibilityConverter x:Key="IsNullToVisibilityConverter"/>

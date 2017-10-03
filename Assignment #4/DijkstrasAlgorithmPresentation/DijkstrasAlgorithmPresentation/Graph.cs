@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DijkstrasAlgorithmPresentation
 {
-    class Graph
+    public class Graph
     {
         public List<Vertex> vectors;
         public List<Edge> edges;

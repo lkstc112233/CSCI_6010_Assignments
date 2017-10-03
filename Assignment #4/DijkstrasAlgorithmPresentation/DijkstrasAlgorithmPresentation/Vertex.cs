@@ -10,7 +10,7 @@ using System.Windows.Media;
 
 namespace DijkstrasAlgorithmPresentation
 {
-    class Vertex : INotifyPropertyChanged
+    public class Vertex : INotifyPropertyChanged
     {
         private Color m_color;
         public Color color

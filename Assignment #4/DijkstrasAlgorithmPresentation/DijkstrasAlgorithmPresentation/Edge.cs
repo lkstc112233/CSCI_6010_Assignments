@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace DijkstrasAlgorithmPresentation
 {
-    class Edge
+    public class Edge
     {
-        public Vertex start { get; }
-        public Vertex end { get; }
+        public Vertex start { get; set; }
+        public Vertex end { get; set; }
         public double weight { get; set; }
     }
 }

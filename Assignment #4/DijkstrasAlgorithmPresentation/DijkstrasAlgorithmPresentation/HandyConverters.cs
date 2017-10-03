@@ -10,6 +10,19 @@ using System.Windows.Data;
 
 namespace DijkstrasAlgorithmPresentation
 {
+    class ValueConverterGroups : List<IValueConverter>, IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return this.Aggregate(value, (current, converter) => converter.Convert(current, targetType, parameter, culture));
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     class IsNullToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -29,7 +42,18 @@ namespace DijkstrasAlgorithmPresentation
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-
+            try
+            {
+                Vertex v = value as Vertex;
+                UIElement e = MainWindow.vertexPresenterDictionary[v];
+                if (e == null)
+                    return Binding.DoNothing;
+                return e;
+            }
+            catch (InvalidCastException e)
+            {
+                return Binding.DoNothing;
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -46,6 +70,22 @@ namespace DijkstrasAlgorithmPresentation
                 return Binding.DoNothing;
             UIElement elem = value as UIElement;
             return (Canvas.GetLeft(elem) + Canvas.GetRight(elem)) / 2;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return Binding.DoNothing;
+        }
+    }
+
+    class UIElementToYConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null)
+                return Binding.DoNothing;
+            UIElement elem = value as UIElement;
+            return (Canvas.GetTop(elem) + Canvas.GetBottom(elem)) / 2;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

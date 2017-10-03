@@ -26,6 +26,8 @@ namespace DijkstrasAlgorithmPresentation
 
         Nullable<Point> dragStart = null;
 
+        public static Dictionary<Vertex, ContentPresenter> vertexPresenterDictionary = new Dictionary<Vertex, ContentPresenter>();
+
         
         Vertex m_vertexSelected
         {
@@ -165,6 +167,9 @@ namespace DijkstrasAlgorithmPresentation
             rd.Source = new Uri("ControlPanelDisplayDictionary.xaml", UriKind.RelativeOrAbsolute);
             if (vertexes == null)
                 vertexes = new List<Vertex>();
+            Vertex last = null;
+            if (vertexes.Count > 0)
+                last = vertexes.Last();
             vertexes.Add(new Vertex());
             vertexes.Last().id = vertexes.Count;
             m_vertexSelected = vertexes.Last();
@@ -178,7 +183,19 @@ namespace DijkstrasAlgorithmPresentation
             cont.MouseUp += moveEnd;
             cont.MouseMove += moving;
 
+            vertexPresenterDictionary.Add(vertexes.Last(), cont);
+
             monitor.Children.Add(cont);
+            if (last != null)
+            {
+                Edge edg = new Edge();
+                edg.start = last;
+                edg.end = vertexes.Last();
+                cont = new ContentPresenter();
+                cont.ContentTemplate = (DataTemplate)rd["EdgePresent"];
+                cont.Content = edg;
+                monitor.Children.Add(cont);
+            }
         }
 
         private void CancelSelection(object sender, MouseButtonEventArgs e)
