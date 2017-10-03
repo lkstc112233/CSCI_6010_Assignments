@@ -74,6 +74,7 @@ namespace DijkstrasAlgorithmPresentation
                 var presenter = varMoved as ContentPresenter;
                 if (presenter.Content is Vertex)
                     m_vertexSelected = presenter.Content as Vertex;
+                args.Handled = true;
             };
 
         }
@@ -165,14 +166,18 @@ namespace DijkstrasAlgorithmPresentation
             cont.ContentTemplate = (DataTemplate)rd["VertexNode"];
             cont.Content = vertexes.Last();
 
-            cont.MouseDown += selectPresenter;
             cont.MouseDown += moveStart;
+            cont.MouseDown += selectPresenter;
           //  cont.MouseUp += vertexMouseUp;
             cont.MouseUp += moveEnd;
             cont.MouseMove += moving;
 
             monitor.Children.Add(cont);
-            
+        }
+
+        private void CancelSelection(object sender, MouseButtonEventArgs e)
+        {
+            m_vertexSelected = null;
         }
     }
 

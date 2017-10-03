@@ -24,11 +24,14 @@
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
                 <Button Click="Add_Circle_Button_Click">Add Circle</Button>
                 <Button Click="Add_Vertex">Add Vertex</Button>
-                <Button Click="Make_Vertex_Null">Deselect</Button>
                 <TextBlock Text="{Binding Path=CustomText}"/>
             </StackPanel>
-            <Canvas Name="monitor">
-
+            <Canvas Name="monitor" MouseDown="CancelSelection">
+                <Rectangle 
+                    Panel.ZIndex="-99"
+                    Fill="{Binding Path=Background, ElementName=parentWindow}" 
+                    Width="{Binding Path=ActualWidth, ElementName=monitor}" 
+                    Height="{Binding Path=ActualHeight, ElementName=monitor}"/>
             </Canvas>
         </DockPanel>
     </DockPanel>
