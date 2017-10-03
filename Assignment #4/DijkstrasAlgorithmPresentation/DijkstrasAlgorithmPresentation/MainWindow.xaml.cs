@@ -38,18 +38,6 @@ namespace DijkstrasAlgorithmPresentation
             }
         }
         public static readonly DependencyProperty CurrentVertexSelected = DependencyProperty.Register("CurrentVertexSelected", typeof(Vertex),typeof(MainWindow),new PropertyMetadata(null));
-        string CustomText
-        {
-            get
-            {
-                return (string)GetValue(m_CustomText);
-            }
-            set
-            {
-                SetValue(m_CustomText, value);
-            }
-        }
-        public static readonly DependencyProperty m_CustomText = DependencyProperty.Register("CustomText", typeof(string),typeof(MainWindow),new PropertyMetadata("123"));
 
 
         public MainWindow()
@@ -139,14 +127,13 @@ namespace DijkstrasAlgorithmPresentation
         private void Set_Vertex_try(object sender, RoutedEventArgs e)
         {
             m_vertexSelected = new Vertex();
-            m_vertexSelected.m_color = ColorSelection.GREEN;
+            m_vertexSelected.color = Colors.Green;
             m_vertexSelected = m_vertexSelected;
         }
 
         private void Make_Vertex_Null(object sender, RoutedEventArgs e)
         {
             m_vertexSelected = null;
-            CustomText = "7654321";
         }
     }
 

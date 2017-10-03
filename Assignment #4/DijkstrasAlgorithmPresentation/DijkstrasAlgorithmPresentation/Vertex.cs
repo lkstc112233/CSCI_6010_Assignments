@@ -26,49 +26,21 @@ namespace DijkstrasAlgorithmPresentation
     }
     class Vertex : INotifyPropertyChanged
     {
-        private ColorSelection m_m_color;
-        public ColorSelection m_color
+        private Color m_color;
+        public Color color
         {
             get
             {
-                return m_m_color;
+                return m_color;
             }
             set
             {
-                m_m_color = value;
-                NotifyPropertyChanged("m_color");
+                m_color = value;
+                NotifyPropertyChanged("color");
             }
         }
 
         public int id { get; set; }
-        public Color color { get
-            {
-                switch(m_color)
-                {
-                    default:
-                    case ColorSelection.RED:
-                        return Colors.Red;
-                    case ColorSelection.GREEN:
-                        return Colors.Green;
-                    case ColorSelection.BLUE:
-                        return Colors.Blue;
-                    case ColorSelection.BLACK:
-                        return Colors.Black;
-                    case ColorSelection.WHITE:
-                        return Colors.White;
-                    case ColorSelection.CYAN:
-                        return Colors.Cyan;
-                    case ColorSelection.BROWN:
-                        return Colors.Brown;
-                    case ColorSelection.PINK:
-                        return Colors.Pink;
-                    case ColorSelection.YELLOW:
-                        return Colors.Yellow;
-                    case ColorSelection.AQUA:
-                        return Colors.Aqua;
-                }
-            }
-        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void NotifyPropertyChanged(string propName)
@@ -82,12 +54,12 @@ namespace DijkstrasAlgorithmPresentation
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value.Equals(parameter);
+            return value.Equals((Color)ColorConverter.ConvertFromString(parameter as string));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value.Equals(true) ? parameter : Binding.DoNothing;
+            return value.Equals(true) ? (Color)ColorConverter.ConvertFromString(parameter as string) : Binding.DoNothing;
         }
     }
 }

@@ -6,17 +6,17 @@
             <local:ColorSelectionToIsCheckedConverter x:Key="ColorConverter"/>
         </DataTemplate.Resources>
         <StackPanel>
-            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.RED}}">Red</RadioButton>
-            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.GREEN}}">Green</RadioButton>
-            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.BLUE}}">Blue</RadioButton>
-            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.BLACK}}">Black</RadioButton>
-            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.WHITE}}">White</RadioButton>
-            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.CYAN}}">Cyan</RadioButton>
-            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.BROWN}}">Brown</RadioButton>
-            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.PINK}}">Pink</RadioButton>
-            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.YELLOW}}">Yellow</RadioButton>
-            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.AQUA}}">Aqua</RadioButton>
-            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.GREY}}">Grey</RadioButton>
+            <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Red}">Red</RadioButton>
+            <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Green}">Green</RadioButton>
+            <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Blue}">Blue</RadioButton>
+            <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Black}">Black</RadioButton>
+            <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=White}">White</RadioButton>
+            <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Cyan}">Cyan</RadioButton>
+            <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Brown}">Brown</RadioButton>
+            <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Pink}">Pink</RadioButton>
+            <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Yellow}">Yellow</RadioButton>
+            <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Aqua}">Aqua</RadioButton>
+            <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Gray}">Gray</RadioButton>
         </StackPanel>
     </DataTemplate>
     <DataTemplate x:Key="VertexNode" DataType="{x:Type local:Vertex}">
@@ -24,17 +24,7 @@
             <local:ColorSelectionToIsCheckedConverter x:Key="ColorConverter"/>
         </DataTemplate.Resources>
         <StackPanel>
-            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.RED}}">Red</RadioButton>
-            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.GREEN}}">Green</RadioButton>
-            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.BLUE}}">Blue</RadioButton>
-            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.BLACK}}">Black</RadioButton>
-            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.WHITE}}">White</RadioButton>
-            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.CYAN}}">Cyan</RadioButton>
-            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.BROWN}}">Brown</RadioButton>
-            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.PINK}}">Pink</RadioButton>
-            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.YELLOW}}">Yellow</RadioButton>
-            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.AQUA}}">Aqua</RadioButton>
-            <RadioButton IsChecked="{Binding Path=m_color, Converter={StaticResource ColorConverter}, ConverterParameter={x:Static local:ColorSelection.GREY}}">Grey</RadioButton>
+            
         </StackPanel>
     </DataTemplate>
     <local:IsNullToVisibilityConverter x:Key="IsNullToVisibilityConverter"/>
