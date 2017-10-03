@@ -25,13 +25,14 @@
         <DataTemplate.Resources>
             <local:ColorSelectionToIsCheckedConverter x:Key="ColorConverter"/>
         </DataTemplate.Resources>
-        <StackPanel>
+        <Grid>
             <Ellipse Width="{StaticResource DotRadius}" Height="{StaticResource DotRadius}">
                 <Ellipse.Fill>
                     <SolidColorBrush Color="{Binding color}"/>
                 </Ellipse.Fill>
             </Ellipse>
-        </StackPanel>
+            <TextBlock Text="{Binding id}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Grid>
     </DataTemplate>
     <local:IsNullToVisibilityConverter x:Key="IsNullToVisibilityConverter"/>
 </ResourceDictionary>
