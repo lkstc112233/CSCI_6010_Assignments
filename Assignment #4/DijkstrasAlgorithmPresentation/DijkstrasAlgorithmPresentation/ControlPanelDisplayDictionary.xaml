@@ -34,5 +34,13 @@
             <TextBlock Text="{Binding id}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
     </DataTemplate>
+    <DataTemplate x:Key="EdgePresent" DataType="{x:Type local:Edge}">
+        <DataTemplate.Resources>
+            <local:UIElementToXConverter x:Key="ElementToX"/>
+        </DataTemplate.Resources>
+        <Grid>
+            <Line X1="{Binding start, Converter={StaticResource ElementToX}}"/>
+        </Grid>
+    </DataTemplate>
     <local:IsNullToVisibilityConverter x:Key="IsNullToVisibilityConverter"/>
 </ResourceDictionary>
