@@ -38,20 +38,12 @@
         <DataTemplate.Resources>
             <local:UIElementToXConverter x:Key="ElementToX"/>
             <local:UIElementToYConverter x:Key="ElementToY"/>
-            <local:ValueConverterGroups x:Key="VertexToX">
-                <local:VertexToContentConverter/>
-                <local:UIElementToXConverter/>
-            </local:ValueConverterGroups>
-            <local:ValueConverterGroups x:Key="VertexToY">
-                <local:VertexToContentConverter/>
-                <local:UIElementToYConverter/>
-            </local:ValueConverterGroups>
         </DataTemplate.Resources>
         <Grid>
-            <Line X1="{Binding start, Converter={StaticResource VertexToX}}" 
-                  Y1="{Binding start, Converter={StaticResource VertexToY}}"
-                  X2="{Binding end, Converter={StaticResource VertexToX}}"
-                  Y2="{Binding end, Converter={StaticResource VertexToY}}" 
+            <Line X1="{Binding startPresentser, Converter={StaticResource ElementToX}}" 
+                  Y1="{Binding startPresentser, Converter={StaticResource ElementToY}}"
+                  X2="{Binding endPresentser, Converter={StaticResource ElementToX}}"
+                  Y2="{Binding endPresentser, Converter={StaticResource ElementToY}}" 
                   Stroke="Cyan"
                   StrokeThickness="2"
                   />

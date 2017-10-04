@@ -69,7 +69,7 @@ namespace DijkstrasAlgorithmPresentation
             if (value == null)
                 return Binding.DoNothing;
             UIElement elem = value as UIElement;
-            return (Canvas.GetLeft(elem) + Canvas.GetRight(elem)) / 2;
+            return Canvas.GetLeft(elem);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -85,7 +85,7 @@ namespace DijkstrasAlgorithmPresentation
             if (value == null)
                 return Binding.DoNothing;
             UIElement elem = value as UIElement;
-            return (Canvas.GetTop(elem) + Canvas.GetBottom(elem)) / 2;
+            return Canvas.GetTop(elem);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
