@@ -50,7 +50,7 @@ namespace DijkstrasAlgorithmPresentation
                     return Binding.DoNothing;
                 return e;
             }
-            catch (InvalidCastException e)
+            catch (InvalidCastException)
             {
                 return Binding.DoNothing;
             }
