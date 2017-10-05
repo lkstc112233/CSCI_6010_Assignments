@@ -24,7 +24,7 @@
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
                 <Button Click="Add_Circle_Button_Click">Add Circle</Button>
                 <Button Click="Add_Vertex">Add Vertex</Button>
-                <TextBlock Text="{Binding Path=CustomText}"/>
+                <TextBlock/>
             </StackPanel>
             <Canvas Name="monitor" MouseDown="CancelSelection">
                 <Rectangle 

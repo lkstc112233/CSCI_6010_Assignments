@@ -40,8 +40,13 @@ namespace DijkstrasAlgorithmPresentation
                 SetValue(CurrentVertexSelected, value);
             }
         }
-        public static readonly DependencyProperty CurrentVertexSelected = DependencyProperty.Register("CurrentVertexSelected", typeof(Vertex),typeof(MainWindow),new PropertyMetadata(null));
+        public static readonly DependencyProperty CurrentVertexSelected = DependencyProperty.Register("CurrentVertexSelected", typeof(Vertex), typeof(MainWindow), new PropertyMetadata(null));
+        public static readonly DependencyProperty PositionUpdatedProperty = DependencyProperty.Register("PositionUpdated", typeof(double), typeof(MainWindow), new PropertyMetadata(0));
 
+        public void updatePosition()
+        {
+            SetValue(PositionUpdatedProperty, GetValue(PositionUpdatedProperty));
+        }
 
         public MainWindow()
         {
