@@ -45,7 +45,7 @@
         <Grid>
             <ContentPresenter ContentTemplate="{StaticResource Node}" Content="{Binding startPresentser}"/>
             <ContentPresenter ContentTemplate="{StaticResource Node}" Content="{Binding endPresentser}"/>
-            <Line X1="{Binding Path=PositionUpdated, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:MainWindow}}}" 
+            <Line X1="0" 
                   Y1="{Binding startPresentser, Converter={StaticResource ElementToY}}"
                   X2="{Binding endPresentser, Converter={StaticResource ElementToX}}"
                   Y2="{Binding endPresentser, Converter={StaticResource ElementToY}}" 

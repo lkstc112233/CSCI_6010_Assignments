@@ -21,37 +21,20 @@ namespace DijkstrasAlgorithmPresentation
     /// </summary>
     public partial class MainWindow : Window
     {
+        ViewModelVertexEdge viewModel;
+
         List<Ellipse> circles;
         List<Vertex> vertexes;
 
         Nullable<Point> dragStart = null;
 
         public static Dictionary<Vertex, ContentPresenter> vertexPresenterDictionary = new Dictionary<Vertex, ContentPresenter>();
-
         
-        Vertex m_vertexSelected
-        {
-            get
-            {
-                return (Vertex)GetValue(CurrentVertexSelected);
-            }
-            set
-            {
-                SetValue(CurrentVertexSelected, value);
-            }
-        }
-        public static readonly DependencyProperty CurrentVertexSelected = DependencyProperty.Register("CurrentVertexSelected", typeof(Vertex), typeof(MainWindow), new PropertyMetadata(null));
-        public static readonly DependencyProperty PositionUpdatedProperty = DependencyProperty.Register("PositionUpdated", typeof(double), typeof(MainWindow), new PropertyMetadata(0));
-
-        public void updatePosition()
-        {
-            SetValue(PositionUpdatedProperty, GetValue(PositionUpdatedProperty));
-        }
-
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = this;
+            viewModel = new ViewModelVertexEdge();
+            DataContext = viewModel;
 
             moveStart = (varMoved, args) =>
             {
@@ -86,7 +69,7 @@ namespace DijkstrasAlgorithmPresentation
             {
                 var presenter = varMoved as ContentPresenter;
                 if (presenter.Content is Vertex)
-                    m_vertexSelected = presenter.Content as Vertex;
+                    viewModel.CurrentVertexSelected = presenter.Content as Vertex;
                 args.Handled = true;
             };
 
@@ -148,14 +131,14 @@ namespace DijkstrasAlgorithmPresentation
 
         private void Set_Vertex_try(object sender, RoutedEventArgs e)
         {
-            m_vertexSelected = new Vertex();
-            m_vertexSelected.color = Colors.Green;
-            m_vertexSelected = m_vertexSelected;
+            viewModel.CurrentVertexSelected = new Vertex();
+            viewModel.CurrentVertexSelected.color = Colors.Green;
+            viewModel.CurrentVertexSelected = viewModel.CurrentVertexSelected;
         }
 
         private void Make_Vertex_Null(object sender, RoutedEventArgs e)
         {
-            m_vertexSelected = null;
+            viewModel.CurrentVertexSelected = null;
         }
 
         MouseButtonEventHandler moveStart;
@@ -177,7 +160,7 @@ namespace DijkstrasAlgorithmPresentation
                 last = vertexes.Last();
             vertexes.Add(new Vertex());
             vertexes.Last().id = vertexes.Count;
-            m_vertexSelected = vertexes.Last();
+            viewModel.CurrentVertexSelected = vertexes.Last();
             var cont = new ContentPresenter();
             cont.ContentTemplate = (DataTemplate)rd["VertexNode"];
             cont.Content = vertexes.Last();
@@ -205,7 +188,7 @@ namespace DijkstrasAlgorithmPresentation
 
         private void CancelSelection(object sender, MouseButtonEventArgs e)
         {
-            m_vertexSelected = null;
+            viewModel.CurrentVertexSelected = null;
         }
     }
 
