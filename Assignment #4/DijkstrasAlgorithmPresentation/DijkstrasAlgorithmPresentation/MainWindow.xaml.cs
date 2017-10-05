@@ -28,7 +28,6 @@ namespace DijkstrasAlgorithmPresentation
 
         Nullable<Point> dragStart = null;
 
-        public static Dictionary<Vertex, ContentPresenter> vertexPresenterDictionary = new Dictionary<Vertex, ContentPresenter>();
         
         public MainWindow()
         {
@@ -171,7 +170,7 @@ namespace DijkstrasAlgorithmPresentation
             cont.MouseUp += moveEnd;
             cont.MouseMove += moving;
 
-            vertexPresenterDictionary.Add(vertexes.Last(), cont);
+            ViewModelVertexEdge.vertexPresenterDictionary.Add(vertexes.Last(), cont);
 
             monitor.Children.Add(cont);
             if (last != null)

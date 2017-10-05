@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Controls;
 
 namespace DijkstrasAlgorithmPresentation
 {
@@ -17,6 +19,8 @@ namespace DijkstrasAlgorithmPresentation
                 onPropertyChanged("CurrentVertexSelected");
             }
         }
+
+        public static Dictionary<Vertex, ContentPresenter> vertexPresenterDictionary = new Dictionary<Vertex, ContentPresenter>();
 
 
         public event PropertyChangedEventHandler PropertyChanged;
