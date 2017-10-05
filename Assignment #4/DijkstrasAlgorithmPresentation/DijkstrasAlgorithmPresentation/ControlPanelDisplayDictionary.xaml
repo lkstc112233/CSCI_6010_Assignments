@@ -34,24 +34,22 @@
             <TextBlock Text="{Binding id}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
     </DataTemplate>
-    <DataTemplate x:Key="EdgePresent" DataType="{x:Type local:Edge}">
+    <DataTemplate x:Key="EdgePresent" DataType="{x:Type local:EdgeViewModelClass}">
         <DataTemplate.Resources>
-            <DataTemplate x:Key="Node" DataType="{x:Type ContentPresenter}">
-                <Ellipse Width="{Binding Canvas.Left}" Height="{Binding Canvas.Top}" Fill="Red" />
-            </DataTemplate>
             <local:UIElementToXConverter x:Key="ElementToX"/>
             <local:UIElementToYConverter x:Key="ElementToY"/>
+            <local:AverangeConverter x:Key="Averange"/>
         </DataTemplate.Resources>
         <Grid>
-            <ContentPresenter ContentTemplate="{StaticResource Node}" Content="{Binding startPresentser}"/>
-            <ContentPresenter ContentTemplate="{StaticResource Node}" Content="{Binding endPresentser}"/>
-            <Line X1="0" 
-                  Y1="{Binding startPresentser, Converter={StaticResource ElementToY}}"
-                  X2="{Binding endPresentser, Converter={StaticResource ElementToX}}"
-                  Y2="{Binding endPresentser, Converter={StaticResource ElementToY}}" 
+            <Line X1="{Binding X1}"
+                  Y1="{Binding Y1}"
+                  X2="{Binding X2}"
+                  Y2="{Binding Y2}" 
                   Stroke="Cyan"
                   StrokeThickness="2"
                   />
+            <TextBlock Text="{Binding edge.weight}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
         </Grid>
     </DataTemplate>
     <local:IsNullToVisibilityConverter x:Key="IsNullToVisibilityConverter"/>

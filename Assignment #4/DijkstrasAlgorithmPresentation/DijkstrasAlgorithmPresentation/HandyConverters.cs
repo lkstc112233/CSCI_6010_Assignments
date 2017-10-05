@@ -45,7 +45,7 @@ namespace DijkstrasAlgorithmPresentation
             try
             {
                 Vertex v = value as Vertex;
-                UIElement e = MainWindow.vertexPresenterDictionary[v];
+                UIElement e = ViewModelVertexEdge.vertexPresenterDictionary[v];
                 if (e == null)
                     return Binding.DoNothing;
                 return e;
@@ -59,6 +59,39 @@ namespace DijkstrasAlgorithmPresentation
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return Binding.DoNothing;
+        }
+    }
+
+    class AverangeConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            double result = 0;
+            foreach (object o in values)
+            {
+                result += (double)o;
+            }
+            return result / values.Count();
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    class EclipseConverter : IValueConverter
+    {
+        public double Radius { get; set; }
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (double)value + 10;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (double)value - 10;
         }
     }
 

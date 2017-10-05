@@ -171,6 +171,8 @@ namespace DijkstrasAlgorithmPresentation
             cont.MouseMove += moving;
 
             ViewModelVertexEdge.vertexPresenterDictionary.Add(vertexes.Last(), cont);
+            Canvas.SetLeft(ViewModelVertexEdge.vertexPresenterDictionary[vertexes.Last()], 10);
+            Canvas.SetTop(ViewModelVertexEdge.vertexPresenterDictionary[vertexes.Last()], 10);
 
             monitor.Children.Add(cont);
             if (last != null)
@@ -180,7 +182,7 @@ namespace DijkstrasAlgorithmPresentation
                 edg.end = vertexes.Last();
                 cont = new ContentPresenter();
                 cont.ContentTemplate = (DataTemplate)rd["EdgePresent"];
-                cont.Content = edg;
+                cont.Content = new EdgeViewModelClass(edg);
                 monitor.Children.Add(cont);
             }
         }
@@ -191,16 +193,5 @@ namespace DijkstrasAlgorithmPresentation
         }
     }
 
-    class EclipseConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return (double)value + 10;
-        }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return (double)value - 10;
-        }
-    }
 }
