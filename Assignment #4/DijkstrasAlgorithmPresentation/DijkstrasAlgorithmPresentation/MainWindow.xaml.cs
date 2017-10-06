@@ -27,12 +27,16 @@ namespace DijkstrasAlgorithmPresentation
 
         Nullable<Point> dragStart = null;
 
-        
+        ResourceDictionary ControlPanelDisplayDictionary = new ResourceDictionary();
+
         public MainWindow()
         {
             InitializeComponent();
             viewModel = new ViewModelVertexEdge();
             DataContext = viewModel;
+
+            ControlPanelDisplayDictionary.Source = new Uri("ControlPanelDisplayDictionary.xaml", UriKind.RelativeOrAbsolute);
+
 
             // These lambda functions are for draging Vertex nodes around.
             moveStart = (varMoved, args) =>
@@ -103,14 +107,10 @@ namespace DijkstrasAlgorithmPresentation
 
         public Vertex CreateVertex()
         {
-            var rd = new ResourceDictionary();
-            rd.Source = new Uri("ControlPanelDisplayDictionary.xaml", UriKind.RelativeOrAbsolute);
-            Vertex LatestVertex = new Vertex();
-            graph.vertexes.Add(LatestVertex);
-            LatestVertex.id = graph.getNextAvailableVertexId();
+            Vertex LatestVertex = graph.createVertex();
             viewModel.CurrentVertexSelected = LatestVertex;
             var cont = new ContentPresenter();
-            cont.ContentTemplate = (DataTemplate)rd["VertexNode"];
+            cont.ContentTemplate = (DataTemplate)ControlPanelDisplayDictionary["VertexNode"];
             cont.Content = LatestVertex;
 
             cont.MouseDown += moveStart;
@@ -130,14 +130,9 @@ namespace DijkstrasAlgorithmPresentation
 
         public Edge AddEdge(Vertex vstart, Vertex vend)
         {
-            var rd = new ResourceDictionary();
-            rd.Source = new Uri("ControlPanelDisplayDictionary.xaml", UriKind.RelativeOrAbsolute);
-            Edge edg = new Edge();
-            edg.start = vstart;
-            edg.end = vend;
-            graph.edges.Add(edg);
+            Edge edg = graph.AddEdge(vstart, vend);
             ContentPresenter cont = new ContentPresenter();
-            cont.ContentTemplate = (DataTemplate)rd["EdgePresent"];
+            cont.ContentTemplate = (DataTemplate)ControlPanelDisplayDictionary["EdgePresent"];
             cont.Content = new EdgeViewModelClass(edg);
             cont.MouseDown += selectPresenter;
             Canvas.SetZIndex(cont, 5);
