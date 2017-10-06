@@ -62,6 +62,21 @@ namespace DijkstrasAlgorithmPresentation
         }
     }
 
+    class MarginMakerConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            double left = (double)values[0];
+            double top = (double)values[1];
+            return new Thickness(left, top, 0, 0);
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     class AverangeConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
@@ -80,6 +95,23 @@ namespace DijkstrasAlgorithmPresentation
         }
     }
 
+    class MinimalConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            double result = (double)values[0];
+            foreach (object o in values)
+            {
+                result = result < (double)o ? result : (double)o;
+            }
+            return result;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
     class EclipseConverter : IValueConverter
     {
         public double Radius { get; set; }

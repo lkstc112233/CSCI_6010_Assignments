@@ -41,33 +41,40 @@ namespace DijkstrasAlgorithmPresentation
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
+        private Binding getOnewayBinding(object source, DependencyProperty property, IValueConverter converter)
+        {
+            return getOnewayBinding(source, new PropertyPath(property), converter);
+        }
+
+        private Binding getOnewayBinding(object source, PropertyPath path, IValueConverter converter)
+        {
+            Binding binding = new Binding();
+            binding.Source = source;
+            binding.Path = path;
+            binding.Converter = converter;
+            binding.Mode = BindingMode.OneWay;
+            return binding;
+        }
+
         public EdgeViewModelClass(Edge e)
         {
             contentEdge = e;
-            Binding binding = new Binding();
-            binding.Source = startPresentser;
-            binding.Path = new PropertyPath(Canvas.LeftProperty);
-            binding.Converter = new EclipseConverter();
-            binding.Mode = BindingMode.OneWay;
-            BindingOperations.SetBinding(this, X1Property, binding);
-            binding = new Binding();
-            binding.Source = endPresentser;
-            binding.Path = new PropertyPath(Canvas.LeftProperty);
-            binding.Converter = new EclipseConverter();
-            binding.Mode = BindingMode.OneWay;
-            BindingOperations.SetBinding(this, X2Property, binding);
-            binding = new Binding();
-            binding.Source = startPresentser;
-            binding.Path = new PropertyPath(Canvas.TopProperty);
-            binding.Converter = new EclipseConverter();
-            binding.Mode = BindingMode.OneWay;
-            BindingOperations.SetBinding(this, Y1Property, binding);
-            binding = new Binding();
-            binding.Source = endPresentser;
-            binding.Path = new PropertyPath(Canvas.TopProperty);
-            binding.Converter = new EclipseConverter();
-            binding.Mode = BindingMode.OneWay;
-            BindingOperations.SetBinding(this, Y2Property, binding);
+            IValueConverter converter = new EclipseConverter();
+            BindingOperations.SetBinding(this, X1Property, getOnewayBinding(startPresentser, Canvas.LeftProperty, converter));
+            BindingOperations.SetBinding(this, X2Property, getOnewayBinding(endPresentser, Canvas.LeftProperty, converter));
+            BindingOperations.SetBinding(this, Y1Property, getOnewayBinding(startPresentser, Canvas.TopProperty, converter));
+            BindingOperations.SetBinding(this, Y2Property, getOnewayBinding(endPresentser, Canvas.TopProperty, converter));
+
+            MultiBinding multiBinding = new MultiBinding();
+            multiBinding.Bindings.Add(getOnewayBinding(startPresentser, Canvas.LeftProperty, converter));
+            multiBinding.Bindings.Add(getOnewayBinding(endPresentser, Canvas.LeftProperty, converter));
+            multiBinding.Converter = new MinimalConverter();
+            BindingOperations.SetBinding(this, LeftEdgeProperty, multiBinding);
+            multiBinding = new MultiBinding();
+            multiBinding.Bindings.Add(getOnewayBinding(startPresentser, Canvas.TopProperty, converter));
+            multiBinding.Bindings.Add(getOnewayBinding(endPresentser, Canvas.TopProperty, converter));
+            multiBinding.Converter = new MinimalConverter();
+            BindingOperations.SetBinding(this, TopEdgeProperty, multiBinding);
         }
         private Edge contentEdge;
         public Edge edge => contentEdge;
@@ -81,6 +88,10 @@ namespace DijkstrasAlgorithmPresentation
         public static readonly DependencyProperty X2Property = DependencyProperty.Register("X2", typeof(double), typeof(EdgeViewModelClass));
         public double Y2 { get { return (double)GetValue(Y2Property); } set { SetValue(Y2Property, value); } }
         public static readonly DependencyProperty Y2Property = DependencyProperty.Register("Y2", typeof(double), typeof(EdgeViewModelClass));
+        public double LeftEdgeHere { get { return (double)GetValue(LeftEdgeProperty); } set { SetValue(LeftEdgeProperty, value); } }
+        public static readonly DependencyProperty LeftEdgeProperty = DependencyProperty.Register("LeftEdgeHere", typeof(double), typeof(EdgeViewModelClass));
+        public double TopEdgeHere { get { return (double)GetValue(TopEdgeProperty); } set { SetValue(TopEdgeProperty, value); } }
+        public static readonly DependencyProperty TopEdgeProperty = DependencyProperty.Register("TopEdgeHere", typeof(double), typeof(EdgeViewModelClass));
 
         public ContentPresenter startPresentser => ViewModelVertexEdge.vertexPresenterDictionary[start];
         public ContentPresenter endPresentser => ViewModelVertexEdge.vertexPresenterDictionary[end];

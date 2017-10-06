@@ -38,7 +38,7 @@
         <DataTemplate.Resources>
             <local:UIElementToXConverter x:Key="ElementToX"/>
             <local:UIElementToYConverter x:Key="ElementToY"/>
-            <local:AverangeConverter x:Key="Averange"/>
+            <local:MarginMakerConverter x:Key="marginMakerConverter"/>
         </DataTemplate.Resources>
         <Grid>
             <Line X1="{Binding X1}"
@@ -48,29 +48,14 @@
                   Stroke="Cyan"
                   StrokeThickness="2"
                   />
-            <TextBlock Text="{Binding edge.weight}">
-                <TextBlock.Style>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="Canvas.Left">
-                            <Setter.Value>
-                                <MultiBinding Converter="{StaticResource Averange}">
-                                    <Binding Path="X1" />
-                                    <Binding Path="X2" />
-                                </MultiBinding>
-                            </Setter.Value>
-                        </Setter>
-                        <Setter Property="Canvas.Top">
-                            <Setter.Value>
-                                <MultiBinding Converter="{StaticResource Averange}">
-                                    <Binding Path="Y1" />
-                                    <Binding Path="Y2" />
-                                </MultiBinding>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </TextBlock.Style>
+            <TextBlock Text="{Binding edge.weight}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock.Margin>
+                    <MultiBinding Converter="{StaticResource marginMakerConverter}">
+                        <Binding Path="LeftEdgeHere"/>
+                        <Binding Path="TopEdgeHere"/>
+                    </MultiBinding>
+                </TextBlock.Margin>
             </TextBlock>
-
         </Grid>
     </DataTemplate>
     <local:IsNullToVisibilityConverter x:Key="IsNullToVisibilityConverter"/>
