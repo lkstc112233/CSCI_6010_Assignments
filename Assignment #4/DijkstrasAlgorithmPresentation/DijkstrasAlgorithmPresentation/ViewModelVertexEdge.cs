@@ -12,7 +12,6 @@ namespace DijkstrasAlgorithmPresentation
     {
         SelectAnElement,
         SelectTargetVertex,
-
     }
     
     class ViewModelVertexEdge : INotifyPropertyChanged
@@ -45,6 +44,10 @@ namespace DijkstrasAlgorithmPresentation
         }
 
         public static Dictionary<Vertex, ContentPresenter> vertexPresenterDictionary = new Dictionary<Vertex, ContentPresenter>();
+        public static ContentPresenter findVertexPresenter(Vertex v)
+        {
+            return vertexPresenterDictionary[v];
+        }
         public SelectStatus CurrentStatus = SelectStatus.SelectAnElement;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -119,7 +122,7 @@ namespace DijkstrasAlgorithmPresentation
         public double TopEdgeHere { get { return (double)GetValue(TopEdgeProperty); } set { SetValue(TopEdgeProperty, value); } }
         public static readonly DependencyProperty TopEdgeProperty = DependencyProperty.Register("TopEdgeHere", typeof(double), typeof(EdgeViewModelClass));
 
-        public ContentPresenter startPresentser => ViewModelVertexEdge.vertexPresenterDictionary[start];
-        public ContentPresenter endPresentser => ViewModelVertexEdge.vertexPresenterDictionary[end];
+        public ContentPresenter startPresentser => ViewModelVertexEdge.findVertexPresenter(start);
+        public ContentPresenter endPresentser => ViewModelVertexEdge.findVertexPresenter(end);
     }
 }

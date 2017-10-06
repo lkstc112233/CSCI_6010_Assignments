@@ -9,7 +9,8 @@ namespace DijkstrasAlgorithmPresentation
 {
     public class Commands
     {
-        public static readonly RoutedUICommand AddEdgeCommand = new RoutedUICommand("Add a new Edge","AddEdge", typeof(Commands));
+        public static readonly RoutedUICommand AddEdgeCommand = new RoutedUICommand("Add a new Edge", "AddEdge", typeof(Commands));
+        public static readonly RoutedUICommand RemoveEdgeCommand = new RoutedUICommand("Remove this Edge", "RemoveEdge", typeof(Commands));
 
     }
 }

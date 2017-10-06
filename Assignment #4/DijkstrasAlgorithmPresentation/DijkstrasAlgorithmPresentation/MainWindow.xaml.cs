@@ -179,6 +179,16 @@ namespace DijkstrasAlgorithmPresentation
         {
             e.CanExecute = (viewModel.CurrentStatus == SelectStatus.SelectAnElement);
         }
+
+        private void RemoveEdge(object sender, ExecutedRoutedEventArgs e)
+        {
+            // TODO: remove the edge.
+        }
+
+        private void CanRemoveEdge(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
     }
 
 
