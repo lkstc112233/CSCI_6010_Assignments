@@ -144,15 +144,20 @@ namespace DijkstrasAlgorithmPresentation
     }
     class EclipseConverter : IValueConverter
     {
-        public double Radius { get; set; }
-
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (parameter != null)
+                if (parameter is Vertex)
+                    return (double)value + (parameter as Vertex).radius / 2;
             return (double)value + 10;
+                
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (parameter != null)
+                if (parameter is Vertex)
+                    return (double)value - (parameter as Vertex).radius / 2;
             return (double)value - 10;
         }
     }

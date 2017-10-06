@@ -6,6 +6,7 @@
     <DataTemplate x:Key="ControlPanelVertexPanel" DataType="{x:Type local:Vertex}">
         <DataTemplate.Resources>
             <local:ColorSelectionToIsCheckedConverter x:Key="ColorConverter"/>
+            <local:RadiusSelectionToIsCheckedConverter x:Key="RadiusConverter"/>
         </DataTemplate.Resources>
         <StackPanel>
             <StackPanel Orientation="Horizontal">
@@ -27,6 +28,14 @@
                     <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Gray}">Gray</RadioButton>
                 </StackPanel>
             </GroupBox>
+            <GroupBox Header="Select a radius for this Vertex">
+                <StackPanel>
+                    <RadioButton IsChecked="{Binding Path=radius, Converter={StaticResource RadiusConverter}, ConverterParameter=15}">Small</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=radius, Converter={StaticResource RadiusConverter}, ConverterParameter=20}">Medium</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=radius, Converter={StaticResource RadiusConverter}, ConverterParameter=30}">Large</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=radius, Converter={StaticResource RadiusConverter}, ConverterParameter=40}">Super Large</RadioButton>
+                </StackPanel>
+            </GroupBox>
         </StackPanel>
     </DataTemplate>
     <DataTemplate x:Key="ControlPanelEdgePanel" DataType="{x:Type local:Edge}">
@@ -38,6 +47,14 @@
             <StackPanel Orientation="Horizontal">
                 <TextBlock>Edge No.</TextBlock>
                 <TextBlock Text="{Binding id}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock>Starts from Vertex No.</TextBlock>
+                <TextBlock Text="{Binding start.id}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock>And edge to Vertex No.</TextBlock>
+                <TextBlock Text="{Binding end.id}"/>
             </StackPanel>
             <GroupBox Header="Select a color for this Edge.">
                 <StackPanel>
@@ -63,7 +80,7 @@
             <local:ColorSelectionToIsCheckedConverter x:Key="ColorConverter"/>
         </DataTemplate.Resources>
         <Grid>
-            <Ellipse Width="{StaticResource DotRadius}" Height="{StaticResource DotRadius}">
+            <Ellipse Width="{Binding radius}" Height="{Binding radius}">
                 <Ellipse.Fill>
                     <SolidColorBrush Color="{Binding color}"/>
                 </Ellipse.Fill>

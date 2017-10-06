@@ -57,15 +57,19 @@ namespace DijkstrasAlgorithmPresentation
 
         private Binding getOnewayBinding(object source, DependencyProperty property, IValueConverter converter)
         {
+            if (source is ContentPresenter)
+                if ((source as ContentPresenter).Content is Vertex)
+                    return getBinding(source, new PropertyPath(property), converter, BindingMode.OneWay, (source as ContentPresenter).Content);
             return getBinding(source, new PropertyPath(property), converter, BindingMode.OneWay);
         }
 
-        private Binding getBinding(object source, PropertyPath path, IValueConverter converter, BindingMode mode)
+        private Binding getBinding(object source, PropertyPath path, IValueConverter converter, BindingMode mode, object parameter = null)
         {
             Binding binding = new Binding();
             binding.Source = source;
             binding.Path = path;
             binding.Converter = converter;
+            binding.ConverterParameter = parameter;
             binding.Mode = mode;
             return binding;
         }

@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 
@@ -23,6 +24,23 @@ namespace DijkstrasAlgorithmPresentation
             {
                 m_color = value;
                 NotifyPropertyChanged("color");
+            }
+        }
+
+        private double m_radius = 20;
+        public double radius
+        {
+            get
+            {
+                return m_radius;
+            }
+            set
+            {
+                double d = m_radius - value;
+                m_radius = value;
+                Canvas.SetLeft(ViewModelVertexEdge.vertexPresenterDictionary[this], Canvas.GetLeft(ViewModelVertexEdge.vertexPresenterDictionary[this]) + d / 2);
+                Canvas.SetTop(ViewModelVertexEdge.vertexPresenterDictionary[this], Canvas.GetTop(ViewModelVertexEdge.vertexPresenterDictionary[this]) + d / 2);
+                NotifyPropertyChanged("radius");
             }
         }
 
@@ -50,6 +68,26 @@ namespace DijkstrasAlgorithmPresentation
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return value.Equals(true) ? (Color)ColorConverter.ConvertFromString(parameter as string) : Binding.DoNothing;
+        }
+    }
+
+    class RadiusSelectionToIsCheckedConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            double result;
+            if (Double.TryParse(parameter as string, out result))
+                return result == (double)value;
+            return null;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            double result;
+            if (Double.TryParse(parameter as string, out result))
+                if (value.Equals(true))
+                    return result;
+            return Binding.DoNothing;
         }
     }
 }
