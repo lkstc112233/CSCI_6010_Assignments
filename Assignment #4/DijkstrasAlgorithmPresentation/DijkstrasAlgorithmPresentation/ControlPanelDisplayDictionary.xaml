@@ -48,7 +48,28 @@
                   Stroke="Cyan"
                   StrokeThickness="2"
                   />
-            <TextBlock Text="{Binding edge.weight}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding edge.weight}">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Canvas.Left">
+                            <Setter.Value>
+                                <MultiBinding Converter="{StaticResource Averange}">
+                                    <Binding Path="X1" />
+                                    <Binding Path="X2" />
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="Canvas.Top">
+                            <Setter.Value>
+                                <MultiBinding Converter="{StaticResource Averange}">
+                                    <Binding Path="Y1" />
+                                    <Binding Path="Y2" />
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
 
         </Grid>
     </DataTemplate>
