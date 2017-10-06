@@ -22,7 +22,6 @@
         <DockPanel
             DockPanel.Dock="Left">
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
-                <Button Click="Add_Circle_Button_Click">Add Circle</Button>
                 <Button Click="Add_Vertex">Add Vertex</Button>
                 <TextBlock/>
             </StackPanel>

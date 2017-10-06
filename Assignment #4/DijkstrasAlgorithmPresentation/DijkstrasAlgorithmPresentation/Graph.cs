@@ -8,7 +8,12 @@ namespace DijkstrasAlgorithmPresentation
 {
     public class Graph
     {
-        public List<Vertex> vectors;
-        public List<Edge> edges;
+        public List<Vertex> vertexes = new List<Vertex>();
+        public List<Edge> edges = new List<Edge>();
+
+        internal int getNextAvailableVertexId()
+        {
+            return vertexes.Count();
+        }
     }
 }

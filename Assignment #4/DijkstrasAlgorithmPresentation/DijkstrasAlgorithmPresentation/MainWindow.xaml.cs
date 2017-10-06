@@ -23,8 +23,7 @@ namespace DijkstrasAlgorithmPresentation
     {
         ViewModelVertexEdge viewModel;
 
-        List<Ellipse> circles;
-        List<Vertex> vertexes;
+        Graph graph = new Graph();
 
         Nullable<Point> dragStart = null;
 
@@ -35,6 +34,7 @@ namespace DijkstrasAlgorithmPresentation
             viewModel = new ViewModelVertexEdge();
             DataContext = viewModel;
 
+            // These lambda functions are for draging Vertex nodes around.
             moveStart = (varMoved, args) =>
             {
                 var element = varMoved as UIElement;
@@ -64,6 +64,7 @@ namespace DijkstrasAlgorithmPresentation
                 }
             };
 
+            // This function is for selecting elements on the screen.
             selectPresenter = (varMoved, args) =>
             {
                 var presenter = varMoved as ContentPresenter;
@@ -82,95 +83,35 @@ namespace DijkstrasAlgorithmPresentation
 
         }
 
-        private void Add_Circle_Button_Click(object sender, RoutedEventArgs e)
-        {
-            if (circles == null)
-                circles = new List<Ellipse>();
-            Ellipse newOne = new Ellipse() { Fill = Brushes.Red, Width = 20, Height = 20 };
-
-            // Enable drag.
-            newOne.MouseDown += moveStart;
-            newOne.MouseUp += moveEnd;
-            newOne.MouseMove += moving;
-            
-
-            monitor.Children.Add(newOne);
-            Canvas.SetLeft(newOne, 10);
-            Canvas.SetTop(newOne, 10);
-            Canvas.SetZIndex(newOne, 10);
-
-            if (circles.Count == 0)
-            {
-                circles.Add(newOne);
-                return;
-            }
-
-            Ellipse last = circles.Last();
-            circles.Add(newOne);
-            Line connection = new Line() { Stroke = Brushes.Cyan, StrokeThickness = 2 };
-            Binding binding = new Binding();
-            binding.Source = last;
-            binding.Path = new PropertyPath(Canvas.LeftProperty);
-            binding.Converter = new EclipseConverter();
-            binding.Mode = BindingMode.OneWay;
-            BindingOperations.SetBinding(connection, Line.X1Property, binding);
-            binding = new Binding();
-            binding.Source = newOne;
-            binding.Path = new PropertyPath(Canvas.LeftProperty);
-            binding.Converter = new EclipseConverter();
-            binding.Mode = BindingMode.OneWay;
-            BindingOperations.SetBinding(connection, Line.X2Property, binding);
-            binding = new Binding();
-            binding.Source = last;
-            binding.Path = new PropertyPath(Canvas.TopProperty);
-            binding.Converter = new EclipseConverter();
-            binding.Mode = BindingMode.OneWay;
-            BindingOperations.SetBinding(connection, Line.Y1Property, binding);
-            binding = new Binding();
-            binding.Source = newOne;
-            binding.Path = new PropertyPath(Canvas.TopProperty);
-            binding.Converter = new EclipseConverter();
-            binding.Mode = BindingMode.OneWay;
-            BindingOperations.SetBinding(connection, Line.Y2Property, binding);
-
-            monitor.Children.Add(connection);
-        }
-
-        private void Set_Vertex_try(object sender, RoutedEventArgs e)
-        {
-            viewModel.CurrentVertexSelected = new Vertex();
-            viewModel.CurrentVertexSelected.color = Colors.Green;
-            viewModel.CurrentVertexSelected = viewModel.CurrentVertexSelected;
-        }
-
-        private void Make_Vertex_Null(object sender, RoutedEventArgs e)
-        {
-            viewModel.CurrentVertexSelected = null;
-        }
-
         MouseButtonEventHandler moveStart;
         MouseButtonEventHandler moveEnd;
         MouseEventHandler moving;
         
         MouseButtonEventHandler selectPresenter;
-        MouseButtonEventHandler vertexMouseUp;
-        MouseEventHandler vertexMouseMoving;
 
         private void Add_Vertex(object sender, RoutedEventArgs e)
         {
+            Vertex last = null;
+            if (graph.vertexes.Count > 0)
+                last = graph.vertexes.Last();
+
+            Vertex LatestVertex = CreateVertex();
+
+            if (last != null)
+                AddEdge(last, LatestVertex);
+        }
+
+        public Vertex CreateVertex()
+        {
             var rd = new ResourceDictionary();
             rd.Source = new Uri("ControlPanelDisplayDictionary.xaml", UriKind.RelativeOrAbsolute);
-            if (vertexes == null)
-                vertexes = new List<Vertex>();
-            Vertex last = null;
-            if (vertexes.Count > 0)
-                last = vertexes.Last();
-            vertexes.Add(new Vertex());
-            vertexes.Last().id = vertexes.Count;
-            viewModel.CurrentVertexSelected = vertexes.Last();
+            Vertex LatestVertex = new Vertex();
+            graph.vertexes.Add(LatestVertex);
+            LatestVertex.id = graph.getNextAvailableVertexId();
+            viewModel.CurrentVertexSelected = LatestVertex;
             var cont = new ContentPresenter();
             cont.ContentTemplate = (DataTemplate)rd["VertexNode"];
-            cont.Content = vertexes.Last();
+            cont.Content = LatestVertex;
 
             cont.MouseDown += moveStart;
             cont.MouseDown += selectPresenter;
@@ -178,23 +119,30 @@ namespace DijkstrasAlgorithmPresentation
             cont.MouseMove += moving;
             Canvas.SetZIndex(cont, 10);
 
-            ViewModelVertexEdge.vertexPresenterDictionary.Add(vertexes.Last(), cont);
-            Canvas.SetLeft(ViewModelVertexEdge.vertexPresenterDictionary[vertexes.Last()], 10);
-            Canvas.SetTop(ViewModelVertexEdge.vertexPresenterDictionary[vertexes.Last()], 10);
+            ViewModelVertexEdge.vertexPresenterDictionary.Add(LatestVertex, cont);
+            Canvas.SetLeft(cont, 10);
+            Canvas.SetTop(cont, 10);
 
             monitor.Children.Add(cont);
-            if (last != null)
-            {
-                Edge edg = new Edge();
-                edg.start = last;
-                edg.end = vertexes.Last();
-                cont = new ContentPresenter();
-                cont.ContentTemplate = (DataTemplate)rd["EdgePresent"];
-                cont.Content = new EdgeViewModelClass(edg);
-                cont.MouseDown += selectPresenter;
-                Canvas.SetZIndex(cont, 5);
-                monitor.Children.Add(cont);
-            }
+            return LatestVertex;
+        }
+
+
+        public Edge AddEdge(Vertex vstart, Vertex vend)
+        {
+            var rd = new ResourceDictionary();
+            rd.Source = new Uri("ControlPanelDisplayDictionary.xaml", UriKind.RelativeOrAbsolute);
+            Edge edg = new Edge();
+            edg.start = vstart;
+            edg.end = vend;
+            graph.edges.Add(edg);
+            ContentPresenter cont = new ContentPresenter();
+            cont.ContentTemplate = (DataTemplate)rd["EdgePresent"];
+            cont.Content = new EdgeViewModelClass(edg);
+            cont.MouseDown += selectPresenter;
+            Canvas.SetZIndex(cont, 5);
+            monitor.Children.Add(cont);
+            return edg;
         }
 
         private void CancelSelection(object sender, MouseButtonEventArgs e)
