@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DijkstrasAlgorithmPresentation"
         mc:Ignorable="d" Name="parentWindow"
-        Title="Dijkstra's Algorithm Presentation" Height="350" Width="525">
+        Title="Dijkstra's Algorithm Presentation" Height="393.562" Width="630.15">
     <DockPanel>
         <DockPanel.Resources>
             <ResourceDictionary Source="ControlPanelDisplayDictionary.xaml"/>

@@ -176,6 +176,7 @@ namespace DijkstrasAlgorithmPresentation
             cont.MouseDown += selectPresenter;
             cont.MouseUp += moveEnd;
             cont.MouseMove += moving;
+            Canvas.SetZIndex(cont, 10);
 
             ViewModelVertexEdge.vertexPresenterDictionary.Add(vertexes.Last(), cont);
             Canvas.SetLeft(ViewModelVertexEdge.vertexPresenterDictionary[vertexes.Last()], 10);
@@ -191,6 +192,7 @@ namespace DijkstrasAlgorithmPresentation
                 cont.ContentTemplate = (DataTemplate)rd["EdgePresent"];
                 cont.Content = new EdgeViewModelClass(edg);
                 cont.MouseDown += selectPresenter;
+                Canvas.SetZIndex(cont, 5);
                 monitor.Children.Add(cont);
             }
         }
