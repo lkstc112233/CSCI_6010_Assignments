@@ -15,8 +15,8 @@
             <StackPanel Name="VertexSettingPanel" Visibility="{Binding Path=CurrentVertexSelected, Converter={StaticResource IsNullToVisibilityConverter}, TargetNullValue=Collapsed}">
                 <ContentPresenter ContentTemplate="{StaticResource ControlPanelVertexPanel}" Content="{Binding CurrentVertexSelected}"/>
             </StackPanel>
-            <StackPanel Name="EdgeSettingPanel" Visibility="Collapsed">
-                <Button>Set Weight</Button>
+            <StackPanel Name="EdgeSettingPanel" Visibility="{Binding Path=CurrentEdgeSelected, Converter={StaticResource IsNullToVisibilityConverter}, TargetNullValue=Collapsed}">
+                <ContentPresenter ContentTemplate="{StaticResource ControlPanelEdgePanel}" Content="{Binding CurrentEdgeSelected}"/>
             </StackPanel>
         </StackPanel>
         <DockPanel

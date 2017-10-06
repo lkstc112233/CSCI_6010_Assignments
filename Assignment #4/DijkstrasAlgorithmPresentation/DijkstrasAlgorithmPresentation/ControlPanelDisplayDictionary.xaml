@@ -8,17 +8,54 @@
             <local:ColorSelectionToIsCheckedConverter x:Key="ColorConverter"/>
         </DataTemplate.Resources>
         <StackPanel>
-            <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Red}">Red</RadioButton>
-            <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Green}">Green</RadioButton>
-            <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Blue}">Blue</RadioButton>
-            <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Black}">Black</RadioButton>
-            <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=White}">White</RadioButton>
-            <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Cyan}">Cyan</RadioButton>
-            <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Brown}">Brown</RadioButton>
-            <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Pink}">Pink</RadioButton>
-            <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Yellow}">Yellow</RadioButton>
-            <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Aqua}">Aqua</RadioButton>
-            <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Gray}">Gray</RadioButton>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock>Vertex No. </TextBlock>
+                <TextBlock Text="{Binding id}"/>
+            </StackPanel>
+            <GroupBox Header="Select a color for this Vertex">
+                <StackPanel>
+                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Red}">Red</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Green}">Green</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Blue}">Blue</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Black}">Black</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=White}">White</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Cyan}">Cyan</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Brown}">Brown</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Pink}">Pink</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Yellow}">Yellow</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Aqua}">Aqua</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Gray}">Gray</RadioButton>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+    </DataTemplate>
+    <DataTemplate x:Key="ControlPanelEdgePanel" DataType="{x:Type local:Edge}">
+        <DataTemplate.Resources>
+            <local:ColorSelectionToIsCheckedConverter x:Key="ColorConverter"/>
+            <local:PositiveDoubleToPersistantStringConverter x:Key="SmartConverter"/>
+        </DataTemplate.Resources>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock>Edge No.</TextBlock>
+                <TextBlock Text="{Binding id}"/>
+            </StackPanel>
+            <GroupBox Header="Select a color for this Edge.">
+                <StackPanel>
+                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Red}">Red</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Green}">Green</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Blue}">Blue</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Black}">Black</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=White}">White</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Cyan}">Cyan</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Brown}">Brown</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Pink}">Pink</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Yellow}">Yellow</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Aqua}">Aqua</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Gray}">Gray</RadioButton>
+                </StackPanel>
+            </GroupBox>
+            <TextBlock>Set the weight of this edge.</TextBlock>
+            <TextBox Text="{Binding weight, Converter={StaticResource SmartConverter}, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
     </DataTemplate>
     <DataTemplate x:Key="VertexNode" DataType="{x:Type local:Vertex}">
@@ -45,9 +82,11 @@
                   Y1="{Binding Y1}"
                   X2="{Binding X2}"
                   Y2="{Binding Y2}" 
-                  Stroke="Cyan"
-                  StrokeThickness="2"
-                  />
+                  StrokeThickness="2">
+                <Line.Stroke>
+                    <SolidColorBrush Color="{Binding edge.color}"/>
+                </Line.Stroke>
+            </Line>
             <TextBlock Text="{Binding edge.weight}" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <TextBlock.Margin>
                     <MultiBinding Converter="{StaticResource marginMakerConverter}">

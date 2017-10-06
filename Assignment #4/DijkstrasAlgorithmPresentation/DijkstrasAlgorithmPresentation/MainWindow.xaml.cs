@@ -68,7 +68,15 @@ namespace DijkstrasAlgorithmPresentation
             {
                 var presenter = varMoved as ContentPresenter;
                 if (presenter.Content is Vertex)
+                {
+                    CancelSelection();
                     viewModel.CurrentVertexSelected = presenter.Content as Vertex;
+                }
+                if (presenter.Content is EdgeViewModelClass)
+                {
+                    CancelSelection();
+                    viewModel.CurrentEdgeSelected = (presenter.Content as EdgeViewModelClass).edge;
+                }
                 args.Handled = true;
             };
 
@@ -166,7 +174,6 @@ namespace DijkstrasAlgorithmPresentation
 
             cont.MouseDown += moveStart;
             cont.MouseDown += selectPresenter;
-          //  cont.MouseUp += vertexMouseUp;
             cont.MouseUp += moveEnd;
             cont.MouseMove += moving;
 
@@ -183,13 +190,20 @@ namespace DijkstrasAlgorithmPresentation
                 cont = new ContentPresenter();
                 cont.ContentTemplate = (DataTemplate)rd["EdgePresent"];
                 cont.Content = new EdgeViewModelClass(edg);
+                cont.MouseDown += selectPresenter;
                 monitor.Children.Add(cont);
             }
         }
 
         private void CancelSelection(object sender, MouseButtonEventArgs e)
         {
+            CancelSelection();
+        }
+
+        private void CancelSelection()
+        {
             viewModel.CurrentVertexSelected = null;
+            viewModel.CurrentEdgeSelected = null;
         }
     }
 

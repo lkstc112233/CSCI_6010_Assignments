@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace DijkstrasAlgorithmPresentation
@@ -20,6 +21,19 @@ namespace DijkstrasAlgorithmPresentation
             {
                 m_vertexSelected = value;
                 onPropertyChanged("CurrentVertexSelected");
+            }
+        }
+        private Edge m_edgeSelected = null;
+        public Edge CurrentEdgeSelected
+        {
+            get
+            {
+                return m_edgeSelected;
+            }
+            set
+            {
+                m_edgeSelected = value;
+                onPropertyChanged("CurrentEdgeSelected");
             }
         }
 
@@ -43,16 +57,16 @@ namespace DijkstrasAlgorithmPresentation
 
         private Binding getOnewayBinding(object source, DependencyProperty property, IValueConverter converter)
         {
-            return getOnewayBinding(source, new PropertyPath(property), converter);
+            return getBinding(source, new PropertyPath(property), converter, BindingMode.OneWay);
         }
 
-        private Binding getOnewayBinding(object source, PropertyPath path, IValueConverter converter)
+        private Binding getBinding(object source, PropertyPath path, IValueConverter converter, BindingMode mode)
         {
             Binding binding = new Binding();
             binding.Source = source;
             binding.Path = path;
             binding.Converter = converter;
-            binding.Mode = BindingMode.OneWay;
+            binding.Mode = mode;
             return binding;
         }
 
@@ -76,6 +90,7 @@ namespace DijkstrasAlgorithmPresentation
             multiBinding.Converter = new MinimalConverter();
             BindingOperations.SetBinding(this, TopEdgeProperty, multiBinding);
         }
+
         private Edge contentEdge;
         public Edge edge => contentEdge;
         public Vertex start => edge.start;
