@@ -2,7 +2,6 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:DijkstrasAlgorithmPresentation">
-    <sys:Double x:Key="DotRadius">20</sys:Double>
     <DataTemplate x:Key="ControlPanelVertexPanel" DataType="{x:Type local:Vertex}">
         <DataTemplate.Resources>
             <local:ColorSelectionToIsCheckedConverter x:Key="ColorConverter"/>
@@ -36,6 +35,7 @@
                     <RadioButton IsChecked="{Binding Path=radius, Converter={StaticResource RadiusConverter}, ConverterParameter=40}">Super Large</RadioButton>
                 </StackPanel>
             </GroupBox>
+            <Button Command="{x:Static local:Commands.AddEdgeCommand}" Tag="{Binding}">Add Edge</Button>
         </StackPanel>
     </DataTemplate>
     <DataTemplate x:Key="ControlPanelEdgePanel" DataType="{x:Type local:Edge}">

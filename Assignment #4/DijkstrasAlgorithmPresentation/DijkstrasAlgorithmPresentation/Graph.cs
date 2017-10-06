@@ -21,17 +21,10 @@ namespace DijkstrasAlgorithmPresentation
         }
         public Edge AddEdge(Vertex vstart, Vertex vend)
         {
-
             Edge edg = new Edge();
             edg.start = vstart;
             edg.end = vend;
-            graph.edges.Add(edg);
-            ContentPresenter cont = new ContentPresenter();
-            cont.ContentTemplate = (DataTemplate)ControlPanelDisplayDictionary["EdgePresent"];
-            cont.Content = new EdgeViewModelClass(edg);
-            cont.MouseDown += selectPresenter;
-            Canvas.SetZIndex(cont, 5);
-            monitor.Children.Add(cont);
+            edges.Add(edg);
             return edg;
         }
 

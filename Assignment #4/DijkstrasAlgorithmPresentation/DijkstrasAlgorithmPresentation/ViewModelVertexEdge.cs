@@ -8,6 +8,13 @@ using System.Windows.Shapes;
 
 namespace DijkstrasAlgorithmPresentation
 {
+    enum SelectStatus
+    {
+        SelectAnElement,
+        SelectTargetVertex,
+
+    }
+    
     class ViewModelVertexEdge : INotifyPropertyChanged
     {
         private Vertex m_vertexSelected = null;
@@ -38,7 +45,7 @@ namespace DijkstrasAlgorithmPresentation
         }
 
         public static Dictionary<Vertex, ContentPresenter> vertexPresenterDictionary = new Dictionary<Vertex, ContentPresenter>();
-
+        public SelectStatus CurrentStatus = SelectStatus.SelectAnElement;
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void onPropertyChanged(string name)

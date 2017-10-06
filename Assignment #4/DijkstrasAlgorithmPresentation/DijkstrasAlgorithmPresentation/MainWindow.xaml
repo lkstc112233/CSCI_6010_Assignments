@@ -6,6 +6,11 @@
         xmlns:local="clr-namespace:DijkstrasAlgorithmPresentation"
         mc:Ignorable="d" Name="parentWindow"
         Title="Dijkstra's Algorithm Presentation" Height="393.562" Width="630.15">
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static local:Commands.AddEdgeCommand}"
+                        Executed="AddEdge"
+                        CanExecute="CanAddEdge"  />
+    </Window.CommandBindings>
     <DockPanel>
         <DockPanel.Resources>
             <ResourceDictionary Source="ControlPanelDisplayDictionary.xaml"/>
@@ -25,7 +30,7 @@
                 <Button Click="Add_Vertex">Add Vertex</Button>
                 <TextBlock/>
             </StackPanel>
-            <Canvas Name="monitor" MouseDown="CancelSelection">
+            <Canvas Name="monitor" MouseDown="CancelSelectionAndResetStatus">
                 <Rectangle 
                     Panel.ZIndex="-99"
                     Fill="{Binding Path=Background, ElementName=parentWindow}" 

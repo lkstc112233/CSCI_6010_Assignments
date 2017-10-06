@@ -72,17 +72,32 @@ namespace DijkstrasAlgorithmPresentation
             selectPresenter = (varMoved, args) =>
             {
                 var presenter = varMoved as ContentPresenter;
-                if (presenter.Content is Vertex)
+                if (viewModel.CurrentStatus == SelectStatus.SelectAnElement)
                 {
-                    CancelSelection();
-                    viewModel.CurrentVertexSelected = presenter.Content as Vertex;
+                    if (presenter.Content is Vertex)
+                    {
+                        CancelSelectionAndResetStatus();
+                        viewModel.CurrentVertexSelected = presenter.Content as Vertex;
+                        args.Handled = true;
+                    }
+                    if (presenter.Content is EdgeViewModelClass)
+                    {
+                        CancelSelectionAndResetStatus();
+                        viewModel.CurrentEdgeSelected = (presenter.Content as EdgeViewModelClass).edge;
+                        args.Handled = true;
+                    }
                 }
-                if (presenter.Content is EdgeViewModelClass)
+                else if (viewModel.CurrentStatus == SelectStatus.SelectTargetVertex)
                 {
-                    CancelSelection();
-                    viewModel.CurrentEdgeSelected = (presenter.Content as EdgeViewModelClass).edge;
+                    if (presenter.Content is Vertex)
+                    {
+                        Edge e = AddEdge(viewModel.CurrentVertexSelected , presenter.Content as Vertex);
+                        CancelSelectionAndResetStatus();
+                        viewModel.CurrentEdgeSelected = e;
+                        args.Handled = true;
+
+                    }
                 }
-                args.Handled = true;
             };
 
         }
@@ -95,20 +110,15 @@ namespace DijkstrasAlgorithmPresentation
 
         private void Add_Vertex(object sender, RoutedEventArgs e)
         {
-            Vertex last = null;
-            if (graph.vertexes.Count > 0)
-                last = graph.vertexes.Last();
-
             Vertex LatestVertex = CreateVertex();
+            viewModel.CurrentVertexSelected = LatestVertex;
 
-            if (last != null)
-                AddEdge(last, LatestVertex);
+
         }
 
         public Vertex CreateVertex()
         {
             Vertex LatestVertex = graph.createVertex();
-            viewModel.CurrentVertexSelected = LatestVertex;
             var cont = new ContentPresenter();
             cont.ContentTemplate = (DataTemplate)ControlPanelDisplayDictionary["VertexNode"];
             cont.Content = LatestVertex;
@@ -140,15 +150,34 @@ namespace DijkstrasAlgorithmPresentation
             return edg;
         }
 
-        private void CancelSelection(object sender, MouseButtonEventArgs e)
+        private void CancelSelectionAndResetStatus(object sender, MouseButtonEventArgs e)
         {
-            CancelSelection();
+            CancelSelectionAndResetStatus();
         }
 
-        private void CancelSelection()
+        private void CancelSelectionAndResetStatus()
         {
             viewModel.CurrentVertexSelected = null;
             viewModel.CurrentEdgeSelected = null;
+            viewModel.CurrentStatus = SelectStatus.SelectAnElement;
+        }
+
+        private void AddEdge(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (e.OriginalSource is Button)
+            {
+                Button button = e.OriginalSource as Button;
+                if (button.Tag is Vertex)
+                {
+                    Vertex last = button.Tag as Vertex;
+                    viewModel.CurrentStatus = SelectStatus.SelectTargetVertex;
+                }
+            }
+        }
+
+        private void CanAddEdge(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = (viewModel.CurrentStatus == SelectStatus.SelectAnElement);
         }
     }
 
