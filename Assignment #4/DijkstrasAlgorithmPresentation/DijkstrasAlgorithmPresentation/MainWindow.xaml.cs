@@ -114,8 +114,6 @@ namespace DijkstrasAlgorithmPresentation
         {
             Vertex LatestVertex = CreateVertex();
             viewModel.CurrentVertexSelected = LatestVertex;
-
-
         }
 
         public Vertex CreateVertex()
@@ -151,10 +149,7 @@ namespace DijkstrasAlgorithmPresentation
             {
                 Button button = e.OriginalSource as Button;
                 if (button.Tag is Vertex)
-                {
-                    Vertex last = button.Tag as Vertex;
                     viewModel.CurrentStatus = SelectStatus.SelectTargetVertex;
-                }
             }
         }
 
@@ -165,7 +160,15 @@ namespace DijkstrasAlgorithmPresentation
 
         private void RemoveEdge(object sender, ExecutedRoutedEventArgs e)
         {
-            // TODO: remove the edge.
+            if (e.OriginalSource is Button)
+            {
+                Button button = e.OriginalSource as Button;
+                if (button.Tag is Edge)
+                {
+                    viewModel.graphModel.graph.edges.Remove(viewModel.CurrentEdgeSelected);
+                    CancelSelectionAndResetStatus();
+                }
+            }
         }
 
         private void CanRemoveEdge(object sender, CanExecuteRoutedEventArgs e)
