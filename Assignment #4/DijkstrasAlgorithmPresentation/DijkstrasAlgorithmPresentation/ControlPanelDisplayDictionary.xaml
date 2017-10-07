@@ -12,7 +12,7 @@
                 <TextBlock>Vertex No. </TextBlock>
                 <TextBlock Text="{Binding id}"/>
             </StackPanel>
-            <GroupBox Header="Select a color for this Vertex">
+            <GroupBox Header="Select a color for this Vertex" Visibility="Collapsed">
                 <StackPanel>
                     <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Red}">Red</RadioButton>
                     <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Green}">Green</RadioButton>
@@ -56,7 +56,7 @@
                 <TextBlock>And edge to Vertex No.</TextBlock>
                 <TextBlock Text="{Binding end.id}"/>
             </StackPanel>
-            <GroupBox Header="Select a color for this Edge.">
+            <GroupBox Header="Select a color for this Edge." Visibility="Collapsed">
                 <StackPanel>
                     <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Red}">Red</RadioButton>
                     <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Green}">Green</RadioButton>

@@ -33,11 +33,35 @@ namespace DijkstrasAlgorithmPresentation
             {
                 return m_vertexSelected;
             }
-            set
+        }
+        public void SelectVertex(Vertex v)
+        {
+            m_vertexSelected = v;
+            onPropertyChanged("CurrentVertexSelected");
+        }
+        public void CancelVertexSelection()
+        {
+            m_vertexSelected = null;
+            onPropertyChanged("CurrentVertexSelected");
+        }
+
+        private Edge m_edgeSelected = null;
+        public Edge CurrentEdgeSelected
+        {
+            get
             {
-                m_vertexSelected = value;
-                onPropertyChanged("CurrentVertexSelected");
+                return m_edgeSelected;
             }
+        }
+        public void SelectEdge(Edge e)
+        {
+            m_edgeSelected = e;
+            onPropertyChanged("CurrentEdgeSelected");
+        }
+        public void CancelEdgeSelection()
+        {
+            m_edgeSelected = null;
+            onPropertyChanged("CurrentEdgeSelected");
         }
 
         private Graph m_graph;
@@ -55,19 +79,6 @@ namespace DijkstrasAlgorithmPresentation
             }
         }
 
-        private Edge m_edgeSelected = null;
-        public Edge CurrentEdgeSelected
-        {
-            get
-            {
-                return m_edgeSelected;
-            }
-            set
-            {
-                m_edgeSelected = value;
-                onPropertyChanged("CurrentEdgeSelected");
-            }
-        }
 
         public static T FindVisualChild<T>(DependencyObject depObj) where T : DependencyObject
         {
