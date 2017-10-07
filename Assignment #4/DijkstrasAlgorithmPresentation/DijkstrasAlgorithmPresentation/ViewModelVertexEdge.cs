@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -10,12 +14,18 @@ namespace DijkstrasAlgorithmPresentation
 {
     enum SelectStatus
     {
-        SelectAnElement,
+        SelectAnElement, 
         SelectTargetVertex,
     }
     
     class ViewModelVertexEdge : INotifyPropertyChanged
     {
+        public ViewModelVertexEdge()
+        {
+            m_graph = new Graph();
+            m_graphModel = new GraphViewModelClass(m_graph);
+        }
+
         private Vertex m_vertexSelected = null;
         public Vertex CurrentVertexSelected
         {
@@ -29,6 +39,22 @@ namespace DijkstrasAlgorithmPresentation
                 onPropertyChanged("CurrentVertexSelected");
             }
         }
+
+        private Graph m_graph;
+        private GraphViewModelClass m_graphModel;
+        public GraphViewModelClass graphModel
+        {
+            get
+            {
+                return m_graphModel;
+            }
+            set
+            {
+                m_graphModel = value;
+                onPropertyChanged("graphModel");
+            }
+        }
+
         private Edge m_edgeSelected = null;
         public Edge CurrentEdgeSelected
         {
@@ -43,9 +69,52 @@ namespace DijkstrasAlgorithmPresentation
             }
         }
 
-        public static Dictionary<Vertex, ContentPresenter> vertexPresenterDictionary = new Dictionary<Vertex, ContentPresenter>();
+        public static T FindVisualChild<T>(DependencyObject depObj) where T : DependencyObject
+        {
+            if (depObj != null)
+            {
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+                {
+                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+                    if (child != null && child is T)
+                        return (T)child;
+
+                    T childItem = FindVisualChild<T>(child);
+                    if (childItem != null) return childItem;
+                }
+            }
+            return null;
+        }
+
+        public static T FindVisualChild<T>(DependencyObject depObj, string name) where T : DependencyObject
+        {
+            if (depObj != null)
+            {
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+                {
+                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+                    if (child != null && child is T)
+                        if (child is Control)
+                            if ((child as Control).Name.Equals(name))
+                                return (T)child;
+
+                    T childItem = FindVisualChild<T>(child, name);
+                    if (childItem != null) return childItem;
+                }
+            }
+            return null;
+        }
+
+        private static Dictionary<Vertex, ContentPresenter> vertexPresenterDictionary = new Dictionary<Vertex, ContentPresenter>();
         public static ContentPresenter findVertexPresenter(Vertex v)
         {
+            if (!vertexPresenterDictionary.ContainsKey(v))
+            {
+                var temp = FindVisualChild<ItemsControl>(graphControl, "VertexesControl"); 
+                 var temp2 = temp.ItemContainerGenerator.ContainerFromItem(v) as ContentPresenter;
+                if (temp2 == null) throw new InvalidOperationException();
+                vertexPresenterDictionary[v] = temp2;
+            }
             return vertexPresenterDictionary[v];
         }
         public SelectStatus CurrentStatus = SelectStatus.SelectAnElement;
@@ -55,9 +124,11 @@ namespace DijkstrasAlgorithmPresentation
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+
+        public static ContentPresenter graphControl = null;
     }
 
-    class EdgeViewModelClass : DependencyObject, INotifyPropertyChanged
+    public class EdgeViewModelClass : DependencyObject, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private void onPropertyChanged(string name)
@@ -124,5 +195,56 @@ namespace DijkstrasAlgorithmPresentation
 
         public ContentPresenter startPresentser => ViewModelVertexEdge.findVertexPresenter(start);
         public ContentPresenter endPresentser => ViewModelVertexEdge.findVertexPresenter(end);
+    }
+
+    public class GraphViewModelClass : DependencyObject, INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void onPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        private ObservableCollection<EdgeViewModelClass> m_edgeModels = new ObservableCollection<EdgeViewModelClass>();
+        public ObservableCollection<EdgeViewModelClass> edgeModels => m_edgeModels;
+        private Dictionary<Edge, EdgeViewModelClass> modelPair = new Dictionary<Edge, EdgeViewModelClass>();
+
+        public GraphViewModelClass(Graph g)
+        {
+            contentGraph = g;
+
+            contentGraph.edges.CollectionChanged += Edges_CollectionChanged;
+        }
+
+        private void Edges_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (contentGraph.edges != sender)
+                return;
+
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    foreach (Edge edg in e.NewItems)
+                        if (edg != null)
+                        {
+                            var ViewModel = new EdgeViewModelClass(edg);
+                            modelPair.Add(edg, ViewModel);
+                            edgeModels.Add(ViewModel);
+                        }
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    foreach (Edge edg in e.OldItems)
+                        if (edg != null)
+                        {
+                            edgeModels.Remove(modelPair[edg]);
+                            modelPair.Remove(edg);
+                        }
+                    break;
+            }
+        }
+
+        private Graph contentGraph;
+        public Graph graph => contentGraph;
+
     }
 }

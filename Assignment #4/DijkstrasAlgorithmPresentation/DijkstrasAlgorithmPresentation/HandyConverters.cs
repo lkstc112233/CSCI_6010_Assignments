@@ -10,6 +10,19 @@ using System.Windows.Data;
 
 namespace DijkstrasAlgorithmPresentation
 {
+    class DebugConverter : List<IValueConverter>, IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value;
+        }
+    }
+
     class ValueConverterGroups : List<IValueConverter>, IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -75,7 +88,7 @@ namespace DijkstrasAlgorithmPresentation
             try
             {
                 Vertex v = value as Vertex;
-                UIElement e = ViewModelVertexEdge.vertexPresenterDictionary[v];
+                UIElement e = ViewModelVertexEdge.findVertexPresenter(v);
                 if (e == null)
                     return Binding.DoNothing;
                 return e;

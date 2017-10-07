@@ -38,8 +38,8 @@ namespace DijkstrasAlgorithmPresentation
             {
                 double d = m_radius - value;
                 m_radius = value;
-                Canvas.SetLeft(ViewModelVertexEdge.vertexPresenterDictionary[this], Canvas.GetLeft(ViewModelVertexEdge.vertexPresenterDictionary[this]) + d / 2);
-                Canvas.SetTop(ViewModelVertexEdge.vertexPresenterDictionary[this], Canvas.GetTop(ViewModelVertexEdge.vertexPresenterDictionary[this]) + d / 2);
+                Canvas.SetLeft(ViewModelVertexEdge.findVertexPresenter(this), Canvas.GetLeft(ViewModelVertexEdge.findVertexPresenter(this)) + d / 2);
+                Canvas.SetTop(ViewModelVertexEdge.findVertexPresenter(this), Canvas.GetTop(ViewModelVertexEdge.findVertexPresenter(this)) + d / 2);
                 NotifyPropertyChanged("radius");
             }
         }

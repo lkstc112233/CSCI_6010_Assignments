@@ -72,8 +72,8 @@
                 </StackPanel>
             </GroupBox>
             <TextBlock>Set the weight of this edge.</TextBlock>
-            <Button Command="{x:Static local:Commands.RemoveEdgeCommand}" Tag="{Binding}">Remove Edge</Button>
             <TextBox Text="{Binding weight, Converter={StaticResource SmartConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Command="{x:Static local:Commands.RemoveEdgeCommand}" Tag="{Binding}">Remove Edge</Button>
         </StackPanel>
     </DataTemplate>
     <DataTemplate x:Key="VertexNode" DataType="{x:Type local:Vertex}">

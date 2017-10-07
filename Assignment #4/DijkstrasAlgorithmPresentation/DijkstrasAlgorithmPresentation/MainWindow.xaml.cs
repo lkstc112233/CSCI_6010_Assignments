@@ -23,8 +23,6 @@ namespace DijkstrasAlgorithmPresentation
     {
         ViewModelVertexEdge viewModel;
 
-        Graph graph = new Graph();
-
         Nullable<Point> dragStart = null;
 
         ResourceDictionary ControlPanelDisplayDictionary = new ResourceDictionary();
@@ -35,8 +33,11 @@ namespace DijkstrasAlgorithmPresentation
             viewModel = new ViewModelVertexEdge();
             DataContext = viewModel;
 
+            ViewModelVertexEdge.graphControl = monitor;
+
             ControlPanelDisplayDictionary.Source = new Uri("ControlPanelDisplayDictionary.xaml", UriKind.RelativeOrAbsolute);
 
+            UIElement cvs = monitor as UIElement;
 
             // These lambda functions are for draging Vertex nodes around.
             moveStart = (varMoved, args) =>
@@ -56,7 +57,7 @@ namespace DijkstrasAlgorithmPresentation
                 if (dragStart != null && args.LeftButton == MouseButtonState.Pressed)
                 {
                     var element = (UIElement)varMoved;
-                    var p2 = args.GetPosition(monitor);
+                    var p2 = args.GetPosition(cvs);
                     if (p2.X - dragStart.Value.X > 0)
                         Canvas.SetLeft(element, p2.X - dragStart.Value.X);
                     else
@@ -99,6 +100,7 @@ namespace DijkstrasAlgorithmPresentation
                     }
                 }
             };
+            
 
         }
 
@@ -118,35 +120,16 @@ namespace DijkstrasAlgorithmPresentation
 
         public Vertex CreateVertex()
         {
-            Vertex LatestVertex = graph.createVertex();
-            var cont = new ContentPresenter();
-            cont.ContentTemplate = (DataTemplate)ControlPanelDisplayDictionary["VertexNode"];
-            cont.Content = LatestVertex;
+            Vertex LatestVertex = viewModel.graphModel.graph.createVertex();
 
-            cont.MouseDown += moveStart;
-            cont.MouseDown += selectPresenter;
-            cont.MouseUp += moveEnd;
-            cont.MouseMove += moving;
-            Canvas.SetZIndex(cont, 10);
-
-            ViewModelVertexEdge.vertexPresenterDictionary.Add(LatestVertex, cont);
-            Canvas.SetLeft(cont, 10);
-            Canvas.SetTop(cont, 10);
-
-            monitor.Children.Add(cont);
             return LatestVertex;
         }
 
 
         public Edge AddEdge(Vertex vstart, Vertex vend)
         {
-            Edge edg = graph.AddEdge(vstart, vend);
-            ContentPresenter cont = new ContentPresenter();
-            cont.ContentTemplate = (DataTemplate)ControlPanelDisplayDictionary["EdgePresent"];
-            cont.Content = new EdgeViewModelClass(edg);
-            cont.MouseDown += selectPresenter;
-            Canvas.SetZIndex(cont, 5);
-            monitor.Children.Add(cont);
+            Edge edg = viewModel.graphModel.graph.AddEdge(vstart, vend);
+
             return edg;
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,14 +9,17 @@ namespace DijkstrasAlgorithmPresentation
 {
     public class Graph
     {
-        public List<Vertex> vertexes = new List<Vertex>();
-        public List<Edge> edges = new List<Edge>();
+        private ObservableCollection<Vertex> m_vertexes = new ObservableCollection<Vertex>();
+        private ObservableCollection<Edge> m_edges = new ObservableCollection<Edge>();
+
+        public ObservableCollection<Vertex> vertexes { get => m_vertexes; }
+        public ObservableCollection<Edge> edges { get => m_edges; }
 
         public Vertex createVertex()
         {
             Vertex LatestVertex = new Vertex();
-            vertexes.Add(LatestVertex);
             LatestVertex.id = getNextAvailableVertexId();
+            vertexes.Add(LatestVertex);
             
             return LatestVertex;
         }

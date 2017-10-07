@@ -27,19 +27,58 @@
                 <ContentPresenter ContentTemplate="{StaticResource ControlPanelEdgePanel}" Content="{Binding CurrentEdgeSelected}"/>
             </StackPanel>
         </StackPanel>
-        <DockPanel
-            DockPanel.Dock="Left">
+        <DockPanel DockPanel.Dock="Left">
+            <DockPanel.Resources>
+                <local:DebugConverter x:Key="DebugConverter"/>
+            </DockPanel.Resources>
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
                 <Button Click="Add_Vertex">Add Vertex</Button>
                 <TextBlock/>
             </StackPanel>
-            <Canvas Name="monitor" MouseDown="CancelSelectionAndResetStatus">
-                <Rectangle 
-                    Panel.ZIndex="-99"
-                    Fill="{Binding Path=Background, ElementName=parentWindow}" 
-                    Width="{Binding Path=ActualWidth, ElementName=monitor}" 
-                    Height="{Binding Path=ActualHeight, ElementName=monitor}"/>
-            </Canvas>
+            <ContentPresenter Name="monitor" Content="{Binding Path=graphModel}">
+                <ContentPresenter.ContentTemplate>
+                    <DataTemplate>
+                        <Canvas Name="container" MouseDown="CancelSelectionAndResetStatus">
+                            <ItemsControl ItemsSource="{Binding Path=edgeModels}" ItemTemplate="{StaticResource EdgePresent}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <Canvas/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemContainerStyle>
+                                    <Style TargetType="ContentPresenter">
+                                        <EventSetter Event="MouseDown"  Handler="selectPresenter"/>
+                                        <Setter Property="Canvas.ZIndex" Value="5"/>
+                                    </Style>
+                                </ItemsControl.ItemContainerStyle>
+                            </ItemsControl>
+                            <ItemsControl Name="VertexesControl" ItemsSource="{Binding Path=graph.vertexes}" ItemTemplate="{StaticResource VertexNode}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <Canvas/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemContainerStyle>
+                                    <Style TargetType="ContentPresenter">
+                                        <EventSetter Event="MouseDown"  Handler="moveStart"/>
+                                        <EventSetter Event="MouseDown"  Handler="selectPresenter"/>
+                                        <EventSetter Event="MouseUp"  Handler="moveEnd"/>
+                                        <EventSetter Event="MouseMove"  Handler="moving"/>
+                                        <Setter Property="Canvas.Left" Value="10"/>
+                                        <Setter Property="Canvas.Top" Value="10"/>
+                                        <Setter Property="Canvas.ZIndex" Value="10"/>
+                                    </Style>
+                                </ItemsControl.ItemContainerStyle>
+                            </ItemsControl>
+                            <Rectangle 
+                                Panel.ZIndex="-99"
+                                Fill="{Binding Path=Background, ElementName=parentWindow}" 
+                                Width="{Binding Path=ActualWidth, ElementName=monitor}" 
+                                Height="{Binding Path=ActualHeight, ElementName=monitor}"/>
+                        </Canvas>
+                    </DataTemplate>
+                </ContentPresenter.ContentTemplate>
+            </ContentPresenter>
         </DockPanel>
     </DockPanel>
 </Window>
