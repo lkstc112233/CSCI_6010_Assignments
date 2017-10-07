@@ -15,7 +15,7 @@ namespace DijkstrasAlgorithmPresentation
         public Vertex end { get; set; }
         public int id { get; set; }
 
-        private Color m_color = Colors.Red;
+        private Color m_color = Colors.Blue;
 
         public Color color
         {

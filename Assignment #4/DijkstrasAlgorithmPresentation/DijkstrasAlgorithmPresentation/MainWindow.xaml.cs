@@ -88,14 +88,21 @@ namespace DijkstrasAlgorithmPresentation
                         args.Handled = true;
                     }
                 }
-                else if (viewModel.CurrentStatus == SelectStatus.SelectTargetVertex)
+                else if (viewModel.CurrentStatus == SelectStatus.EdgeBuilding)
                 {
                     if (presenter.Content is Vertex)
                     {
-                        Edge e = AddEdge(viewModel.CurrentVertexSelected , presenter.Content as Vertex);
-                        CancelSelectionAndResetStatus();
-                        viewModel.SelectEdge(e);
-                        args.Handled = true;
+                        if (presenter.Content != viewModel.CurrentVertexSelected)
+                        {
+                            Edge e = AddEdge(viewModel.CurrentVertexSelected, presenter.Content as Vertex);
+                            CancelSelectionAndResetStatus();
+                            viewModel.SelectEdge(e);
+                            args.Handled = true;
+                        }
+                        else
+                        {
+                            CancelSelectionAndResetStatus();
+                        }
                     }
                 }
             };
@@ -148,7 +155,7 @@ namespace DijkstrasAlgorithmPresentation
             {
                 Button button = e.OriginalSource as Button;
                 if (button.Tag is Vertex)
-                    viewModel.CurrentStatus = SelectStatus.SelectTargetVertex;
+                    viewModel.CurrentStatus = SelectStatus.EdgeBuilding;
             }
         }
 

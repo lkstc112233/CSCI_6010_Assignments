@@ -15,7 +15,7 @@ namespace DijkstrasAlgorithmPresentation
     enum SelectStatus
     {
         SelectAnElement, 
-        SelectTargetVertex,
+        EdgeBuilding,
     }
     
     class ViewModelVertexEdge : INotifyPropertyChanged
@@ -36,12 +36,24 @@ namespace DijkstrasAlgorithmPresentation
         }
         public void SelectVertex(Vertex v)
         {
+            if (m_vertexSelected != null)
+                CancelVertexSelection();
             m_vertexSelected = v;
+            m_vertexSelected.color = Colors.Cyan;
             onPropertyChanged("CurrentVertexSelected");
         }
         public void CancelVertexSelection()
         {
+            if (m_vertexSelected != null)
+                m_vertexSelected.color = Colors.Red;
             m_vertexSelected = null;
+            onPropertyChanged("CurrentVertexSelected");
+        }
+        public void BeginEdgeBuilding(Vertex v)
+        {
+            m_vertexSelected = v;
+            m_vertexSelected.color = Colors.Green;
+            CurrentStatus = SelectStatus.EdgeBuilding;
             onPropertyChanged("CurrentVertexSelected");
         }
 
@@ -55,11 +67,16 @@ namespace DijkstrasAlgorithmPresentation
         }
         public void SelectEdge(Edge e)
         {
+            if (m_edgeSelected != null)
+                CancelEdgeSelection();
             m_edgeSelected = e;
+            m_edgeSelected.color = Colors.Aqua;
             onPropertyChanged("CurrentEdgeSelected");
         }
         public void CancelEdgeSelection()
         {
+            if (m_edgeSelected != null)
+                m_edgeSelected.color = Colors.Blue;
             m_edgeSelected = null;
             onPropertyChanged("CurrentEdgeSelected");
         }

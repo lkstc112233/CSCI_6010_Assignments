@@ -13,7 +13,7 @@ namespace DijkstrasAlgorithmPresentation
 {
     public class Vertex : INotifyPropertyChanged
     {
-        private Color m_color;
+        private Color m_color = Colors.Red;
         public Color color
         {
             get
@@ -45,12 +45,7 @@ namespace DijkstrasAlgorithmPresentation
         }
 
         public int id { get; set; }
-
-        public Vertex()
-        {
-            color = Colors.Red;
-        }
-
+        
         public event PropertyChangedEventHandler PropertyChanged;
         public void NotifyPropertyChanged(string propName)
         {
