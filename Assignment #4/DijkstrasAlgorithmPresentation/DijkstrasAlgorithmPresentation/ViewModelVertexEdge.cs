@@ -154,6 +154,19 @@ namespace DijkstrasAlgorithmPresentation
         }
 
         public static ContentPresenter graphControl = null;
+
+        public void RemoveCurrentSelectedVertex()
+        {
+            if (CurrentVertexSelected == null)
+                return;
+            List<Edge> toRemove = new List<Edge>();
+            foreach (Edge e in graphModel.graph.edges)
+                if (e.start == CurrentVertexSelected || e.end == CurrentVertexSelected)
+                    toRemove.Add(e);
+            foreach (Edge e in toRemove)
+                graphModel.graph.edges.Remove(e);
+            graphModel.graph.vertexes.Remove(CurrentVertexSelected);
+        }
     }
 
     public class EdgeViewModelClass : DependencyObject, INotifyPropertyChanged

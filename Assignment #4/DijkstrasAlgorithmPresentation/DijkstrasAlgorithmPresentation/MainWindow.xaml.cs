@@ -180,7 +180,27 @@ namespace DijkstrasAlgorithmPresentation
 
         private void CanRemoveEdge(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = true;
+            e.CanExecute = viewModel.CurrentEdgeSelected != null;
+        }
+
+        private void RemoveVertex(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (e.OriginalSource is Button)
+            {
+                Button button = e.OriginalSource as Button;
+                if (button.Tag is Vertex)
+                    if (MessageBox.Show("You cannot restore this operation.\nAre you sure you want to remove this Vertex,\nand all Edges connected to it?",
+                        "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                    {
+                        viewModel.RemoveCurrentSelectedVertex();
+                        CancelSelectionAndResetStatus();
+                    }
+            }
+        }
+
+        private void CanRemoveVertex(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = viewModel.CurrentVertexSelected != null;
         }
     }
 

@@ -36,6 +36,7 @@
                 </StackPanel>
             </GroupBox>
             <Button Command="{x:Static local:Commands.AddEdgeCommand}" Tag="{Binding}">Add Edge</Button>
+            <Button Command="{x:Static local:Commands.RemoveVertexCommand}" Tag="{Binding}">Remove Vertex</Button>
         </StackPanel>
     </DataTemplate>
     <DataTemplate x:Key="ControlPanelEdgePanel" DataType="{x:Type local:Edge}">

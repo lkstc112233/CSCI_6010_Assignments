@@ -10,6 +10,9 @@
         <CommandBinding Command="{x:Static local:Commands.AddEdgeCommand}"
                         Executed="AddEdge"
                         CanExecute="CanAddEdge"  />
+        <CommandBinding Command="{x:Static local:Commands.RemoveVertexCommand}"
+                        Executed="RemoveVertex"
+                        CanExecute="CanRemoveVertex"  />
         <CommandBinding Command="{x:Static local:Commands.RemoveEdgeCommand}"
                         Executed="RemoveEdge"
                         CanExecute="CanRemoveEdge"  />

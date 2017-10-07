@@ -12,6 +12,9 @@ namespace DijkstrasAlgorithmPresentation
         private ObservableCollection<Vertex> m_vertexes = new ObservableCollection<Vertex>();
         private ObservableCollection<Edge> m_edges = new ObservableCollection<Edge>();
 
+        private int vertexesIdIncreasmenter = 0;
+        private int edgesIdIncreasmenter = 0;
+
         public ObservableCollection<Vertex> vertexes { get => m_vertexes; }
         public ObservableCollection<Edge> edges { get => m_edges; }
 
@@ -28,13 +31,19 @@ namespace DijkstrasAlgorithmPresentation
             Edge edg = new Edge();
             edg.start = vstart;
             edg.end = vend;
+            edg.id = getNextAvailableEdgeId();
             edges.Add(edg);
             return edg;
         }
 
-        internal int getNextAvailableVertexId()
+        private int getNextAvailableVertexId()
         {
-            return vertexes.Count();
+            return ++vertexesIdIncreasmenter;
+        }
+
+        private int getNextAvailableEdgeId()
+        {
+            return ++edgesIdIncreasmenter;
         }
     }
 }
