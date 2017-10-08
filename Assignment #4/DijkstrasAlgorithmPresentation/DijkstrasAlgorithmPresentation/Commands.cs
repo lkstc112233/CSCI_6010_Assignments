@@ -12,6 +12,8 @@ namespace DijkstrasAlgorithmPresentation
         public static readonly RoutedUICommand AddEdgeCommand = new RoutedUICommand("Add a new Edge", "AddEdge", typeof(Commands));
         public static readonly RoutedUICommand RemoveVertexCommand = new RoutedUICommand("Remove this Vertex", "RemoveVertex", typeof(Commands));
         public static readonly RoutedUICommand RemoveEdgeCommand = new RoutedUICommand("Remove this Edge", "RemoveEdge", typeof(Commands));
+        public static readonly RoutedUICommand ConvertToDirectedCommand = new RoutedUICommand("Convert the graph to a directed graph", "ConvertToDirected", typeof(Commands));
+        public static readonly RoutedUICommand ConvertToUndirectedCommand = new RoutedUICommand("Convert the graph to an undirected graph", "ConvertToUndirected", typeof(Commands));
 
     }
 }

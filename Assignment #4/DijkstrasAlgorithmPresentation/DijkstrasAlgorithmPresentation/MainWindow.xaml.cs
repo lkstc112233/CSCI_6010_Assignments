@@ -202,6 +202,32 @@ namespace DijkstrasAlgorithmPresentation
         {
             e.CanExecute = viewModel.CurrentVertexSelected != null;
         }
+
+        private void ConvertToDirected(object sender, ExecutedRoutedEventArgs e)
+        {
+            viewModel.graphModel.graph.ToDirectedGraph();
+        }
+
+        private void CanConvertToDirected(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (viewModel == null)
+                return;
+            e.CanExecute = viewModel.graphModel.graph.CanToDirect;
+        }
+
+        private void ConvertToUndirected(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (MessageBox.Show("You cannot restore this operation.\nAll conflicting edges will be merged.\nAre you sure you want to convert the graph to undirected graph?",
+                "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                viewModel.graphModel.graph.ToUndirectedGraph();
+        }
+
+        private void CanConvertToUndirected(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (viewModel == null)
+                return;
+            e.CanExecute = viewModel.graphModel.graph.CanToUndirect;
+        }
     }
 
 

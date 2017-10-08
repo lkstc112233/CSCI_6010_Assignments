@@ -16,6 +16,12 @@
         <CommandBinding Command="{x:Static local:Commands.RemoveEdgeCommand}"
                         Executed="RemoveEdge"
                         CanExecute="CanRemoveEdge"  />
+        <CommandBinding Command="{x:Static local:Commands.ConvertToDirectedCommand}"
+                        Executed="ConvertToDirected"
+                        CanExecute="CanConvertToDirected"  />
+        <CommandBinding Command="{x:Static local:Commands.ConvertToUndirectedCommand}"
+                        Executed="ConvertToUndirected"
+                        CanExecute="CanConvertToUndirected"  />
     </Window.CommandBindings>
     <DockPanel>
         <DockPanel.Resources>
@@ -36,8 +42,14 @@
             </DockPanel.Resources>
             <TabControl DockPanel.Dock="Top">
                 <TabItem Header="Graph Control">
+                    <TabItem.Resources>
+                        
+                    </TabItem.Resources>
                     <StackPanel Orientation="Horizontal">
+                        <Button>Load From File</Button>
                         <Button Click="Add_Vertex">Add Vertex</Button>
+                        <Button Command="{x:Static local:Commands.ConvertToDirectedCommand}">To Directed Graph</Button>
+                        <Button Command="{x:Static local:Commands.ConvertToUndirectedCommand}">To Undirected Graph</Button>
                     </StackPanel>
                 </TabItem>
                 <TabItem Header="Dijkstra's Algorithm Control">

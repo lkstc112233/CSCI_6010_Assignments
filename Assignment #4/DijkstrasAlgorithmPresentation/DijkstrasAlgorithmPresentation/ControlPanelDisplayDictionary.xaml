@@ -74,7 +74,7 @@
             </GroupBox>
             <TextBlock>Set the weight of this edge.</TextBlock>
             <TextBox Text="{Binding weight, Converter={StaticResource SmartConverter}, UpdateSourceTrigger=PropertyChanged}"/>
-            <Slider Value="{Binding weight}" Maximum="720"/>
+            <Slider Visibility="Collapsed" Value="{Binding weight}" Maximum="720"/>
             <Button Command="{x:Static local:Commands.RemoveEdgeCommand}" Tag="{Binding}">Remove Edge</Button>
         </StackPanel>
     </DataTemplate>
