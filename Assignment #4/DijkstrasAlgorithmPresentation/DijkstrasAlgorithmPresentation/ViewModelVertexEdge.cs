@@ -18,7 +18,7 @@ namespace DijkstrasAlgorithmPresentation
         SelectAnElement, 
         EdgeBuilding,
     }
-    
+
     class ViewModelVertexEdge : INotifyPropertyChanged
     {
         public ViewModelVertexEdge()
@@ -139,8 +139,8 @@ namespace DijkstrasAlgorithmPresentation
         {
             if (!vertexPresenterDictionary.ContainsKey(v))
             {
-                var temp = FindVisualChild<ItemsControl>(graphControl, "VertexesControl"); 
-                 var temp2 = temp.ItemContainerGenerator.ContainerFromItem(v) as ContentPresenter;
+                var temp = FindVisualChild<ItemsControl>(graphControl, "VertexesControl");
+                var temp2 = temp.ItemContainerGenerator.ContainerFromItem(v) as ContentPresenter;
                 if (temp2 == null) throw new InvalidOperationException();
                 vertexPresenterDictionary[v] = temp2;
             }
@@ -162,6 +162,24 @@ namespace DijkstrasAlgorithmPresentation
                 return;
             graphModel.graph.RemoveVertex(CurrentVertexSelected);
         }
+
+        public void RearrangeVertexes()
+        {
+            int count = graphModel.graph.vertexes.Count;
+            if (count <= 1)
+                return;
+            double step = 2 * Math.PI / count;
+            double x0 = 180;
+            double y0 = 150;
+            double r = 130;
+            for (int i = 0; i < count; ++i)
+            {
+                var presenter = findVertexPresenter(graphModel.graph.vertexes[i]);
+                Canvas.SetLeft(presenter, x0 + r * Math.Sin(step * i));
+                Canvas.SetTop(presenter, y0 + r * Math.Cos(step * i));
+            }
+        }
+
     }
 
     public class EdgeViewModelClass : DependencyObject, INotifyPropertyChanged

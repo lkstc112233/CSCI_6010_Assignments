@@ -326,9 +326,8 @@ namespace DijkstrasAlgorithmPresentation
             for (int i = 0; i < maxVertexId; ++i)
                 temp.Add(CreateVertex());
             foreach (EdgeEntry e in edgeEntries)
-            {
                 AddEdge(temp[e.startid], temp[e.endid]).weight = e.weight;
-            }
+            viewModel.RearrangeVertexes();
         }
 
         private void LoadFile(object sender, ExecutedRoutedEventArgs e)
