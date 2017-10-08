@@ -273,6 +273,11 @@ namespace DijkstrasAlgorithmPresentation
             {
                 return;
             }
+            ProcessTextLoaded(s);
+        }
+
+        private void ProcessTextLoaded(string s)
+        {
             string[] dataT = s.Split(null);
             List<string> data = dataT.ToList();
             data.RemoveAll(str => str.Equals(""));
@@ -347,6 +352,28 @@ namespace DijkstrasAlgorithmPresentation
         private void CanResetGraph(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
+        }
+
+        private void FileDropProcess(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                LoadFile(files[0]);
+            }
+            else if (e.Data.GetDataPresent(DataFormats.Text))
+            {
+                string text = (string)e.Data.GetData(DataFormats.Text);
+                ProcessTextLoaded(text);
+            }
+        }
+
+        private void FileDragEnterProcess(object sender, DragEventArgs e)
+        {
+            if (!(e.Data.GetDataPresent(DataFormats.FileDrop)|| e.Data.GetDataPresent(DataFormats.Text)) || sender == e.Source)
+            {
+                e.Effects = DragDropEffects.None;
+            }
         }
     }
 

@@ -102,7 +102,8 @@
                                 Panel.ZIndex="-99"
                                 Fill="{Binding Path=Background, ElementName=parentWindow}" 
                                 Width="{Binding Path=ActualWidth, ElementName=monitor}" 
-                                Height="{Binding Path=ActualHeight, ElementName=monitor}"/>
+                                Height="{Binding Path=ActualHeight, ElementName=monitor}"
+                                AllowDrop="True" Drop="FileDropProcess" DragEnter="FileDragEnterProcess"/>
                         </Canvas>
                     </DataTemplate>
                 </ContentPresenter.ContentTemplate>

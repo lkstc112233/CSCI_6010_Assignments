@@ -44,11 +44,11 @@ namespace DijkstrasAlgorithmPresentation
 
         public void ClearGraph()
         {
-            m_edges.Clear();
-            m_vertexes.Clear();
             for (int i = 0; i < currentMaxiumCapacity; ++i)
                 for (int j = 0; j < currentMaxiumCapacity; ++j)
                     EdgeTable[i, j] = null;
+            edges.Clear();
+            vertexes.Clear();
             vertexesIdIncreasmenter = 0;
             edgesIdIncreasmenter = 0;
         }

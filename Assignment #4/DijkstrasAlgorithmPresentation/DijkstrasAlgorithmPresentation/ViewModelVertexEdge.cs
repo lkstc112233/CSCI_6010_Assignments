@@ -328,6 +328,10 @@ namespace DijkstrasAlgorithmPresentation
                             modelPair.Remove(edg);
                         }
                     break;
+                case NotifyCollectionChangedAction.Reset:
+                    modelPair.Clear();
+                    edgeModels.Clear();
+                    break;
             }
         }
 
