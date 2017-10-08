@@ -96,7 +96,8 @@ namespace DijkstrasAlgorithmPresentation
                         {
                             Edge e = AddEdge(viewModel.CurrentVertexSelected, presenter.Content as Vertex);
                             CancelSelectionAndResetStatus();
-                            viewModel.SelectEdge(e);
+                            if (e != null)
+                                viewModel.SelectEdge(e);
                             args.Handled = true;
                         }
                         else
@@ -172,7 +173,7 @@ namespace DijkstrasAlgorithmPresentation
                 if (button.Tag is Edge)
                     if (MessageBox.Show("You cannot restore this operation.\nAre you sure you want to remove this Edge?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                     {
-                        viewModel.graphModel.graph.edges.Remove(viewModel.CurrentEdgeSelected);
+                        viewModel.graphModel.graph.RemoveEdge(viewModel.CurrentEdgeSelected);
                         CancelSelectionAndResetStatus();
                     }
             }
