@@ -218,6 +218,13 @@ namespace DijkstrasAlgorithmPresentation
             multiBinding.Bindings.Add(getOnewayBinding(endPresentser, Canvas.TopProperty, converter));
             multiBinding.Converter = new LabelPositionConverter();
             BindingOperations.SetBinding(this, TopEdgeProperty, multiBinding);
+            multiBinding = new MultiBinding();
+            multiBinding.Bindings.Add(getOnewayBinding(startPresentser, Canvas.LeftProperty, converter));
+            multiBinding.Bindings.Add(getOnewayBinding(startPresentser, Canvas.TopProperty, converter));
+            multiBinding.Bindings.Add(getOnewayBinding(endPresentser, Canvas.LeftProperty, converter));
+            multiBinding.Bindings.Add(getOnewayBinding(endPresentser, Canvas.TopProperty, converter));
+            multiBinding.Converter = new AngleConverter();
+            BindingOperations.SetBinding(this, RotatingAngleProperty, multiBinding);
         }
 
         private Edge contentEdge;
@@ -232,6 +239,8 @@ namespace DijkstrasAlgorithmPresentation
         public static readonly DependencyProperty X2Property = DependencyProperty.Register("X2", typeof(double), typeof(EdgeViewModelClass));
         public double Y2 { get { return (double)GetValue(Y2Property); } set { SetValue(Y2Property, value); } }
         public static readonly DependencyProperty Y2Property = DependencyProperty.Register("Y2", typeof(double), typeof(EdgeViewModelClass));
+        public double RotatingAngle { get { return (double)GetValue(RotatingAngleProperty); } set { SetValue(RotatingAngleProperty, value); } }
+        public static readonly DependencyProperty RotatingAngleProperty = DependencyProperty.Register("RotatingAngle", typeof(double), typeof(EdgeViewModelClass));
         public double LeftEdgeHere { get { return (double)GetValue(LeftEdgeProperty); } set { SetValue(LeftEdgeProperty, value); } }
         public static readonly DependencyProperty LeftEdgeProperty = DependencyProperty.Register("LeftEdgeHere", typeof(double), typeof(EdgeViewModelClass));
         public double TopEdgeHere { get { return (double)GetValue(TopEdgeProperty); } set { SetValue(TopEdgeProperty, value); } }
@@ -246,9 +255,33 @@ namespace DijkstrasAlgorithmPresentation
             {
                 bool oneway = (bool)values[0];
                 if (oneway)
-                    return ((double)values[1] * 2.0 / 3.0) + ((double)values[2] / 3.0);
+                    return ((double)values[1] * 1.0 / 3.0) + ((double)values[2] * 2.0 / 3.0);
                 else
                     return ((double)values[1] + (double)values[2]) / 2.0;
+            }
+
+            public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        class AngleConverter : IMultiValueConverter
+        {
+            public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+            {
+                double xs = (double)values[0];
+                double ys = (double)values[1];
+                double xe = (double)values[2];
+                double ye = (double)values[3];
+                double dx = xe - xs;
+                double dy = ys - ye;
+                double d = Math.Pow((Math.Pow(dx, 2) + Math.Pow(dy, 2)), 0.5);
+                if (dy > 0)
+                    return Math.Asin(dx / d) / Math.PI * 180;
+                if (dx > 0)
+                    return Math.Acos(dy / d) / Math.PI * 180;
+                return -Math.Acos(dy / d) / Math.PI * 180;
             }
 
             public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
