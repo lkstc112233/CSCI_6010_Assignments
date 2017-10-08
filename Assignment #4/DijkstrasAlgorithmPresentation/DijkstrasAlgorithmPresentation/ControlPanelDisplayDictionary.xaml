@@ -95,6 +95,7 @@
             <local:UIElementToXConverter x:Key="ElementToX"/>
             <local:UIElementToYConverter x:Key="ElementToY"/>
             <local:MarginMakerConverter x:Key="marginMakerConverter"/>
+            <local:TextCentralConverter x:Key="textCentralMarginMakerConverter"/>
         </DataTemplate.Resources>
         <Grid>
             <Line X1="{Binding X1}"
@@ -106,11 +107,13 @@
                     <SolidColorBrush Color="{Binding edge.color}"/>
                 </Line.Stroke>
             </Line>
-            <TextBlock Text="{Binding edge.weight}" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Name="ThisTextBlock" Text="{Binding edge.weight}" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <TextBlock.Margin>
-                    <MultiBinding Converter="{StaticResource marginMakerConverter}">
+                    <MultiBinding Converter="{StaticResource textCentralMarginMakerConverter}">
                         <Binding Path="LeftEdgeHere"/>
+                        <Binding Path="ActualWidth" ElementName="ThisTextBlock"/>
                         <Binding Path="TopEdgeHere"/>
+                        <Binding Path="ActualHeight" ElementName="ThisTextBlock"/>
                     </MultiBinding>
                 </TextBlock.Margin>
             </TextBlock>

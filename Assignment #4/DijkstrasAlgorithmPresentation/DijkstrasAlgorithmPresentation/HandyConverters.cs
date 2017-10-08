@@ -105,6 +105,24 @@ namespace DijkstrasAlgorithmPresentation
         }
     }
 
+    class TextCentralConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            double desired1 = (double)values[0];
+            double d1 = 0, d2 = 0;
+            double desired2 = (double)values[2];
+            d1 = (double)values[1];
+            d2 = (double)values[3];
+            return new Thickness(desired1 - d1 / 2, desired2 - d2 / 2, 0, 0);
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     class MarginMakerConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)

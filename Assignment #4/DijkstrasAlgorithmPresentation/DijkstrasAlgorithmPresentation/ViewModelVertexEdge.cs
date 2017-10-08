@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -206,14 +207,16 @@ namespace DijkstrasAlgorithmPresentation
             BindingOperations.SetBinding(this, Y2Property, getOnewayBinding(endPresentser, Canvas.TopProperty, converter));
 
             MultiBinding multiBinding = new MultiBinding();
+            multiBinding.Bindings.Add(getBinding(edge, new PropertyPath("oneway"), null, BindingMode.OneWay));
             multiBinding.Bindings.Add(getOnewayBinding(startPresentser, Canvas.LeftProperty, converter));
             multiBinding.Bindings.Add(getOnewayBinding(endPresentser, Canvas.LeftProperty, converter));
-            multiBinding.Converter = new MinimalConverter();
+            multiBinding.Converter = new LabelPositionConverter();
             BindingOperations.SetBinding(this, LeftEdgeProperty, multiBinding);
             multiBinding = new MultiBinding();
+            multiBinding.Bindings.Add(getBinding(edge, new PropertyPath("oneway"), null, BindingMode.OneWay));
             multiBinding.Bindings.Add(getOnewayBinding(startPresentser, Canvas.TopProperty, converter));
             multiBinding.Bindings.Add(getOnewayBinding(endPresentser, Canvas.TopProperty, converter));
-            multiBinding.Converter = new MinimalConverter();
+            multiBinding.Converter = new LabelPositionConverter();
             BindingOperations.SetBinding(this, TopEdgeProperty, multiBinding);
         }
 
@@ -236,6 +239,23 @@ namespace DijkstrasAlgorithmPresentation
 
         public ContentPresenter startPresentser => ViewModelVertexEdge.findVertexPresenter(start);
         public ContentPresenter endPresentser => ViewModelVertexEdge.findVertexPresenter(end);
+
+        class LabelPositionConverter : IMultiValueConverter
+        {
+            public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+            {
+                bool oneway = (bool)values[0];
+                if (oneway)
+                    return ((double)values[1] * 2.0 / 3.0) + ((double)values[2] / 3.0);
+                else
+                    return ((double)values[1] + (double)values[2]) / 2.0;
+            }
+
+            public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 
     public class GraphViewModelClass : DependencyObject, INotifyPropertyChanged

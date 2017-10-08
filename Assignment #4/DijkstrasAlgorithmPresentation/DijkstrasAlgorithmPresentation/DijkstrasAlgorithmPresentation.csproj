@@ -55,12 +55,19 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands.cs" />
+    <Compile Include="Dijkstra%27s Algorithm Followup.xaml.cs">
+      <DependentUpon>Dijkstra%27s Algorithm Followup.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Edge.cs" />
     <Compile Include="Graph.cs" />
     <Compile Include="HandyConverters.cs" />
     <Compile Include="Vertex.cs" />
     <Compile Include="ViewModelVertexEdge.cs" />
     <Page Include="ControlPanelDisplayDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dijkstra%27s Algorithm Followup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

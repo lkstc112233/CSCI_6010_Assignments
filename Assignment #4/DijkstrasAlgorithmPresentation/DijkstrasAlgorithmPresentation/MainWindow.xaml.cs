@@ -155,7 +155,7 @@ namespace DijkstrasAlgorithmPresentation
             {
                 Button button = e.OriginalSource as Button;
                 if (button.Tag is Vertex)
-                    viewModel.CurrentStatus = SelectStatus.EdgeBuilding;
+                    viewModel.BeginEdgeBuilding(button.Tag as Vertex);
             }
         }
 

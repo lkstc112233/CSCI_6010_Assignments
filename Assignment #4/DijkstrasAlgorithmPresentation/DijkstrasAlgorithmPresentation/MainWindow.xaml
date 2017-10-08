@@ -34,10 +34,16 @@
             <DockPanel.Resources>
                 <local:DebugConverter x:Key="DebugConverter"/>
             </DockPanel.Resources>
-            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
-                <Button Click="Add_Vertex">Add Vertex</Button>
-                <TextBlock/>
-            </StackPanel>
+            <TabControl DockPanel.Dock="Top">
+                <TabItem Header="Graph Control">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Click="Add_Vertex">Add Vertex</Button>
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="Dijkstra's Algorithm Control">
+                    
+                </TabItem>
+            </TabControl>
             <ContentPresenter Name="monitor" Content="{Binding Path=graphModel}">
                 <ContentPresenter.ContentTemplate>
                     <DataTemplate>
