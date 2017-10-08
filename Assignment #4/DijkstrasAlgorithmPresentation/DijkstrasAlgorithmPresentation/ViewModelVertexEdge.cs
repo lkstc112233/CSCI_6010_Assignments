@@ -40,20 +40,20 @@ namespace DijkstrasAlgorithmPresentation
             if (m_vertexSelected != null)
                 CancelVertexSelection();
             m_vertexSelected = v;
-            m_vertexSelected.color = Colors.Cyan;
+            m_vertexSelected.SetColor(ColorSelection.Selected);
             onPropertyChanged("CurrentVertexSelected");
         }
         public void CancelVertexSelection()
         {
             if (m_vertexSelected != null)
-                m_vertexSelected.color = Colors.Red;
+                m_vertexSelected.SetColor(ColorSelection.Unselected);
             m_vertexSelected = null;
             onPropertyChanged("CurrentVertexSelected");
         }
         public void BeginEdgeBuilding(Vertex v)
         {
             m_vertexSelected = v;
-            m_vertexSelected.color = Colors.Green;
+            m_vertexSelected.SetColor(ColorSelection.BuildingEdge);
             CurrentStatus = SelectStatus.EdgeBuilding;
             onPropertyChanged("CurrentVertexSelected");
         }

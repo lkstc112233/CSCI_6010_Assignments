@@ -11,6 +11,12 @@ using System.Windows.Media;
 
 namespace DijkstrasAlgorithmPresentation
 {
+    public enum ColorSelection
+    {
+        Unselected,
+        Selected,
+        BuildingEdge,
+    }
     public class Vertex : INotifyPropertyChanged
     {
         private Color m_color = Colors.Red;
@@ -24,6 +30,23 @@ namespace DijkstrasAlgorithmPresentation
             {
                 m_color = value;
                 NotifyPropertyChanged("color");
+            }
+        }
+
+        public void SetColor(ColorSelection selection)
+        {
+            switch (selection)
+            {
+                case ColorSelection.Selected:
+                    color = Colors.Cyan;
+                    break;
+                case ColorSelection.BuildingEdge:
+                    color = Colors.Green;
+                    break;
+                case ColorSelection.Unselected:
+                default:
+                    color = Colors.Red;
+                    break;
             }
         }
 
@@ -85,4 +108,5 @@ namespace DijkstrasAlgorithmPresentation
             return Binding.DoNothing;
         }
     }
+
 }
