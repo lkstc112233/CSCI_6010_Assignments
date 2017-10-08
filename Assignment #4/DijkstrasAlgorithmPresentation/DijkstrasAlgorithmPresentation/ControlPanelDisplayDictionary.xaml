@@ -74,6 +74,7 @@
             </GroupBox>
             <TextBlock>Set the weight of this edge.</TextBlock>
             <TextBox Text="{Binding weight, Converter={StaticResource SmartConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+            <Slider Value="{Binding weight}" Maximum="720"/>
             <Button Command="{x:Static local:Commands.RemoveEdgeCommand}" Tag="{Binding}">Remove Edge</Button>
         </StackPanel>
     </DataTemplate>
@@ -96,18 +97,27 @@
             <local:UIElementToYConverter x:Key="ElementToY"/>
             <local:MarginMakerConverter x:Key="marginMakerConverter"/>
             <local:TextCentralConverter x:Key="textCentralMarginMakerConverter"/>
+            <BooleanToVisibilityConverter x:Key="IsOnewayToVisibilityConverter"/>
+            <SolidColorBrush x:Key="LineBrush" Color="{Binding edge.color}"/>
         </DataTemplate.Resources>
-        <Grid>
+        <Canvas>
             <Line X1="{Binding X1}"
                   Y1="{Binding Y1}"
                   X2="{Binding X2}"
                   Y2="{Binding Y2}" 
-                  StrokeThickness="2">
-                <Line.Stroke>
-                    <SolidColorBrush Color="{Binding edge.color}"/>
-                </Line.Stroke>
+                  StrokeThickness="2"
+                  Stroke="{StaticResource LineBrush}">
             </Line>
-            <TextBlock Name="ThisTextBlock" Text="{Binding edge.weight}" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Path Canvas.Left="{Binding LeftEdgeHere}" Canvas.Top="{Binding TopEdgeHere}" 
+                  Visibility="{Binding edge.oneway, Converter={StaticResource IsOnewayToVisibilityConverter}}"
+                  Data="M 0,0 L 6,10 0,6 -6,10 0,0" Stroke="{StaticResource LineBrush}" Fill="{StaticResource LineBrush}"
+                  RenderTransformOrigin="0, 0">
+                <Path.RenderTransform>
+                    <RotateTransform CenterX="0" CenterY="0" Angle="{Binding edge.weight}"/>
+                </Path.RenderTransform>
+            </Path>
+            <TextBlock Name="ThisTextBlock" Text="{Binding edge.weight}"
+                       HorizontalAlignment="Left" VerticalAlignment="Top">
                 <TextBlock.Margin>
                     <MultiBinding Converter="{StaticResource textCentralMarginMakerConverter}">
                         <Binding Path="LeftEdgeHere"/>
@@ -117,7 +127,7 @@
                     </MultiBinding>
                 </TextBlock.Margin>
             </TextBlock>
-        </Grid>
+        </Canvas>
     </DataTemplate>
     <local:IsNullToVisibilityConverter x:Key="IsNullToVisibilityConverter"/>
 </ResourceDictionary>
