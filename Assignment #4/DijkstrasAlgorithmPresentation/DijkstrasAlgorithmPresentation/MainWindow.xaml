@@ -7,6 +7,15 @@
         mc:Ignorable="d" Name="parentWindow"
         Title="Dijkstra's Algorithm Presentation" Height="393.562" Width="630.15">
     <Window.CommandBindings>
+        <CommandBinding Command="{x:Static local:Commands.LoadFileCommand}"
+                        Executed="LoadFile"
+                        CanExecute="CanLoadFile"  />
+        <CommandBinding Command="{x:Static local:Commands.ResetGraphCommand}"
+                        Executed="ResetGraph"
+                        CanExecute="CanResetGraph"  />
+        <CommandBinding Command="{x:Static local:Commands.AddVertexCommand}"
+                        Executed="AddVertex"
+                        CanExecute="CanAddVertex"  />
         <CommandBinding Command="{x:Static local:Commands.AddEdgeCommand}"
                         Executed="AddEdge"
                         CanExecute="CanAddEdge"  />
@@ -42,15 +51,13 @@
             </DockPanel.Resources>
             <TabControl DockPanel.Dock="Top">
                 <TabItem Header="Graph Control">
-                    <TabItem.Resources>
-                        
-                    </TabItem.Resources>
-                    <StackPanel Orientation="Horizontal">
-                        <Button>Load From File</Button>
-                        <Button Click="Add_Vertex">Add Vertex</Button>
+                    <WrapPanel Orientation="Horizontal">
+                        <Button Command="{x:Static local:Commands.LoadFileCommand}">Load From File</Button>
+                        <Button Command="{x:Static local:Commands.ResetGraphCommand}">Reset Graph</Button>
+                        <Button Command="{x:Static local:Commands.AddVertexCommand}">Add Vertex</Button>
                         <Button Command="{x:Static local:Commands.ConvertToDirectedCommand}">To Directed Graph</Button>
                         <Button Command="{x:Static local:Commands.ConvertToUndirectedCommand}">To Undirected Graph</Button>
-                    </StackPanel>
+                    </WrapPanel>
                 </TabItem>
                 <TabItem Header="Dijkstra's Algorithm Control">
                     

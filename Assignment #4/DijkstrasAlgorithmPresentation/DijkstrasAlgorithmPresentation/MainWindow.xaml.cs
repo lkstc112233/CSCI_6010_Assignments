@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -119,8 +120,6 @@ namespace DijkstrasAlgorithmPresentation
 
         private void Add_Vertex(object sender, RoutedEventArgs e)
         {
-            Vertex LatestVertex = CreateVertex();
-            viewModel.SelectVertex(LatestVertex);
         }
 
         public Vertex CreateVertex()
@@ -220,7 +219,10 @@ namespace DijkstrasAlgorithmPresentation
         {
             if (MessageBox.Show("You cannot restore this operation.\nAll conflicting edges will be merged.\nAre you sure you want to convert the graph to undirected graph?",
                 "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
                 viewModel.graphModel.graph.ToUndirectedGraph();
+                CancelSelectionAndResetStatus();
+            }
         }
 
         private void CanConvertToUndirected(object sender, CanExecuteRoutedEventArgs e)
@@ -228,6 +230,123 @@ namespace DijkstrasAlgorithmPresentation
             if (viewModel == null)
                 return;
             e.CanExecute = viewModel.graphModel.graph.CanToUndirect;
+        }
+
+        private void AddVertex(object sender, ExecutedRoutedEventArgs e)
+        {
+            Vertex LatestVertex = CreateVertex();
+            viewModel.SelectVertex(LatestVertex);
+        }
+
+        private void CanAddVertex(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private class EdgeEntry
+        {
+            public int edgeid = 0;
+            public int startid = 0;
+            public int endid = 0;
+            public double weight = 0;
+
+            public EdgeEntry(int edgeid, int startId, int endid, double weight)
+            {
+                this.edgeid = edgeid;
+                this.startid = startId;
+                this.endid = endid;
+                this.weight = weight;
+            }
+        }
+
+        private void LoadFile(string fileName)
+        {
+            if (!File.Exists(fileName))
+                return;
+            var reader = File.OpenText(fileName);
+            string s;
+            try
+            {
+                s = reader.ReadToEnd();
+            }
+            catch (IOException)
+            {
+                return;
+            }
+            string[] dataT = s.Split(null);
+            List<string> data = dataT.ToList();
+            data.RemoveAll(str => str.Equals(""));
+            List<EdgeEntry> edgeEntries = new List<EdgeEntry>();
+            try
+            {
+                for (int i = 0; i < data.Count(); ++i)
+                {
+                    int edgeid = 0;
+                    int startid = 0;
+                    int endid = 0;
+                    double weight = 0;
+                    if (!int.TryParse(data[i], out edgeid))
+                        break;
+                    i += 1;
+                    if (!int.TryParse(data[i], out startid))
+                        break;
+                    i += 1;
+                    if (!int.TryParse(data[i], out endid))
+                        break;
+                    i += 1;
+                    if (!double.TryParse(data[i], out weight))
+                        break;
+                    edgeEntries.Add(new EdgeEntry(edgeid, startid, endid, weight));
+                }
+            }
+            catch (IndexOutOfRangeException)
+            {
+
+            }
+            if (edgeEntries.Count() == 0)
+                return;
+            int maxVertexId = -1;
+            foreach (EdgeEntry e in edgeEntries)
+            {
+                if (e.startid > maxVertexId)
+                    maxVertexId = e.startid;
+                if (e.endid > maxVertexId)
+                    maxVertexId = e.endid;
+            }
+
+            viewModel.graphModel.graph.ClearGraph();
+
+            List<Vertex> temp = new List<Vertex>();
+            temp.Add(null);
+            for (int i = 0; i < maxVertexId; ++i)
+                temp.Add(CreateVertex());
+            foreach (EdgeEntry e in edgeEntries)
+            {
+                AddEdge(temp[e.startid], temp[e.endid]).weight = e.weight;
+            }
+        }
+
+        private void LoadFile(object sender, ExecutedRoutedEventArgs e)
+        {
+            System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
+            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                LoadFile(ofd.FileName);
+        }
+
+        private void CanLoadFile(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void ResetGraph(object sender, ExecutedRoutedEventArgs e)
+        {
+            viewModel.graphModel.graph.ClearGraph();
+            CancelSelectionAndResetStatus();
+        }
+
+        private void CanResetGraph(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
         }
     }
 

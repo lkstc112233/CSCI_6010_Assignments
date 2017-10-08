@@ -43,19 +43,31 @@
         <DataTemplate.Resources>
             <local:ColorSelectionToIsCheckedConverter x:Key="ColorConverter"/>
             <local:PositiveDoubleToPersistantStringConverter x:Key="SmartConverter"/>
+            <BooleanToVisibilityConverter x:Key="IsOnewayToVisibilityConverter"/>
+            <local:RevertedBooleanToVisibilityConverter x:Key="NotOnewayToVisibilityConverter"/>
         </DataTemplate.Resources>
         <StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock>Edge No.</TextBlock>
                 <TextBlock Text="{Binding id}"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock>Starts from Vertex No.</TextBlock>
-                <TextBlock Text="{Binding start.id}"/>
+            <StackPanel Visibility="{Binding oneway,Converter={StaticResource IsOnewayToVisibilityConverter}}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Starts from Vertex No.</TextBlock>
+                    <TextBlock Text="{Binding start.id}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>And edge to Vertex No.</TextBlock>
+                    <TextBlock Text="{Binding end.id}"/>
+                </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock>And edge to Vertex No.</TextBlock>
-                <TextBlock Text="{Binding end.id}"/>
+            <StackPanel Visibility="{Binding oneway,Converter={StaticResource NotOnewayToVisibilityConverter}}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Connecting Vertex No.</TextBlock>
+                    <TextBlock Text="{Binding start.id}"/>
+                    <TextBlock Text=" and Vertex No."/>
+                    <TextBlock Text="{Binding end.id}"/>
+                </StackPanel>
             </StackPanel>
             <GroupBox Header="Select a color for this Edge." Visibility="Collapsed">
                 <StackPanel>

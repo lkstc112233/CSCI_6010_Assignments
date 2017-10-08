@@ -42,6 +42,17 @@ namespace DijkstrasAlgorithmPresentation
             EdgeTable = new Edge[currentMaxiumCapacity, currentMaxiumCapacity];
         }
 
+        public void ClearGraph()
+        {
+            m_edges.Clear();
+            m_vertexes.Clear();
+            for (int i = 0; i < currentMaxiumCapacity; ++i)
+                for (int j = 0; j < currentMaxiumCapacity; ++j)
+                    EdgeTable[i, j] = null;
+            vertexesIdIncreasmenter = 0;
+            edgesIdIncreasmenter = 0;
+        }
+
         public void NowCanToDirect()
         {
             m_CanToDirect = true;
