@@ -31,12 +31,30 @@
         <CommandBinding Command="{x:Static local:Commands.ConvertToUndirectedCommand}"
                         Executed="ConvertToUndirected"
                         CanExecute="CanConvertToUndirected"  />
+        <CommandBinding Command="{x:Static local:Commands.SelectStartingPointCommand}"
+                        Executed="SelectStartingPoint"
+                        CanExecute="CanSelectStartingPoint"  />
+        <CommandBinding Command="{x:Static local:Commands.SelectEndingPointCommand}"
+                        Executed="SelectEndingPoint"
+                        CanExecute="CanSelectEndingPoint"  />
     </Window.CommandBindings>
-    <DockPanel>
-        <DockPanel.Resources>
+    <Grid>
+        <Grid.Resources>
             <ResourceDictionary Source="ControlPanelDisplayDictionary.xaml"/>
-        </DockPanel.Resources>
-        <DockPanel DockPanel.Dock="Left">
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="1">
+            <StackPanel Name="VertexSettingPanel" Visibility="{Binding Path=CurrentVertexSelected, Converter={StaticResource IsNullToVisibilityConverter}, TargetNullValue=Collapsed}">
+                <ContentPresenter ContentTemplate="{StaticResource ControlPanelVertexPanel}" Content="{Binding CurrentVertexSelected}"/>
+            </StackPanel>
+            <StackPanel Name="EdgeSettingPanel" Visibility="{Binding Path=CurrentEdgeSelected, Converter={StaticResource IsNullToVisibilityConverter}, TargetNullValue=Collapsed}">
+                <ContentPresenter ContentTemplate="{StaticResource ControlPanelEdgePanel}" Content="{Binding CurrentEdgeSelected}"/>
+            </StackPanel>
+        </StackPanel>
+        <DockPanel>
             <DockPanel.Resources>
                 <local:DebugConverter x:Key="DebugConverter"/>
             </DockPanel.Resources>
@@ -51,7 +69,10 @@
                     </WrapPanel>
                 </TabItem>
                 <TabItem Header="Dijkstra's Algorithm Control">
-
+                    <WrapPanel Orientation="Horizontal">
+                        <Button Command="{x:Static local:Commands.SelectStartingPointCommand}">Select Starting Vertex</Button>
+                        <Button Command="{x:Static local:Commands.SelectEndingPointCommand}">Selecting End Vertex</Button>
+                    </WrapPanel>
                 </TabItem>
             </TabControl>
             <ContentPresenter Name="monitor" Content="{Binding Path=graphModel}">
@@ -100,13 +121,5 @@
                 </ContentPresenter.ContentTemplate>
             </ContentPresenter>
         </DockPanel>
-        <StackPanel DockPanel.Dock="Right">
-            <StackPanel Name="VertexSettingPanel" Visibility="{Binding Path=CurrentVertexSelected, Converter={StaticResource IsNullToVisibilityConverter}, TargetNullValue=Collapsed}">
-                <ContentPresenter ContentTemplate="{StaticResource ControlPanelVertexPanel}" Content="{Binding CurrentVertexSelected}"/>
-            </StackPanel>
-            <StackPanel Name="EdgeSettingPanel" Visibility="{Binding Path=CurrentEdgeSelected, Converter={StaticResource IsNullToVisibilityConverter}, TargetNullValue=Collapsed}">
-                <ContentPresenter ContentTemplate="{StaticResource ControlPanelEdgePanel}" Content="{Binding CurrentEdgeSelected}"/>
-            </StackPanel>
-        </StackPanel>
-    </DockPanel>
+    </Grid>
 </Window>

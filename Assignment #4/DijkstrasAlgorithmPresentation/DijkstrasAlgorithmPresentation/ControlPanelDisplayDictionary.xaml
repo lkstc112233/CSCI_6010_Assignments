@@ -12,21 +12,6 @@
                 <TextBlock>Vertex No. </TextBlock>
                 <TextBlock Text="{Binding id}"/>
             </StackPanel>
-            <GroupBox Header="Select a color for this Vertex" Visibility="Collapsed">
-                <StackPanel>
-                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Red}">Red</RadioButton>
-                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Green}">Green</RadioButton>
-                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Blue}">Blue</RadioButton>
-                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Black}">Black</RadioButton>
-                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=White}">White</RadioButton>
-                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Cyan}">Cyan</RadioButton>
-                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Brown}">Brown</RadioButton>
-                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Pink}">Pink</RadioButton>
-                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Yellow}">Yellow</RadioButton>
-                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Aqua}">Aqua</RadioButton>
-                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Gray}">Gray</RadioButton>
-                </StackPanel>
-            </GroupBox>
             <GroupBox Header="Select a radius for this Vertex">
                 <StackPanel>
                     <RadioButton IsChecked="{Binding Path=radius, Converter={StaticResource RadiusConverter}, ConverterParameter=15}">Small</RadioButton>

@@ -74,26 +74,25 @@ namespace DijkstrasAlgorithmPresentation
             selectPresenter = (varMoved, args) =>
             {
                 var presenter = varMoved as ContentPresenter;
-                if (viewModel.CurrentStatus == SelectStatus.SelectAnElement)
+
+                switch (viewModel.CurrentStatus)
                 {
-                    if (presenter.Content is Vertex)
-                    {
-                        CancelSelectionAndResetStatus();
-                        viewModel.SelectVertex(presenter.Content as Vertex);
-                        args.Handled = true;
-                    }
-                    if (presenter.Content is EdgeViewModelClass)
-                    {
-                        CancelSelectionAndResetStatus();
-                        viewModel.SelectEdge((presenter.Content as EdgeViewModelClass).edge);
-                        args.Handled = true;
-                    }
-                }
-                else if (viewModel.CurrentStatus == SelectStatus.EdgeBuilding)
-                {
-                    if (presenter.Content is Vertex)
-                    {
-                        if (presenter.Content != viewModel.CurrentVertexSelected)
+                    case SelectStatus.SelectAnElement:
+                        if (presenter.Content is Vertex)
+                        {
+                            CancelSelectionAndResetStatus();
+                            viewModel.SelectVertex(presenter.Content as Vertex);
+                            args.Handled = true;
+                        }
+                        if (presenter.Content is EdgeViewModelClass)
+                        {
+                            CancelSelectionAndResetStatus();
+                            viewModel.SelectEdge((presenter.Content as EdgeViewModelClass).edge);
+                            args.Handled = true;
+                        }
+                        break;
+                    case SelectStatus.EdgeBuilding:
+                        if (presenter.Content is Vertex && presenter.Content != viewModel.CurrentVertexSelected)
                         {
                             Edge e = AddEdge(viewModel.CurrentVertexSelected, presenter.Content as Vertex);
                             CancelSelectionAndResetStatus();
@@ -102,10 +101,31 @@ namespace DijkstrasAlgorithmPresentation
                             args.Handled = true;
                         }
                         else
+                            CancelSelectionAndResetStatus(); 
+                        break;
+                    case SelectStatus.SelectAStartingVertex:
+                        if (presenter.Content is Vertex)
                         {
                             CancelSelectionAndResetStatus();
+                            viewModel.SelectStartVertex(presenter.Content as Vertex);
+                            args.Handled = true;
                         }
-                    }
+                        else
+                            CancelSelectionAndResetStatus();
+                        break;
+                    case SelectStatus.SelectAnEndVertex:
+                        if (presenter.Content is Vertex)
+                        {
+                            CancelSelectionAndResetStatus();
+                            viewModel.SelectEndVertex(presenter.Content as Vertex);
+                            args.Handled = true;
+                        }
+                        else
+                            CancelSelectionAndResetStatus();
+                        break;
+                    default:
+                        CancelSelectionAndResetStatus();
+                        break;
                 }
             };
             
@@ -194,7 +214,7 @@ namespace DijkstrasAlgorithmPresentation
                     maxVertexId = e.endid;
             }
 
-            viewModel.graphModel.graph.ClearGraph();
+            viewModel.ClearGraph();
 
             List<Vertex> temp = new List<Vertex>();
             temp.Add(null);
@@ -347,7 +367,7 @@ namespace DijkstrasAlgorithmPresentation
                     "Seriously, you can't restore this operation.\nAll information you have so far will be ERASED.\nAre you sure you want to remove all process you have?",
                 "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes)
                 return;
-            viewModel.graphModel.graph.ClearGraph();
+            viewModel.ClearGraph();
             CancelSelectionAndResetStatus();
         }
 
@@ -376,6 +396,30 @@ namespace DijkstrasAlgorithmPresentation
             {
                 e.Effects = DragDropEffects.None;
             }
+        }
+
+        private void SelectStartingPoint(object sender, ExecutedRoutedEventArgs e)
+        {
+            viewModel.CurrentStatus=SelectStatus.SelectAStartingVertex;
+        }
+
+        private void CanSelectStartingPoint(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (viewModel == null)
+                return;
+            e.CanExecute = viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph;
+        }
+
+        private void SelectEndingPoint(object sender, ExecutedRoutedEventArgs e)
+        {
+            viewModel.CurrentStatus = SelectStatus.SelectAnEndVertex;
+        }
+
+        private void CanSelectEndingPoint(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (viewModel == null)
+                return;
+            e.CanExecute = viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph;
         }
     }
 }

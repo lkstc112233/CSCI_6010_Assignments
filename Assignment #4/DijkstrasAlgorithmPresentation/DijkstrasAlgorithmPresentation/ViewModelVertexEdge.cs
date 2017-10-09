@@ -15,8 +15,10 @@ namespace DijkstrasAlgorithmPresentation
 {
     enum SelectStatus
     {
-        SelectAnElement, 
+        SelectAnElement,
         EdgeBuilding,
+        SelectAStartingVertex,
+        SelectAnEndVertex,
     }
 
     enum ProgramStatus
@@ -48,44 +50,50 @@ namespace DijkstrasAlgorithmPresentation
             }
         }
         private Vertex m_vertexSelected = null;
-        public Vertex CurrentVertexSelected
-        {
-            get
-            {
-                return m_vertexSelected;
-            }
-        }
+        private Vertex m_vertexStarting = null;
+        private Vertex m_vertexEnd = null;
+        public Vertex CurrentVertexSelected => m_vertexSelected;
         public void SelectVertex(Vertex v)
         {
             if (m_vertexSelected != null)
                 CancelVertexSelection();
             m_vertexSelected = v;
-            m_vertexSelected.SetColor(ColorSelection.Selected);
+            m_vertexSelected.Select();
+            onPropertyChanged("CurrentVertexSelected");
+        }
+        internal void SelectStartVertex(Vertex vertex)
+        {
+            if (m_vertexStarting != null && m_vertexStarting != m_vertexEnd)
+                m_vertexStarting.SetType(VertexType.Unselected);
+            m_vertexStarting = vertex;
+            m_vertexStarting.SetType(VertexType.StartingVertex);
+            onPropertyChanged("CurrentVertexSelected");
+        }
+        internal void SelectEndVertex(Vertex vertex)
+        {
+            if (m_vertexEnd != null && m_vertexStarting != m_vertexEnd)
+                m_vertexEnd.SetType(VertexType.Unselected);
+            m_vertexEnd = vertex;
+            m_vertexEnd.SetType(VertexType.EndVertex);
             onPropertyChanged("CurrentVertexSelected");
         }
         public void CancelVertexSelection()
         {
             if (m_vertexSelected != null)
-                m_vertexSelected.SetColor(ColorSelection.Unselected);
+                m_vertexSelected.NotSelect();
             m_vertexSelected = null;
             onPropertyChanged("CurrentVertexSelected");
         }
         public void BeginEdgeBuilding(Vertex v)
         {
             m_vertexSelected = v;
-            m_vertexSelected.SetColor(ColorSelection.BuildingEdge);
+            m_vertexSelected.BuildEdge();
             CurrentStatus = SelectStatus.EdgeBuilding;
             onPropertyChanged("CurrentVertexSelected");
         }
 
         private Edge m_edgeSelected = null;
-        public Edge CurrentEdgeSelected
-        {
-            get
-            {
-                return m_edgeSelected;
-            }
-        }
+        public Edge CurrentEdgeSelected => m_edgeSelected;
         public void SelectEdge(Edge e)
         {
             if (m_edgeSelected != null)
@@ -200,6 +208,14 @@ namespace DijkstrasAlgorithmPresentation
             }
         }
 
+        internal void ClearGraph()
+        {
+            graphModel.graph.ClearGraph();
+            m_edgeSelected = null;
+            m_vertexSelected = null;
+            m_vertexStarting = null;
+            m_vertexEnd = null;
+        }
     }
 
     public class EdgeViewModelClass : DependencyObject, INotifyPropertyChanged

@@ -11,43 +11,65 @@ using System.Windows.Media;
 
 namespace DijkstrasAlgorithmPresentation
 {
-    public enum ColorSelection
+    public enum VertexType
     {
         Unselected,
-        Selected,
-        BuildingEdge,
+        StartingVertex,
+        EndVertex,
+        UnscannedVertex,
+        ListedVertex,
+        ScanningVertex,
+        ScannedVertex
     }
     public class Vertex : INotifyPropertyChanged
     {
-        private Color m_color = Colors.Red;
+        private VertexType m_type = VertexType.Unselected;
+        private bool m_selected = false;
+        private bool m_building = false;
         public Color color
         {
             get
             {
-                return m_color;
-            }
-            set
-            {
-                m_color = value;
-                NotifyPropertyChanged("color");
+                if (m_selected)
+                    if (m_building)
+                        return Colors.Green;
+                    else
+                        return Colors.Cyan;
+                switch (m_type)
+                {
+                    case VertexType.StartingVertex:
+                    case VertexType.EndVertex:
+                        return Colors.SlateBlue;
+                    case VertexType.Unselected:
+                    case VertexType.UnscannedVertex:
+                    default:
+                        return Colors.Red;
+                }
             }
         }
-
-        public void SetColor(ColorSelection selection)
+        public void BuildEdge()
         {
-            switch (selection)
-            {
-                case ColorSelection.Selected:
-                    color = Colors.Cyan;
-                    break;
-                case ColorSelection.BuildingEdge:
-                    color = Colors.Green;
-                    break;
-                case ColorSelection.Unselected:
-                default:
-                    color = Colors.Red;
-                    break;
-            }
+            m_selected = true;
+            m_building = true;
+            NotifyPropertyChanged("color");
+        }
+        public void Select()
+        {
+            m_selected = true;
+            m_building = false;
+            NotifyPropertyChanged("color");
+        }
+        public void NotSelect()
+        {
+            m_selected = false;
+            m_building = false;
+            NotifyPropertyChanged("color");
+        }
+
+        public void SetType(VertexType selection)
+        {
+            m_type = selection;
+            NotifyPropertyChanged("color");
         }
 
         private double m_radius = 20;
