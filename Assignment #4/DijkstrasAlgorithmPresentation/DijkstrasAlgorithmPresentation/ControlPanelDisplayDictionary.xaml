@@ -78,6 +78,7 @@
     <DataTemplate x:Key="VertexNode" DataType="{x:Type local:Vertex}">
         <DataTemplate.Resources>
             <local:ColorSelectionToIsCheckedConverter x:Key="ColorConverter"/>
+            <local:EqualsToVisibilityConverter x:Key="EqualsToVisibilityConverter"/>
         </DataTemplate.Resources>
         <Grid>
             <Ellipse Width="{Binding radius}" Height="{Binding radius}">
@@ -85,7 +86,8 @@
                     <SolidColorBrush Color="{Binding color}"/>
                 </Ellipse.Fill>
             </Ellipse>
-            <TextBlock Text="{Binding id}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding id}" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},Path=DataContext.CurrentProgramStatus, Converter={StaticResource EqualsToVisibilityConverter}, ConverterParameter={x:Static local:ProgramStatus.BuildingGraph}}"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding cost}" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},Path=DataContext.CurrentProgramStatus, Converter={StaticResource EqualsToVisibilityConverter}, ConverterParameter={x:Static local:ProgramStatus.Presenting}}"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
     </DataTemplate>
     <DataTemplate x:Key="EdgePresent" DataType="{x:Type local:EdgeViewModelClass}">

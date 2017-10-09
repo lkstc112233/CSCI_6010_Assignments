@@ -90,7 +90,20 @@ namespace DijkstrasAlgorithmPresentation
         }
 
         public int id { get; set; }
-        
+        private double m_cost = -1;
+        public double cost
+        {
+            get
+            {
+                return m_cost;
+            }
+            set
+            {
+                m_cost = value;
+                NotifyPropertyChanged("cost");
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void NotifyPropertyChanged(string propName)
         {

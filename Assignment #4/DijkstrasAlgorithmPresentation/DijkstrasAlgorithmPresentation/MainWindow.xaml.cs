@@ -252,6 +252,8 @@ namespace DijkstrasAlgorithmPresentation
             viewModel.CurrentStatus = SelectStatus.SelectAnElement;
         }
 
+#region Commands
+
         private void AddEdge(object sender, ExecutedRoutedEventArgs e)
         {
             if (e.OriginalSource is Button)
@@ -455,5 +457,6 @@ namespace DijkstrasAlgorithmPresentation
                 return;
             e.CanExecute = true;
         }
+#endregion
     }
 }

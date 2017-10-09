@@ -166,28 +166,32 @@ namespace DijkstrasAlgorithmPresentation
 
         private static void SetStarColumns(Grid grid)
         {
-            string[] starColumns =
-                GetStarColumns(grid).Split(',');
+            if (GetStarColumns(grid).Equals("all", StringComparison.OrdinalIgnoreCase))
+            {
+                for (int i = 0; i < grid.ColumnDefinitions.Count; i++)
+                    grid.ColumnDefinitions[i].Width = new GridLength(1, GridUnitType.Star);
+                return;
+            }
+            string[] starColumns = GetStarColumns(grid).Split(',');
 
             for (int i = 0; i < grid.ColumnDefinitions.Count; i++)
-            {
                 if (starColumns.Contains(i.ToString()))
-                    grid.ColumnDefinitions[i].Width =
-                        new GridLength(1, GridUnitType.Star);
-            }
+                    grid.ColumnDefinitions[i].Width = new GridLength(1, GridUnitType.Star);
         }
 
         private static void SetStarRows(Grid grid)
         {
-            string[] starRows =
-                GetStarRows(grid).Split(',');
+            if (GetStarColumns(grid).Equals("all", StringComparison.OrdinalIgnoreCase))
+            {
+                for (int i = 0; i < grid.ColumnDefinitions.Count; i++)
+                    grid.RowDefinitions[i].Height = new GridLength(1, GridUnitType.Star);
+                return;
+            }
+            string[] starRows = GetStarRows(grid).Split(',');
 
             for (int i = 0; i < grid.RowDefinitions.Count; i++)
-            {
                 if (starRows.Contains(i.ToString()))
-                    grid.RowDefinitions[i].Height =
-                        new GridLength(1, GridUnitType.Star);
-            }
+                    grid.RowDefinitions[i].Height = new GridLength(1, GridUnitType.Star);
         }
     }
 }

@@ -25,7 +25,6 @@ namespace DijkstrasAlgorithmPresentation
     {
         BuildingGraph,
         Presenting,
-        PresentCompleted,
     }
 
     class ViewModelVertexEdge : INotifyPropertyChanged
@@ -46,7 +45,7 @@ namespace DijkstrasAlgorithmPresentation
             set
             {
                 m_ProgramStatus = value;
-                onPropertyChanged("ProgramStatusProperty");
+                onPropertyChanged("CurrentProgramStatus");
             }
         }
         private Vertex m_vertexSelected = null;
@@ -215,6 +214,11 @@ namespace DijkstrasAlgorithmPresentation
             CurrentProgramStatus = ProgramStatus.Presenting;
 
             // TODO: preparation.
+            
+            Dijkstra_s_Algorithm_data data = new Dijkstra_s_Algorithm_data(graphModel.graph);
+            data.setStartPoint(m_vertexStarting);
+            data.setEndPoint(m_vertexEnd);
+            while (data.OneStep()) ;
         }
 
         internal void EndPresentation()
