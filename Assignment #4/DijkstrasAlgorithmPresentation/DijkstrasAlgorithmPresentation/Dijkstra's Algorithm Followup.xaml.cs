@@ -17,11 +17,11 @@ namespace DijkstrasAlgorithmPresentation
     /// <summary>
     /// Dijkstra_s_Algorithm_Followup.xaml 的交互逻辑
     /// </summary>
-    public partial class Dijkstra_s_Algorithm_Followup : Window
+    public partial class Dijkstra_s_Algorithm_Followup_Window : Window
     {
         internal ViewModelVertexEdge viewModel;
 
-        public Dijkstra_s_Algorithm_Followup()
+        public Dijkstra_s_Algorithm_Followup_Window()
         {
             InitializeComponent();
         }

@@ -25,7 +25,7 @@ namespace DijkstrasAlgorithmPresentation
         ViewModelVertexEdge viewModel;
 
         Nullable<Point> dragStart = null;
-        Dijkstra_s_Algorithm_Followup FollowupWindow;
+        Dijkstra_s_Algorithm_Followup_Window FollowupWindow;
 
         public MainWindow()
         {
@@ -34,7 +34,7 @@ namespace DijkstrasAlgorithmPresentation
             DataContext = viewModel;
 
             ViewModelVertexEdge.graphControl = monitor;
-            FollowupWindow = new Dijkstra_s_Algorithm_Followup();
+            FollowupWindow = new Dijkstra_s_Algorithm_Followup_Window();
             FollowupWindow.viewModel = viewModel;
             FollowupWindow.DataContext = viewModel;
 
