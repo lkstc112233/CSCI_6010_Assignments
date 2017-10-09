@@ -19,9 +19,12 @@ namespace DijkstrasAlgorithmPresentation
     /// </summary>
     public partial class Dijkstra_s_Algorithm_Followup : Window
     {
+        internal ViewModelVertexEdge viewModel;
+
         public Dijkstra_s_Algorithm_Followup()
         {
             InitializeComponent();
         }
+
     }
 }

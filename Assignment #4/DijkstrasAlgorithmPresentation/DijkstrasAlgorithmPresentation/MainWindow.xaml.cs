@@ -25,8 +25,7 @@ namespace DijkstrasAlgorithmPresentation
         ViewModelVertexEdge viewModel;
 
         Nullable<Point> dragStart = null;
-
-        ResourceDictionary ControlPanelDisplayDictionary = new ResourceDictionary();
+        Dijkstra_s_Algorithm_Followup FollowupWindow;
 
         public MainWindow()
         {
@@ -35,8 +34,9 @@ namespace DijkstrasAlgorithmPresentation
             DataContext = viewModel;
 
             ViewModelVertexEdge.graphControl = monitor;
-
-            ControlPanelDisplayDictionary.Source = new Uri("ControlPanelDisplayDictionary.xaml", UriKind.RelativeOrAbsolute);
+            FollowupWindow = new Dijkstra_s_Algorithm_Followup();
+            FollowupWindow.viewModel = viewModel;
+            FollowupWindow.DataContext = viewModel;
 
             UIElement cvs = monitor as UIElement;
 
@@ -117,131 +117,6 @@ namespace DijkstrasAlgorithmPresentation
         MouseEventHandler moving;
         
         MouseButtonEventHandler selectPresenter;
-
-        private void Add_Vertex(object sender, RoutedEventArgs e)
-        {
-        }
-
-        public Vertex CreateVertex()
-        {
-            Vertex LatestVertex = viewModel.graphModel.graph.createVertex();
-
-            return LatestVertex;
-        }
-
-
-        public Edge AddEdge(Vertex vstart, Vertex vend)
-        {
-            Edge edg = viewModel.graphModel.graph.AddEdge(vstart, vend);
-
-            return edg;
-        }
-
-        private void CancelSelectionAndResetStatus(object sender, MouseButtonEventArgs e)
-        {
-            CancelSelectionAndResetStatus();
-        }
-
-        private void CancelSelectionAndResetStatus()
-        {
-            viewModel.CancelVertexSelection();
-            viewModel.CancelEdgeSelection();
-            viewModel.CurrentStatus = SelectStatus.SelectAnElement;
-        }
-
-        private void AddEdge(object sender, ExecutedRoutedEventArgs e)
-        {
-            if (e.OriginalSource is Button)
-            {
-                Button button = e.OriginalSource as Button;
-                if (button.Tag is Vertex)
-                    viewModel.BeginEdgeBuilding(button.Tag as Vertex);
-            }
-        }
-
-        private void CanAddEdge(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = (viewModel.CurrentStatus == SelectStatus.SelectAnElement);
-        }
-
-        private void RemoveEdge(object sender, ExecutedRoutedEventArgs e)
-        {
-            if (e.OriginalSource is Button)
-            {
-                Button button = e.OriginalSource as Button;
-                if (button.Tag is Edge)
-                    if (MessageBox.Show("You cannot restore this operation.\nAre you sure you want to remove this Edge?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
-                    {
-                        viewModel.graphModel.graph.RemoveEdge(viewModel.CurrentEdgeSelected);
-                        CancelSelectionAndResetStatus();
-                    }
-            }
-        }
-
-        private void CanRemoveEdge(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = viewModel.CurrentEdgeSelected != null;
-        }
-
-        private void RemoveVertex(object sender, ExecutedRoutedEventArgs e)
-        {
-            if (e.OriginalSource is Button)
-            {
-                Button button = e.OriginalSource as Button;
-                if (button.Tag is Vertex)
-                    if (MessageBox.Show("You cannot restore this operation.\nAre you sure you want to remove this Vertex,\nand all Edges connected to it?",
-                        "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
-                    {
-                        viewModel.RemoveCurrentSelectedVertex();
-                        CancelSelectionAndResetStatus();
-                    }
-            }
-        }
-
-        private void CanRemoveVertex(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = viewModel.CurrentVertexSelected != null;
-        }
-
-        private void ConvertToDirected(object sender, ExecutedRoutedEventArgs e)
-        {
-            viewModel.graphModel.graph.ToDirectedGraph();
-        }
-
-        private void CanConvertToDirected(object sender, CanExecuteRoutedEventArgs e)
-        {
-            if (viewModel == null)
-                return;
-            e.CanExecute = viewModel.graphModel.graph.CanToDirect;
-        }
-
-        private void ConvertToUndirected(object sender, ExecutedRoutedEventArgs e)
-        {
-            if (MessageBox.Show("You cannot restore this operation.\nAll conflicting edges will be merged.\nAre you sure you want to convert the graph to undirected graph?",
-                "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
-            {
-                viewModel.graphModel.graph.ToUndirectedGraph();
-                CancelSelectionAndResetStatus();
-            }
-        }
-
-        private void CanConvertToUndirected(object sender, CanExecuteRoutedEventArgs e)
-        {
-            if (viewModel == null)
-                return;
-            e.CanExecute = viewModel.graphModel.graph.CanToUndirect;
-        }
-
-        private void AddVertex(object sender, ExecutedRoutedEventArgs e)
-        {
-            Vertex LatestVertex = CreateVertex();
-            viewModel.SelectVertex(LatestVertex);
-        }
-
-        private void CanAddVertex(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
-        }
 
         private class EdgeEntry
         {
@@ -330,6 +205,129 @@ namespace DijkstrasAlgorithmPresentation
             viewModel.RearrangeVertexes();
         }
 
+        public Vertex CreateVertex()
+        {
+            Vertex LatestVertex = viewModel.graphModel.graph.createVertex();
+
+            return LatestVertex;
+        }
+
+
+        public Edge AddEdge(Vertex vstart, Vertex vend)
+        {
+            Edge edg = viewModel.graphModel.graph.AddEdge(vstart, vend);
+
+            return edg;
+        }
+
+        private void CancelSelectionAndResetStatus(object sender, MouseButtonEventArgs e)
+        {
+            CancelSelectionAndResetStatus();
+        }
+
+        private void CancelSelectionAndResetStatus()
+        {
+            viewModel.CancelVertexSelection();
+            viewModel.CancelEdgeSelection();
+            viewModel.CurrentStatus = SelectStatus.SelectAnElement;
+        }
+
+        private void AddEdge(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (e.OriginalSource is Button)
+            {
+                Button button = e.OriginalSource as Button;
+                if (button.Tag is Vertex)
+                    viewModel.BeginEdgeBuilding(button.Tag as Vertex);
+            }
+        }
+
+        private void CanAddEdge(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = viewModel.CurrentStatus == SelectStatus.SelectAnElement && viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph;
+        }
+
+        private void RemoveEdge(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (e.OriginalSource is Button)
+            {
+                Button button = e.OriginalSource as Button;
+                if (button.Tag is Edge)
+                    if (MessageBox.Show("You cannot restore this operation.\nAre you sure you want to remove this Edge?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                    {
+                        viewModel.graphModel.graph.RemoveEdge(viewModel.CurrentEdgeSelected);
+                        CancelSelectionAndResetStatus();
+                    }
+            }
+        }
+
+        private void CanRemoveEdge(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = viewModel.CurrentEdgeSelected != null && viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph; ;
+        }
+
+        private void RemoveVertex(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (e.OriginalSource is Button)
+            {
+                Button button = e.OriginalSource as Button;
+                if (button.Tag is Vertex)
+                    if (MessageBox.Show("You cannot restore this operation.\nAre you sure you want to remove this Vertex,\nand all Edges connected to it?",
+                        "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                    {
+                        viewModel.RemoveCurrentSelectedVertex();
+                        CancelSelectionAndResetStatus();
+                    }
+            }
+        }
+
+        private void CanRemoveVertex(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = viewModel.CurrentVertexSelected != null && viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph; ;
+        }
+
+        private void ConvertToDirected(object sender, ExecutedRoutedEventArgs e)
+        {
+            viewModel.graphModel.graph.ToDirectedGraph();
+        }
+
+        private void CanConvertToDirected(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (viewModel == null)
+                return;
+            e.CanExecute = viewModel.graphModel.graph.CanToDirect;
+        }
+
+        private void ConvertToUndirected(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (MessageBox.Show("You cannot restore this operation.\nAll conflicting edges will be merged.\nAre you sure you want to convert the graph to undirected graph?",
+                "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                viewModel.graphModel.graph.ToUndirectedGraph();
+                CancelSelectionAndResetStatus();
+            }
+        }
+
+        private void CanConvertToUndirected(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (viewModel == null)
+                return;
+            e.CanExecute = viewModel.graphModel.graph.CanToUndirect;
+        }
+
+        private void AddVertex(object sender, ExecutedRoutedEventArgs e)
+        {
+            Vertex LatestVertex = CreateVertex();
+            viewModel.SelectVertex(LatestVertex);
+        }
+
+        private void CanAddVertex(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (viewModel == null)
+                return;
+            e.CanExecute = viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph;
+        }
+
         private void LoadFile(object sender, ExecutedRoutedEventArgs e)
         {
             System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
@@ -344,6 +342,11 @@ namespace DijkstrasAlgorithmPresentation
 
         private void ResetGraph(object sender, ExecutedRoutedEventArgs e)
         {
+            if (MessageBox.Show("You cannot restore this operation.\nAll Vertexex and Edges will be removed.\nAre you sure you want to reset the graph?",
+                "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes || MessageBox.Show(
+                    "Seriously, you can't restore this operation.\nAll information you have so far will be ERASED.\nAre you sure you want to remove all process you have?",
+                "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes)
+                return;
             viewModel.graphModel.graph.ClearGraph();
             CancelSelectionAndResetStatus();
         }
@@ -375,6 +378,4 @@ namespace DijkstrasAlgorithmPresentation
             }
         }
     }
-
-
 }

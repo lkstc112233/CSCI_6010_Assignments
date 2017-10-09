@@ -19,6 +19,13 @@ namespace DijkstrasAlgorithmPresentation
         EdgeBuilding,
     }
 
+    enum ProgramStatus
+    {
+        BuildingGraph,
+        Presenting,
+        PresentCompleted,
+    }
+
     class ViewModelVertexEdge : INotifyPropertyChanged
     {
         public ViewModelVertexEdge()
@@ -27,6 +34,19 @@ namespace DijkstrasAlgorithmPresentation
             m_graphModel = new GraphViewModelClass(m_graph);
         }
 
+        private ProgramStatus m_ProgramStatus = ProgramStatus.BuildingGraph;
+        public ProgramStatus CurrentProgramStatus
+        {
+            get
+            {
+                return m_ProgramStatus;
+            }
+            set
+            {
+                m_ProgramStatus = value;
+                onPropertyChanged("ProgramStatusProperty");
+            }
+        }
         private Vertex m_vertexSelected = null;
         public Vertex CurrentVertexSelected
         {
