@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DijkstrasAlgorithmPresentation"
         mc:Ignorable="d" Name="parentWindow"
-        Title="Dijkstra's Algorithm Presentation" Height="450" Width="700">
+        Title="Dijkstra's Algorithm Presentation" Height="450" Width="700" Closed="parentWindow_Closed"
+        AllowDrop="True" Drop="FileDropProcess" DragEnter="FileDragEnterProcess">
     <Window.CommandBindings>
         <CommandBinding Command="{x:Static local:Commands.LoadFileCommand}"
                         Executed="LoadFile"
@@ -37,6 +38,12 @@
         <CommandBinding Command="{x:Static local:Commands.SelectEndingPointCommand}"
                         Executed="SelectEndingPoint"
                         CanExecute="CanSelectEndingPoint"  />
+        <CommandBinding Command="{x:Static local:Commands.BeginPresentationCommand}"
+                        Executed="BeginPresentation"
+                        CanExecute="CanBeginPresentation"  />
+        <CommandBinding Command="{x:Static local:Commands.EndPresentationCommand}"
+                        Executed="EndPresentation"
+                        CanExecute="CanEndPresentation"  />
     </Window.CommandBindings>
     <Grid>
         <Grid.Resources>
@@ -46,14 +53,6 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="1">
-            <StackPanel Name="VertexSettingPanel" Visibility="{Binding Path=CurrentVertexSelected, Converter={StaticResource IsNullToVisibilityConverter}, TargetNullValue=Collapsed}">
-                <ContentPresenter ContentTemplate="{StaticResource ControlPanelVertexPanel}" Content="{Binding CurrentVertexSelected}"/>
-            </StackPanel>
-            <StackPanel Name="EdgeSettingPanel" Visibility="{Binding Path=CurrentEdgeSelected, Converter={StaticResource IsNullToVisibilityConverter}, TargetNullValue=Collapsed}">
-                <ContentPresenter ContentTemplate="{StaticResource ControlPanelEdgePanel}" Content="{Binding CurrentEdgeSelected}"/>
-            </StackPanel>
-        </StackPanel>
         <DockPanel>
             <DockPanel.Resources>
                 <local:DebugConverter x:Key="DebugConverter"/>
@@ -72,10 +71,11 @@
                     <WrapPanel Orientation="Horizontal">
                         <Button Command="{x:Static local:Commands.SelectStartingPointCommand}">Select Starting Vertex</Button>
                         <Button Command="{x:Static local:Commands.SelectEndingPointCommand}">Selecting End Vertex</Button>
+                        <Button Name="BeginButton" Command="{x:Static local:Commands.BeginPresentationCommand}">Begin the presentation!</Button>
                     </WrapPanel>
                 </TabItem>
             </TabControl>
-            <ContentPresenter Name="monitor" Content="{Binding Path=graphModel}">
+            <ContentPresenter Name="monitor" Content="{Binding Path=graphModel}" >
                 <ContentPresenter.ContentTemplate>
                     <DataTemplate>
                         <Canvas Name="container" MouseDown="CancelSelectionAndResetStatus">
@@ -114,12 +114,19 @@
                                 Panel.ZIndex="-99"
                                 Fill="{Binding Path=Background, ElementName=parentWindow}" 
                                 Width="{Binding Path=ActualWidth, ElementName=monitor}" 
-                                Height="{Binding Path=ActualHeight, ElementName=monitor}"
-                                AllowDrop="True" Drop="FileDropProcess" DragEnter="FileDragEnterProcess"/>
+                                Height="{Binding Path=ActualHeight, ElementName=monitor}"/>
                         </Canvas>
                     </DataTemplate>
                 </ContentPresenter.ContentTemplate>
             </ContentPresenter>
         </DockPanel>
+        <StackPanel Grid.Column="1">
+            <StackPanel Name="VertexSettingPanel" Visibility="{Binding Path=CurrentVertexSelected, Converter={StaticResource IsNullToVisibilityConverter}, TargetNullValue=Collapsed}">
+                <ContentPresenter ContentTemplate="{StaticResource ControlPanelVertexPanel}" Content="{Binding CurrentVertexSelected}"/>
+            </StackPanel>
+            <StackPanel Name="EdgeSettingPanel" Visibility="{Binding Path=CurrentEdgeSelected, Converter={StaticResource IsNullToVisibilityConverter}, TargetNullValue=Collapsed}">
+                <ContentPresenter ContentTemplate="{StaticResource ControlPanelEdgePanel}" Content="{Binding CurrentEdgeSelected}"/>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Window>

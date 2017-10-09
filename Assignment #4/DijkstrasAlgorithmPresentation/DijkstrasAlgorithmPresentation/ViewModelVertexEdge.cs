@@ -208,6 +208,24 @@ namespace DijkstrasAlgorithmPresentation
             }
         }
 
+        internal void BeginPresentation()
+        {
+            if (!CanBeginPresentation())
+                return;
+            CurrentProgramStatus = ProgramStatus.Presenting;
+
+            // TODO: preparation.
+        }
+
+        internal void EndPresentation()
+        {
+            if (CurrentProgramStatus == ProgramStatus.BuildingGraph)
+                return;
+            CurrentProgramStatus = ProgramStatus.BuildingGraph;
+            // TODO.
+
+        }
+
         internal void ClearGraph()
         {
             graphModel.graph.ClearGraph();
@@ -215,6 +233,11 @@ namespace DijkstrasAlgorithmPresentation
             m_vertexSelected = null;
             m_vertexStarting = null;
             m_vertexEnd = null;
+        }
+
+        internal bool CanBeginPresentation()
+        {
+            return m_vertexStarting != null && m_vertexEnd != null;
         }
     }
 

@@ -17,8 +17,11 @@ namespace DijkstrasAlgorithmPresentation
         public static readonly RoutedUICommand ResetGraphCommand = new RoutedUICommand("Reset graph. Removing all Vertexes and Edges in it", "ResetGraph", typeof(Commands));
         public static readonly RoutedUICommand ConvertToDirectedCommand = new RoutedUICommand("Convert the graph to a directed graph", "ConvertToDirected", typeof(Commands));
         public static readonly RoutedUICommand ConvertToUndirectedCommand = new RoutedUICommand("Convert the graph to an undirected graph", "ConvertToUndirected", typeof(Commands));
+
         public static readonly RoutedUICommand SelectStartingPointCommand = new RoutedUICommand("Select starting Vertex for the algorithm", "SelectStartingPoint", typeof(Commands));
         public static readonly RoutedUICommand SelectEndingPointCommand = new RoutedUICommand("Select target Vertex for the algorithm", "SelectEndingPoint", typeof(Commands));
+        public static readonly RoutedUICommand BeginPresentationCommand = new RoutedUICommand("Begin the presentation", "BeginPresentation", typeof(Commands));
+        public static readonly RoutedUICommand EndPresentationCommand = new RoutedUICommand("Terminate the presentation", "EndPresentation", typeof(Commands));
 
     }
 }

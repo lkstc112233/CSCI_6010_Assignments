@@ -283,7 +283,7 @@ namespace DijkstrasAlgorithmPresentation
 
         private void CanRemoveEdge(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = viewModel.CurrentEdgeSelected != null && viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph; ;
+            e.CanExecute = viewModel.CurrentEdgeSelected != null && viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph; 
         }
 
         private void RemoveVertex(object sender, ExecutedRoutedEventArgs e)
@@ -303,7 +303,7 @@ namespace DijkstrasAlgorithmPresentation
 
         private void CanRemoveVertex(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = viewModel.CurrentVertexSelected != null && viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph; ;
+            e.CanExecute = viewModel.CurrentVertexSelected != null && viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph; 
         }
 
         private void ConvertToDirected(object sender, ExecutedRoutedEventArgs e)
@@ -315,7 +315,7 @@ namespace DijkstrasAlgorithmPresentation
         {
             if (viewModel == null)
                 return;
-            e.CanExecute = viewModel.graphModel.graph.CanToDirect;
+            e.CanExecute = viewModel.graphModel.graph.CanToDirect && viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph;
         }
 
         private void ConvertToUndirected(object sender, ExecutedRoutedEventArgs e)
@@ -332,7 +332,7 @@ namespace DijkstrasAlgorithmPresentation
         {
             if (viewModel == null)
                 return;
-            e.CanExecute = viewModel.graphModel.graph.CanToUndirect;
+            e.CanExecute = viewModel.graphModel.graph.CanToUndirect && viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph;
         }
 
         private void AddVertex(object sender, ExecutedRoutedEventArgs e)
@@ -367,6 +367,7 @@ namespace DijkstrasAlgorithmPresentation
                     "Seriously, you can't restore this operation.\nAll information you have so far will be ERASED.\nAre you sure you want to remove all process you have?",
                 "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes)
                 return;
+            viewModel.EndPresentation();
             viewModel.ClearGraph();
             CancelSelectionAndResetStatus();
         }
@@ -420,6 +421,39 @@ namespace DijkstrasAlgorithmPresentation
             if (viewModel == null)
                 return;
             e.CanExecute = viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph;
+        }
+
+        private void parentWindow_Closed(object sender, EventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void BeginPresentation(object sender, ExecutedRoutedEventArgs e)
+        {
+            BeginButton.Content = "End the presentation";
+            BeginButton.Command = Commands.EndPresentationCommand;
+            viewModel.BeginPresentation();
+        }
+
+        private void CanBeginPresentation(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (viewModel == null)
+                return;
+            e.CanExecute = viewModel.CanBeginPresentation();
+        }
+
+        private void EndPresentation(object sender, ExecutedRoutedEventArgs e)
+        {
+            BeginButton.Content = "Begin the presentation!";
+            BeginButton.Command = Commands.BeginPresentationCommand;
+            viewModel.EndPresentation();
+        }
+
+        private void CanEndPresentation(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (viewModel == null)
+                return;
+            e.CanExecute = true;
         }
     }
 }
