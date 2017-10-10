@@ -9,6 +9,17 @@ using System.Windows.Media;
 
 namespace DijkstrasAlgorithmPresentation
 {
+    enum EdgeType
+    {
+        Unselected,
+        StartingVertex,
+        EndVertex,
+        UnscannedVertex,
+        ListedVertex,
+        ScanningVertex,
+        ScannedVertex,
+    }
+
     public class Edge : INotifyPropertyChanged
     {
         public Vertex start { get; set; }

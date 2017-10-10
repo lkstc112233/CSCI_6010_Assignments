@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace DijkstrasAlgorithmPresentation
 {
@@ -262,6 +263,7 @@ namespace DijkstrasAlgorithmPresentation
                 if (button.Tag is Vertex)
                     viewModel.BeginEdgeBuilding(button.Tag as Vertex);
             }
+            CommandManager.InvalidateRequerySuggested();
         }
 
         private void CanAddEdge(object sender, CanExecuteRoutedEventArgs e)
@@ -281,6 +283,7 @@ namespace DijkstrasAlgorithmPresentation
                         CancelSelectionAndResetStatus();
                     }
             }
+            CommandManager.InvalidateRequerySuggested();
         }
 
         private void CanRemoveEdge(object sender, CanExecuteRoutedEventArgs e)
@@ -301,6 +304,7 @@ namespace DijkstrasAlgorithmPresentation
                         CancelSelectionAndResetStatus();
                     }
             }
+            CommandManager.InvalidateRequerySuggested();
         }
 
         private void CanRemoveVertex(object sender, CanExecuteRoutedEventArgs e)
@@ -311,6 +315,7 @@ namespace DijkstrasAlgorithmPresentation
         private void ConvertToDirected(object sender, ExecutedRoutedEventArgs e)
         {
             viewModel.graphModel.graph.ToDirectedGraph();
+            CommandManager.InvalidateRequerySuggested();
         }
 
         private void CanConvertToDirected(object sender, CanExecuteRoutedEventArgs e)
@@ -328,6 +333,7 @@ namespace DijkstrasAlgorithmPresentation
                 viewModel.graphModel.graph.ToUndirectedGraph();
                 CancelSelectionAndResetStatus();
             }
+            CommandManager.InvalidateRequerySuggested();
         }
 
         private void CanConvertToUndirected(object sender, CanExecuteRoutedEventArgs e)
@@ -341,6 +347,7 @@ namespace DijkstrasAlgorithmPresentation
         {
             Vertex LatestVertex = CreateVertex();
             viewModel.SelectVertex(LatestVertex);
+            CommandManager.InvalidateRequerySuggested();
         }
 
         private void CanAddVertex(object sender, CanExecuteRoutedEventArgs e)
@@ -355,6 +362,7 @@ namespace DijkstrasAlgorithmPresentation
             System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 LoadFile(ofd.FileName);
+            CommandManager.InvalidateRequerySuggested();
         }
 
         private void CanLoadFile(object sender, CanExecuteRoutedEventArgs e)
@@ -372,6 +380,7 @@ namespace DijkstrasAlgorithmPresentation
             viewModel.EndPresentation();
             viewModel.ClearGraph();
             CancelSelectionAndResetStatus();
+            CommandManager.InvalidateRequerySuggested();
         }
 
         private void CanResetGraph(object sender, CanExecuteRoutedEventArgs e)
@@ -391,6 +400,7 @@ namespace DijkstrasAlgorithmPresentation
                 string text = (string)e.Data.GetData(DataFormats.Text);
                 ProcessTextLoaded(text);
             }
+            CommandManager.InvalidateRequerySuggested();
         }
 
         private void FileDragEnterProcess(object sender, DragEventArgs e)
@@ -404,25 +414,27 @@ namespace DijkstrasAlgorithmPresentation
         private void SelectStartingPoint(object sender, ExecutedRoutedEventArgs e)
         {
             viewModel.CurrentStatus=SelectStatus.SelectAStartingVertex;
+            CommandManager.InvalidateRequerySuggested();
         }
 
         private void CanSelectStartingPoint(object sender, CanExecuteRoutedEventArgs e)
         {
             if (viewModel == null)
                 return;
-            e.CanExecute = viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph;
+            e.CanExecute = viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph && viewModel.CurrentStatus != SelectStatus.SelectAStartingVertex;
         }
 
         private void SelectEndingPoint(object sender, ExecutedRoutedEventArgs e)
         {
             viewModel.CurrentStatus = SelectStatus.SelectAnEndVertex;
+            CommandManager.InvalidateRequerySuggested();
         }
 
         private void CanSelectEndingPoint(object sender, CanExecuteRoutedEventArgs e)
         {
             if (viewModel == null)
                 return;
-            e.CanExecute = viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph;
+            e.CanExecute = viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph && viewModel.CurrentStatus != SelectStatus.SelectAnEndVertex;
         }
 
         private void parentWindow_Closed(object sender, EventArgs e)
@@ -435,6 +447,7 @@ namespace DijkstrasAlgorithmPresentation
             BeginButton.Content = "End the presentation";
             BeginButton.Command = Commands.EndPresentationCommand;
             viewModel.BeginPresentation();
+            CommandManager.InvalidateRequerySuggested();
         }
 
         private void CanBeginPresentation(object sender, CanExecuteRoutedEventArgs e)
@@ -449,6 +462,7 @@ namespace DijkstrasAlgorithmPresentation
             BeginButton.Content = "Begin the presentation!";
             BeginButton.Command = Commands.BeginPresentationCommand;
             viewModel.EndPresentation();
+            CommandManager.InvalidateRequerySuggested();
         }
 
         private void CanEndPresentation(object sender, CanExecuteRoutedEventArgs e)
@@ -457,6 +471,77 @@ namespace DijkstrasAlgorithmPresentation
                 return;
             e.CanExecute = true;
         }
-#endregion
+        #endregion
+
+        private void OneStep(object sender, ExecutedRoutedEventArgs e)
+        {
+            viewModel.AlgorithmData.OneStep();
+            CommandManager.InvalidateRequerySuggested();
+        }
+
+        private void CanOneStep(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (viewModel == null)
+                return;
+            e.CanExecute = viewModel.CurrentProgramStatus == ProgramStatus.Presenting && !viewModel.AlgorithmData.PathFound;
+        }
+
+        DispatcherTimer dispatcherTimer = null;
+
+        private void SolvePresentation(object sender, ExecutedRoutedEventArgs e)
+        {
+            BeginTheShowButton.Content = "End Automatic Presentation";
+            BeginTheShowButton.Command = Commands.StopSolvePresentationCommand;
+
+            dispatcherTimer = new DispatcherTimer();
+            dispatcherTimer.Tick += (Sender, args) =>
+            {
+                if (!viewModel.AlgorithmData.OneStep())
+                {
+                    dispatcherTimer.Stop();
+                    BeginTheShowButton.Content = "Begin Automatic Presentation!";
+                    BeginTheShowButton.Command = Commands.SolvePresentationCommand;
+                }
+            };
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 2);
+            dispatcherTimer.Start();
+            CommandManager.InvalidateRequerySuggested();
+        }
+
+        private void CanSolvePresentation(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (viewModel == null)
+                return;
+            e.CanExecute = viewModel.CurrentProgramStatus == ProgramStatus.Presenting && !viewModel.AlgorithmData.PathFound;
+        }
+
+        private void StopSolvePresentation(object sender, ExecutedRoutedEventArgs e)
+        {
+            BeginTheShowButton.Content ="Begin Automatic Presentation!";
+            BeginTheShowButton.Command = Commands.SolvePresentationCommand;
+            dispatcherTimer.Stop();
+            dispatcherTimer = null;
+            CommandManager.InvalidateRequerySuggested();
+        }
+
+        private void CanStopSolvePresentation(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (viewModel == null)
+                return;
+            e.CanExecute = viewModel.CurrentProgramStatus == ProgramStatus.Presenting;
+        }
+
+        private void SolveInAFlash(object sender, ExecutedRoutedEventArgs e)
+        {
+            while (viewModel.AlgorithmData.OneStep()) ;
+            CommandManager.InvalidateRequerySuggested();
+        }
+
+        private void CanSolveInAFlash(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (viewModel == null)
+                return;
+            e.CanExecute = viewModel.CurrentProgramStatus == ProgramStatus.Presenting && !viewModel.AlgorithmData.PathFound;
+        }
     }
 }

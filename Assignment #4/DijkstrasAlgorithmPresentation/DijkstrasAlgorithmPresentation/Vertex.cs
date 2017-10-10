@@ -19,7 +19,7 @@ namespace DijkstrasAlgorithmPresentation
         UnscannedVertex,
         ListedVertex,
         ScanningVertex,
-        ScannedVertex
+        ScannedVertex,
     }
     public class Vertex : INotifyPropertyChanged
     {
@@ -40,6 +40,12 @@ namespace DijkstrasAlgorithmPresentation
                     case VertexType.StartingVertex:
                     case VertexType.EndVertex:
                         return Colors.SlateBlue;
+                    case VertexType.ListedVertex:
+                        return Colors.Orange;
+                    case VertexType.ScannedVertex:
+                        return Colors.Silver;
+                    case VertexType.ScanningVertex:
+                        return Colors.Gold;
                     case VertexType.Unselected:
                     case VertexType.UnscannedVertex:
                     default:

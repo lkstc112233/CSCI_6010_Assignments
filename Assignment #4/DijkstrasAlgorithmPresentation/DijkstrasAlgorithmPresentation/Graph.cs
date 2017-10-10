@@ -185,5 +185,11 @@ namespace DijkstrasAlgorithmPresentation
         {
             return ++edgesIdIncreasmenter;
         }
+
+        internal void ResetCosts()
+        {
+            foreach (Vertex v in vertexes)
+                v.cost = -1;
+        }
     }
 }

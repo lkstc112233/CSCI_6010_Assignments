@@ -22,6 +22,10 @@ namespace DijkstrasAlgorithmPresentation
         public static readonly RoutedUICommand SelectEndingPointCommand = new RoutedUICommand("Select target Vertex for the algorithm", "SelectEndingPoint", typeof(Commands));
         public static readonly RoutedUICommand BeginPresentationCommand = new RoutedUICommand("Begin the presentation", "BeginPresentation", typeof(Commands));
         public static readonly RoutedUICommand EndPresentationCommand = new RoutedUICommand("Terminate the presentation", "EndPresentation", typeof(Commands));
+        public static readonly RoutedUICommand OneStepCommand = new RoutedUICommand("Move to the next step", "OneStep", typeof(Commands));
+        public static readonly RoutedUICommand SolvePresentationCommand = new RoutedUICommand("Start solving the problem step by step", "SolvePresentation", typeof(Commands));
+        public static readonly RoutedUICommand StopSolvePresentationCommand = new RoutedUICommand("Start solving the problem step by step", "SolvePresentation", typeof(Commands));
+        public static readonly RoutedUICommand SolveInAFlashCommand = new RoutedUICommand("Solve the game in a flash", "SolveInAFlash", typeof(Commands));
 
     }
 }

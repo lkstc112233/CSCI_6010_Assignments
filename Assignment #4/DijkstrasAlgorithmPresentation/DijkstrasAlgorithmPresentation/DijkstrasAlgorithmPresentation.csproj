@@ -60,7 +60,9 @@
       <DependentUpon>Dijkstra%27s Algorithm Followup.xaml</DependentUpon>
     </Compile>
     <Compile Include="Edge.cs" />
+    <Compile Include="EdgeViewModelClass.cs" />
     <Compile Include="Graph.cs" />
+    <Compile Include="GraphViewModelClass.cs" />
     <Compile Include="GridHelper.cs" />
     <Compile Include="HandyConverters.cs" />
     <Compile Include="Vertex.cs" />

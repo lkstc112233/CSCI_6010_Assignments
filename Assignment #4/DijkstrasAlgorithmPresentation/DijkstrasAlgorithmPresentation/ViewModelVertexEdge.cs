@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -207,6 +203,8 @@ namespace DijkstrasAlgorithmPresentation
             }
         }
 
+        public Dijkstra_s_Algorithm_data AlgorithmData;
+
         internal void BeginPresentation()
         {
             if (!CanBeginPresentation())
@@ -214,11 +212,10 @@ namespace DijkstrasAlgorithmPresentation
             CurrentProgramStatus = ProgramStatus.Presenting;
 
             // TODO: preparation.
-            
-            Dijkstra_s_Algorithm_data data = new Dijkstra_s_Algorithm_data(graphModel.graph);
-            data.setStartPoint(m_vertexStarting);
-            data.setEndPoint(m_vertexEnd);
-            while (data.OneStep()) ;
+
+            AlgorithmData = new Dijkstra_s_Algorithm_data(graphModel.graph);
+            AlgorithmData.setStartPoint(m_vertexStarting);
+            AlgorithmData.setEndPoint(m_vertexEnd);
         }
 
         internal void EndPresentation()
@@ -228,6 +225,8 @@ namespace DijkstrasAlgorithmPresentation
             CurrentProgramStatus = ProgramStatus.BuildingGraph;
             // TODO.
 
+            AlgorithmData.ResetStatus();
+            graphModel.graph.ResetCosts();
         }
 
         internal void ClearGraph()
@@ -243,181 +242,5 @@ namespace DijkstrasAlgorithmPresentation
         {
             return m_vertexStarting != null && m_vertexEnd != null;
         }
-    }
-
-    public class EdgeViewModelClass : DependencyObject, INotifyPropertyChanged
-    {
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void onPropertyChanged(string name)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-
-        private Binding getOnewayBinding(object source, DependencyProperty property, IValueConverter converter)
-        {
-            if (source is ContentPresenter)
-                if ((source as ContentPresenter).Content is Vertex)
-                    return getBinding(source, new PropertyPath(property), converter, BindingMode.OneWay, (source as ContentPresenter).Content);
-            return getBinding(source, new PropertyPath(property), converter, BindingMode.OneWay);
-        }
-
-        private Binding getBinding(object source, PropertyPath path, IValueConverter converter, BindingMode mode, object parameter = null)
-        {
-            Binding binding = new Binding();
-            binding.Source = source;
-            binding.Path = path;
-            binding.Converter = converter;
-            binding.ConverterParameter = parameter;
-            binding.Mode = mode;
-            return binding;
-        }
-
-        public EdgeViewModelClass(Edge e)
-        {
-            contentEdge = e;
-            IValueConverter converter = new EclipseConverter();
-            BindingOperations.SetBinding(this, X1Property, getOnewayBinding(startPresentser, Canvas.LeftProperty, converter));
-            BindingOperations.SetBinding(this, X2Property, getOnewayBinding(endPresentser, Canvas.LeftProperty, converter));
-            BindingOperations.SetBinding(this, Y1Property, getOnewayBinding(startPresentser, Canvas.TopProperty, converter));
-            BindingOperations.SetBinding(this, Y2Property, getOnewayBinding(endPresentser, Canvas.TopProperty, converter));
-
-            MultiBinding multiBinding = new MultiBinding();
-            multiBinding.Bindings.Add(getBinding(edge, new PropertyPath("oneway"), null, BindingMode.OneWay));
-            multiBinding.Bindings.Add(getOnewayBinding(startPresentser, Canvas.LeftProperty, converter));
-            multiBinding.Bindings.Add(getOnewayBinding(endPresentser, Canvas.LeftProperty, converter));
-            multiBinding.Converter = new LabelPositionConverter();
-            BindingOperations.SetBinding(this, LeftEdgeProperty, multiBinding);
-            multiBinding = new MultiBinding();
-            multiBinding.Bindings.Add(getBinding(edge, new PropertyPath("oneway"), null, BindingMode.OneWay));
-            multiBinding.Bindings.Add(getOnewayBinding(startPresentser, Canvas.TopProperty, converter));
-            multiBinding.Bindings.Add(getOnewayBinding(endPresentser, Canvas.TopProperty, converter));
-            multiBinding.Converter = new LabelPositionConverter();
-            BindingOperations.SetBinding(this, TopEdgeProperty, multiBinding);
-            multiBinding = new MultiBinding();
-            multiBinding.Bindings.Add(getOnewayBinding(startPresentser, Canvas.LeftProperty, converter));
-            multiBinding.Bindings.Add(getOnewayBinding(startPresentser, Canvas.TopProperty, converter));
-            multiBinding.Bindings.Add(getOnewayBinding(endPresentser, Canvas.LeftProperty, converter));
-            multiBinding.Bindings.Add(getOnewayBinding(endPresentser, Canvas.TopProperty, converter));
-            multiBinding.Converter = new AngleConverter();
-            BindingOperations.SetBinding(this, RotatingAngleProperty, multiBinding);
-        }
-
-        private Edge contentEdge;
-        public Edge edge => contentEdge;
-        public Vertex start => edge.start;
-        public Vertex end => edge.end;
-        public double X1 { get { return (double)GetValue(X1Property); } set { SetValue(X1Property, value); } }
-        public static readonly DependencyProperty X1Property = DependencyProperty.Register("X1", typeof(double), typeof(EdgeViewModelClass));
-        public double Y1 { get { return (double)GetValue(Y1Property); } set { SetValue(Y1Property, value); } }
-        public static readonly DependencyProperty Y1Property = DependencyProperty.Register("Y1", typeof(double), typeof(EdgeViewModelClass));
-        public double X2 { get { return (double)GetValue(X2Property); } set { SetValue(X2Property, value); } }
-        public static readonly DependencyProperty X2Property = DependencyProperty.Register("X2", typeof(double), typeof(EdgeViewModelClass));
-        public double Y2 { get { return (double)GetValue(Y2Property); } set { SetValue(Y2Property, value); } }
-        public static readonly DependencyProperty Y2Property = DependencyProperty.Register("Y2", typeof(double), typeof(EdgeViewModelClass));
-        public double RotatingAngle { get { return (double)GetValue(RotatingAngleProperty); } set { SetValue(RotatingAngleProperty, value); } }
-        public static readonly DependencyProperty RotatingAngleProperty = DependencyProperty.Register("RotatingAngle", typeof(double), typeof(EdgeViewModelClass));
-        public double LeftEdgeHere { get { return (double)GetValue(LeftEdgeProperty); } set { SetValue(LeftEdgeProperty, value); } }
-        public static readonly DependencyProperty LeftEdgeProperty = DependencyProperty.Register("LeftEdgeHere", typeof(double), typeof(EdgeViewModelClass));
-        public double TopEdgeHere { get { return (double)GetValue(TopEdgeProperty); } set { SetValue(TopEdgeProperty, value); } }
-        public static readonly DependencyProperty TopEdgeProperty = DependencyProperty.Register("TopEdgeHere", typeof(double), typeof(EdgeViewModelClass));
-
-        public ContentPresenter startPresentser => ViewModelVertexEdge.findVertexPresenter(start);
-        public ContentPresenter endPresentser => ViewModelVertexEdge.findVertexPresenter(end);
-
-        class LabelPositionConverter : IMultiValueConverter
-        {
-            public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
-            {
-                bool oneway = (bool)values[0];
-                if (oneway)
-                    return ((double)values[1] * 1.0 / 3.0) + ((double)values[2] * 2.0 / 3.0);
-                else
-                    return ((double)values[1] + (double)values[2]) / 2.0;
-            }
-
-            public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        class AngleConverter : IMultiValueConverter
-        {
-            public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
-            {
-                double xs = (double)values[0];
-                double ys = (double)values[1];
-                double xe = (double)values[2];
-                double ye = (double)values[3];
-                double dx = xe - xs;
-                double dy = ys - ye;
-                double d = Math.Pow((Math.Pow(dx, 2) + Math.Pow(dy, 2)), 0.5);
-                if (dy > 0)
-                    return Math.Asin(dx / d) / Math.PI * 180;
-                if (dx > 0)
-                    return Math.Acos(dy / d) / Math.PI * 180;
-                return -Math.Acos(dy / d) / Math.PI * 180;
-            }
-
-            public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-            {
-                throw new NotImplementedException();
-            }
-        }
-    }
-
-    public class GraphViewModelClass : DependencyObject, INotifyPropertyChanged
-    {
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void onPropertyChanged(string name)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-
-        private ObservableCollection<EdgeViewModelClass> m_edgeModels = new ObservableCollection<EdgeViewModelClass>();
-        public ObservableCollection<EdgeViewModelClass> edgeModels => m_edgeModels;
-        private Dictionary<Edge, EdgeViewModelClass> modelPair = new Dictionary<Edge, EdgeViewModelClass>();
-
-        public GraphViewModelClass(Graph g)
-        {
-            contentGraph = g;
-
-            contentGraph.edges.CollectionChanged += Edges_CollectionChanged;
-        }
-
-        private void Edges_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (contentGraph.edges != sender)
-                return;
-
-            switch (e.Action)
-            {
-                case NotifyCollectionChangedAction.Add:
-                    foreach (Edge edg in e.NewItems)
-                        if (edg != null)
-                        {
-                            var ViewModel = new EdgeViewModelClass(edg);
-                            modelPair.Add(edg, ViewModel);
-                            edgeModels.Add(ViewModel);
-                        }
-                    break;
-                case NotifyCollectionChangedAction.Remove:
-                    foreach (Edge edg in e.OldItems)
-                        if (edg != null)
-                        {
-                            edgeModels.Remove(modelPair[edg]);
-                            modelPair.Remove(edg);
-                        }
-                    break;
-                case NotifyCollectionChangedAction.Reset:
-                    modelPair.Clear();
-                    edgeModels.Clear();
-                    break;
-            }
-        }
-
-        private Graph contentGraph;
-        public Graph graph => contentGraph;
-
     }
 }

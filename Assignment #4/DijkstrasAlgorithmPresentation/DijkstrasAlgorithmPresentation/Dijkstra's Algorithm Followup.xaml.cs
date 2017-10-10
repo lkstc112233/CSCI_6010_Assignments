@@ -193,7 +193,7 @@ namespace DijkstrasAlgorithmPresentation
         {
             v.cost = 0;
             heap.Add(v);
-        }
+        } 
         public void setEndPoint(Vertex v)
         {
             TargetVertex = v;
@@ -204,7 +204,7 @@ namespace DijkstrasAlgorithmPresentation
         Vertex currentVertex = null;
         Edge currentEdge = null;
         Stack<Edge> appendingEdges = new Stack<Edge>();
-        bool PathFound = false;
+        public bool PathFound = false;
 
         public void ResetStatus()
         {
@@ -224,7 +224,10 @@ namespace DijkstrasAlgorithmPresentation
                 return null;
             var v = heap.GetMin();
             heap.RemoveMin();
+            if (currentVertex != null)
+                currentVertex.SetType(VertexType.ScannedVertex);
             currentVertex = v;
+            currentVertex.SetType(VertexType.ScanningVertex);
             for (int i = 0; i < graph.EdgeTable.GetLength(0); ++i)
             {
                 if (graph.EdgeTable[v.id, i] != null)
@@ -255,6 +258,7 @@ namespace DijkstrasAlgorithmPresentation
             if (nextVertex.cost < 0)
             {
                 nextVertex.cost = currentVertex.cost + currentEdge.weight;
+                nextVertex.SetType(VertexType.ListedVertex);
                 heap.Add(nextVertex);
             }
             else if (currentVertex.cost + currentEdge.weight < nextVertex.cost)
@@ -268,6 +272,7 @@ namespace DijkstrasAlgorithmPresentation
             }
             if (ReferenceEquals(nextVertex, TargetVertex))
             {
+                nextVertex.SetType(VertexType.EndVertex);
                 PathFound = true;
                 return false;
             }

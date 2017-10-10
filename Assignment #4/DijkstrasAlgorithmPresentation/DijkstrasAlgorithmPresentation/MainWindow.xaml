@@ -44,6 +44,18 @@
         <CommandBinding Command="{x:Static local:Commands.EndPresentationCommand}"
                         Executed="EndPresentation"
                         CanExecute="CanEndPresentation"  />
+        <CommandBinding Command="{x:Static local:Commands.OneStepCommand}"
+                        Executed="OneStep"
+                        CanExecute="CanOneStep"  />
+        <CommandBinding Command="{x:Static local:Commands.SolvePresentationCommand}"
+                        Executed="SolvePresentation"
+                        CanExecute="CanSolvePresentation"  />
+        <CommandBinding Command="{x:Static local:Commands.StopSolvePresentationCommand}"
+                        Executed="StopSolvePresentation"
+                        CanExecute="CanStopSolvePresentation"  />
+        <CommandBinding Command="{x:Static local:Commands.SolveInAFlashCommand}"
+                        Executed="SolveInAFlash"
+                        CanExecute="CanSolveInAFlash"  />
     </Window.CommandBindings>
     <Grid>
         <Grid.Resources>
@@ -68,11 +80,18 @@
                     </WrapPanel>
                 </TabItem>
                 <TabItem Header="Dijkstra's Algorithm Control">
-                    <WrapPanel Orientation="Horizontal">
-                        <Button Command="{x:Static local:Commands.SelectStartingPointCommand}">Select Starting Vertex</Button>
-                        <Button Command="{x:Static local:Commands.SelectEndingPointCommand}">Selecting End Vertex</Button>
-                        <Button Name="BeginButton" Command="{x:Static local:Commands.BeginPresentationCommand}">Begin the presentation!</Button>
-                    </WrapPanel>
+                    <StackPanel>
+                        <WrapPanel Orientation="Horizontal">
+                            <Button Command="{x:Static local:Commands.SelectStartingPointCommand}">Select Starting Vertex</Button>
+                            <Button Command="{x:Static local:Commands.SelectEndingPointCommand}">Selecting End Vertex</Button>
+                            <Button Name="BeginButton" Command="{x:Static local:Commands.BeginPresentationCommand}">Begin The Presentation!</Button>
+                        </WrapPanel>
+                        <WrapPanel Orientation="Horizontal">
+                            <Button Command="{x:Static local:Commands.OneStepCommand}">One Step Ahead</Button>
+                            <Button Name="BeginTheShowButton" Command="{x:Static local:Commands.SolvePresentationCommand}">Begin Automatic Presentation!</Button>
+                            <Button Command="{x:Static local:Commands.SolveInAFlashCommand}">Solve the problem in a Flash!</Button>
+                        </WrapPanel>
+                    </StackPanel>
                 </TabItem>
             </TabControl>
             <ContentPresenter Name="monitor" Content="{Binding Path=graphModel}" >
