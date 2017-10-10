@@ -30,6 +30,7 @@
             <local:PositiveDoubleToPersistantStringConverter x:Key="SmartConverter"/>
             <BooleanToVisibilityConverter x:Key="IsOnewayToVisibilityConverter"/>
             <local:RevertedBooleanToVisibilityConverter x:Key="NotOnewayToVisibilityConverter"/>
+            <local:EqualsToVisibilityConverter x:Key="EqualsToVisibilityConverter"/>
         </DataTemplate.Resources>
         <StackPanel>
             <StackPanel Orientation="Horizontal">
@@ -54,9 +55,11 @@
                     <TextBlock Text="{Binding end.id}"/>
                 </StackPanel>
             </StackPanel>
-            <TextBlock>Set the weight of this edge.</TextBlock>
-            <TextBox Text="{Binding weight, Converter={StaticResource SmartConverter}, UpdateSourceTrigger=PropertyChanged}"/>
-            <Slider Visibility="Collapsed" Value="{Binding weight}" Maximum="720"/>
+            <StackPanel Visibility ="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.CurrentProgramStatus, Converter={StaticResource EqualsToVisibilityConverter}, ConverterParameter={x:Static local:ProgramStatus.BuildingGraph}}">
+                <TextBlock>Set the weight of this edge.</TextBlock>
+                <TextBox Text="{Binding weight, Converter={StaticResource SmartConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                <Slider Visibility="Collapsed" Value="{Binding weight}" Maximum="720"/>
+            </StackPanel>
             <Button Command="{x:Static local:Commands.RemoveEdgeCommand}" Tag="{Binding}">Remove Edge</Button>
         </StackPanel>
     </DataTemplate>

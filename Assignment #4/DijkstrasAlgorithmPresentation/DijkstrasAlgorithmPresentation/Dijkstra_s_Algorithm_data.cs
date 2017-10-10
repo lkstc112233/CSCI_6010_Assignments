@@ -44,6 +44,11 @@ namespace DijkstrasAlgorithmPresentation
             if (heap.IsEmpty())
                 return null;
             var v = heap.GetMin();
+            if (ReferenceEquals(v, TargetVertex))
+            {
+                PathFound = true;
+                return null;
+            }
             heap.RemoveMin();
             if (currentVertex != null)
                 currentVertex.SetType(VertexType.ScannedVertex);
