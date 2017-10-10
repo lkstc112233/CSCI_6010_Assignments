@@ -54,21 +54,6 @@
                     <TextBlock Text="{Binding end.id}"/>
                 </StackPanel>
             </StackPanel>
-            <GroupBox Header="Select a color for this Edge." Visibility="Collapsed">
-                <StackPanel>
-                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Red}">Red</RadioButton>
-                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Green}">Green</RadioButton>
-                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Blue}">Blue</RadioButton>
-                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Black}">Black</RadioButton>
-                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=White}">White</RadioButton>
-                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Cyan}">Cyan</RadioButton>
-                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Brown}">Brown</RadioButton>
-                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Pink}">Pink</RadioButton>
-                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Yellow}">Yellow</RadioButton>
-                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Aqua}">Aqua</RadioButton>
-                    <RadioButton IsChecked="{Binding Path=color, Converter={StaticResource ColorConverter}, ConverterParameter=Gray}">Gray</RadioButton>
-                </StackPanel>
-            </GroupBox>
             <TextBlock>Set the weight of this edge.</TextBlock>
             <TextBox Text="{Binding weight, Converter={StaticResource SmartConverter}, UpdateSourceTrigger=PropertyChanged}"/>
             <Slider Visibility="Collapsed" Value="{Binding weight}" Maximum="720"/>

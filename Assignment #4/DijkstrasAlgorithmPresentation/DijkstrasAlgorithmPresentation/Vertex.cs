@@ -39,17 +39,17 @@ namespace DijkstrasAlgorithmPresentation
                 {
                     case VertexType.StartingVertex:
                     case VertexType.EndVertex:
-                        return Colors.SlateBlue;
+                        return Color.FromRgb(0xF9, 0x88, 0x66);
                     case VertexType.ListedVertex:
-                        return Colors.Orange;
+                        return Color.FromRgb(0x80, 0xBD, 0x9E);
                     case VertexType.ScannedVertex:
                         return Colors.Silver;
                     case VertexType.ScanningVertex:
-                        return Colors.Gold;
+                        return Color.FromRgb(0x89, 0xDA, 0x59);
                     case VertexType.Unselected:
                     case VertexType.UnscannedVertex:
                     default:
-                        return Colors.Red;
+                        return Color.FromRgb(0xFF, 0x42, 0x0E);
                 }
             }
         }

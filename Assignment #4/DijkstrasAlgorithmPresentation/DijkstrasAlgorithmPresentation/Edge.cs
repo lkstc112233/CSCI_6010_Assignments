@@ -9,15 +9,13 @@ using System.Windows.Media;
 
 namespace DijkstrasAlgorithmPresentation
 {
-    enum EdgeType
+    public enum EdgeType
     {
         Unselected,
-        StartingVertex,
-        EndVertex,
-        UnscannedVertex,
-        ListedVertex,
-        ScanningVertex,
-        ScannedVertex,
+        UnscannedEdge,
+        ListedEdge,
+        ScanningEdge,
+        ScannedEdge,
     }
 
     public class Edge : INotifyPropertyChanged
@@ -26,6 +24,9 @@ namespace DijkstrasAlgorithmPresentation
         public Vertex end { get; set; }
         public int id { get; set; }
         private bool m_oneway = true;
+
+        private EdgeType m_type = EdgeType.Unselected;
+        private bool m_selected = false;
 
         public bool oneway
         {
@@ -39,21 +40,47 @@ namespace DijkstrasAlgorithmPresentation
                 NotifyPropertyChanged("oneway");
             }
         }
-
-        private Color m_color = Colors.Blue;
-
+        
         public Color color
         {
             get
             {
-                return m_color;
-            }
-            set
-            {
-                m_color = value;
-                NotifyPropertyChanged("color");
+                if (m_selected)
+                    return Colors.Cyan;
+                switch (m_type)
+                {
+                    case EdgeType.ScannedEdge:
+                        return Color.FromRgb(0xB7, 0xB8, 0xB6);
+                    case EdgeType.ScanningEdge:
+                        return Color.FromRgb(0x34, 0x67, 0x5C);
+                    case EdgeType.ListedEdge:
+                        return Color.FromRgb(0xB3, 0xC1, 0x00);
+                    case EdgeType.Unselected:
+                    case EdgeType.UnscannedEdge:
+                    default:
+                        return Color.FromRgb(0x4C, 0xB5, 0xF5);
+                }
             }
         }
+
+        public void SelectEdge()
+        {
+            m_selected = true;
+            NotifyPropertyChanged("color");
+        }
+
+        public void NotSelectEdge()
+        {
+            m_selected = false;
+            NotifyPropertyChanged("color");
+        }
+
+        public void SetType(EdgeType type)
+        {
+            m_type = type;
+            NotifyPropertyChanged("color");
+        }
+
         private double m_weight;
         public double weight
         {

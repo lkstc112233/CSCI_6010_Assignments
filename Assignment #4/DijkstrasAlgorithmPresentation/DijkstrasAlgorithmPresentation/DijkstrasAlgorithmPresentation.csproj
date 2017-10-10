@@ -59,6 +59,7 @@
     <Compile Include="Dijkstra%27s Algorithm Followup.xaml.cs">
       <DependentUpon>Dijkstra%27s Algorithm Followup.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dijkstra_s_Algorithm_data.cs" />
     <Compile Include="Edge.cs" />
     <Compile Include="EdgeViewModelClass.cs" />
     <Compile Include="Graph.cs" />

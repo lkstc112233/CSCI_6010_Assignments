@@ -189,7 +189,14 @@ namespace DijkstrasAlgorithmPresentation
         internal void ResetCosts()
         {
             foreach (Vertex v in vertexes)
+            {
                 v.cost = -1;
+                v.SetType(VertexType.UnscannedVertex);
+            }
+            foreach(Edge e in edges)
+            {
+                e.SetType(EdgeType.UnscannedEdge);
+            }
         }
     }
 }

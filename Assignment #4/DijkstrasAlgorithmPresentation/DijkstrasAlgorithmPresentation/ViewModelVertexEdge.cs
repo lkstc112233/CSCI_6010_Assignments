@@ -94,13 +94,13 @@ namespace DijkstrasAlgorithmPresentation
             if (m_edgeSelected != null)
                 CancelEdgeSelection();
             m_edgeSelected = e;
-            m_edgeSelected.color = Colors.Aqua;
+            m_edgeSelected.SelectEdge();
             onPropertyChanged("CurrentEdgeSelected");
         }
         public void CancelEdgeSelection()
         {
             if (m_edgeSelected != null)
-                m_edgeSelected.color = Colors.Blue;
+                m_edgeSelected.NotSelectEdge();
             m_edgeSelected = null;
             onPropertyChanged("CurrentEdgeSelected");
         }
@@ -227,6 +227,10 @@ namespace DijkstrasAlgorithmPresentation
 
             AlgorithmData.ResetStatus();
             graphModel.graph.ResetCosts();
+            if (m_vertexStarting != null)
+                m_vertexStarting.SetType(VertexType.StartingVertex);
+            if (m_vertexEnd != null)
+                m_vertexEnd.SetType(VertexType.EndVertex);
         }
 
         internal void ClearGraph()
