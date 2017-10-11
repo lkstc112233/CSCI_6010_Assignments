@@ -74,6 +74,7 @@ namespace DijkstrasAlgorithmPresentation
             if (heap.IsEmpty())
             {
                 currentVertex.SetType(VertexType.ScannedVertex);
+                PathFound = true;
                 return null;
             }
             var v = heap.GetMin();
