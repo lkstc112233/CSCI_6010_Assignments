@@ -48,64 +48,91 @@ namespace DijkstrasAlgorithmPresentation
         private Vertex m_vertexSelected = null;
         private Vertex m_vertexStarting = null;
         private Vertex m_vertexEnd = null;
-        public Vertex CurrentVertexSelected => m_vertexSelected;
-        public Vertex VertexStarting => m_vertexStarting;
-        public Vertex VertexEnd => m_vertexEnd;
+        public Vertex CurrentVertexSelected
+        {
+            get => m_vertexSelected;
+            private set
+            {
+                m_vertexSelected = value;
+                onPropertyChanged("CurrentVertexSelected");
+            }
+        }
+
+        public Vertex VertexStarting
+        {
+            get => m_vertexStarting;
+            private set
+            {
+                m_vertexStarting = value;
+                onPropertyChanged("VertexStarting");
+            }
+        }
+
+        public Vertex VertexEnd
+        {
+            get => m_vertexEnd;
+            private set
+            {
+                m_vertexEnd = value;
+                onPropertyChanged("VertexEnd");
+            }
+        }
         public void SelectVertex(Vertex v)
         {
-            if (m_vertexSelected != null)
+            if (CurrentVertexSelected != null)
                 CancelVertexSelection();
-            m_vertexSelected = v;
-            m_vertexSelected.Select();
-            onPropertyChanged("CurrentVertexSelected");
+            CurrentVertexSelected = v;
+            CurrentVertexSelected.Select();
         }
         internal void SelectStartVertex(Vertex vertex)
         {
-            if (m_vertexStarting != null && m_vertexStarting != m_vertexEnd)
-                m_vertexStarting.SetType(VertexType.Unselected);
-            m_vertexStarting = vertex;
-            m_vertexStarting.SetType(VertexType.StartingVertex);
-            onPropertyChanged("VertexStarting");
+            if (VertexStarting != null && VertexStarting != VertexEnd)
+                VertexStarting.SetType(VertexType.Unselected);
+            VertexStarting = vertex;
+            VertexStarting.SetType(VertexType.StartingVertex);
         }
         internal void SelectEndVertex(Vertex vertex)
         {
-            if (m_vertexEnd != null && m_vertexStarting != m_vertexEnd)
-                m_vertexEnd.SetType(VertexType.Unselected);
-            m_vertexEnd = vertex;
-            m_vertexEnd.SetType(VertexType.EndVertex);
-            onPropertyChanged("VertexEnd");
+            if (VertexEnd != null && VertexStarting != VertexEnd)
+                VertexEnd.SetType(VertexType.Unselected);
+            VertexEnd = vertex;
+            VertexEnd.SetType(VertexType.EndVertex);
         }
         public void CancelVertexSelection()
         {
-            if (m_vertexSelected != null)
-                m_vertexSelected.NotSelect();
-            m_vertexSelected = null;
-            onPropertyChanged("CurrentVertexSelected");
+            if (CurrentVertexSelected != null)
+                CurrentVertexSelected.NotSelect();
+            CurrentVertexSelected = null;
         }
         public void BeginEdgeBuilding(Vertex v)
         {
-            m_vertexSelected = v;
-            m_vertexSelected.BuildEdge();
+            CurrentVertexSelected = v;
+            CurrentVertexSelected.BuildEdge();
             CurrentStatus = SelectStatus.EdgeBuilding;
-            onPropertyChanged("CurrentVertexSelected");
         }
 
         private Edge m_edgeSelected = null;
-        public Edge CurrentEdgeSelected => m_edgeSelected;
+        public Edge CurrentEdgeSelected
+        {
+            get => m_edgeSelected;
+            private set
+            {
+                m_edgeSelected = value;
+                onPropertyChanged("CurrentEdgeSelected");
+            }
+        }
         public void SelectEdge(Edge e)
         {
-            if (m_edgeSelected != null)
+            if (CurrentEdgeSelected != null)
                 CancelEdgeSelection();
-            m_edgeSelected = e;
-            m_edgeSelected.SelectEdge();
-            onPropertyChanged("CurrentEdgeSelected");
+            CurrentEdgeSelected = e;
+            CurrentEdgeSelected.SelectEdge();
         }
         public void CancelEdgeSelection()
         {
-            if (m_edgeSelected != null)
-                m_edgeSelected.NotSelectEdge();
-            m_edgeSelected = null;
-            onPropertyChanged("CurrentEdgeSelected");
+            if (CurrentEdgeSelected != null)
+                CurrentEdgeSelected.NotSelectEdge();
+            CurrentEdgeSelected = null;
         }
 
         private Graph m_graph;
@@ -248,15 +275,15 @@ namespace DijkstrasAlgorithmPresentation
 
         internal void BeginPresentation()
         {
-            if (!CanBeginPresentation())
+            if (VertexEnd == null || VertexStarting == null)
                 return;
             CurrentProgramStatus = ProgramStatus.Presenting;
 
             PathFound = false;
             AlgorithmData = new Dijkstra_s_Algorithm_data(graphModel.graph);
             AlgorithmData.OnPathFound = () => PathFound = true;
-            AlgorithmData.setStartPoint(m_vertexStarting);
-            AlgorithmData.setEndPoint(m_vertexEnd);
+            AlgorithmData.setStartPoint(VertexStarting);
+            AlgorithmData.setEndPoint(VertexEnd);
         }
 
         internal void EndPresentation()
@@ -264,28 +291,22 @@ namespace DijkstrasAlgorithmPresentation
             if (CurrentProgramStatus == ProgramStatus.BuildingGraph)
                 return;
             CurrentProgramStatus = ProgramStatus.BuildingGraph;
-            // TODO.
 
             AlgorithmData.ResetStatus();
             graphModel.graph.ResetCosts();
-            if (m_vertexStarting != null)
-                m_vertexStarting.SetType(VertexType.StartingVertex);
-            if (m_vertexEnd != null)
-                m_vertexEnd.SetType(VertexType.EndVertex);
+            if (VertexStarting != null)
+                VertexStarting.SetType(VertexType.StartingVertex);
+            if (VertexEnd != null)
+                VertexEnd.SetType(VertexType.EndVertex);
         }
 
         internal void ClearGraph()
         {
             graphModel.graph.ClearGraph();
-            m_edgeSelected = null;
-            m_vertexSelected = null;
-            m_vertexStarting = null;
-            m_vertexEnd = null;
-        }
-
-        internal bool CanBeginPresentation()
-        {
-            return m_vertexStarting != null && m_vertexEnd != null;
+            CurrentEdgeSelected = null;
+            CurrentVertexSelected = null;
+            VertexStarting = null;
+            VertexEnd = null;
         }
     }
 }

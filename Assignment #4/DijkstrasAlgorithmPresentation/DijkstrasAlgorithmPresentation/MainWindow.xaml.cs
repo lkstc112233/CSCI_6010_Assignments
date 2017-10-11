@@ -215,7 +215,7 @@ namespace DijkstrasAlgorithmPresentation
                     maxVertexId = e.endid;
             }
 
-            viewModel.ClearGraph();
+            ResetPresentationThingsAndGraph();
 
             List<Vertex> temp = new List<Vertex>();
             temp.Add(null);
@@ -252,8 +252,6 @@ namespace DijkstrasAlgorithmPresentation
             viewModel.CancelEdgeSelection();
             viewModel.CurrentStatus = SelectStatus.SelectAnElement;
         }
-
-        #region Commands
 
         private void AddEdge(object sender, ExecutedRoutedEventArgs e)
         {
@@ -312,17 +310,6 @@ namespace DijkstrasAlgorithmPresentation
             e.CanExecute = viewModel.CurrentVertexSelected != null && viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph;
         }
 
-        private void AddVertex(object sender, ExecutedRoutedEventArgs e)
-        {
-        }
-
-        private void CanAddVertex(object sender, CanExecuteRoutedEventArgs e)
-        {
-            if (viewModel == null)
-                return;
-            e.CanExecute = viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph;
-        }
-
         private void FileDropProcess(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -351,14 +338,26 @@ namespace DijkstrasAlgorithmPresentation
             Application.Current.Shutdown();
         }
 
-        #endregion
-
 
         private void LoadFile(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 LoadFile(ofd.FileName);
+        }
+
+        private void ResetPresentationThingsAndGraph()
+        {
+            if (dispatcherTimer != null)
+            {
+                dispatcherTimer.Stop();
+                dispatcherTimer = null;
+            }
+            viewModel.EndPresentation();
+            BeginTheShowButton.Content = "Begin Automatic Presentation!";
+            BeginButton.Content = "Begin The Presentation!";
+            viewModel.ClearGraph();
+            CancelSelectionAndResetStatus();
         }
 
         private void ResetGraph(object sender, RoutedEventArgs e)
@@ -370,9 +369,7 @@ namespace DijkstrasAlgorithmPresentation
                     "Seriously, you can't restore this operation.\nAll information you have so far will be ERASED.\nAre you sure you want to remove all process you have?",
                 "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes)
                 return;
-            viewModel.EndPresentation();
-            viewModel.ClearGraph();
-            CancelSelectionAndResetStatus();
+            ResetPresentationThingsAndGraph();
         }
 
         private void AddVertex(object sender, RoutedEventArgs e)
