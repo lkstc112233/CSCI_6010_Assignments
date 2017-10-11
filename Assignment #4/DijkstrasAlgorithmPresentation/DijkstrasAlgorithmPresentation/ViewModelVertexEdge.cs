@@ -49,6 +49,8 @@ namespace DijkstrasAlgorithmPresentation
         private Vertex m_vertexStarting = null;
         private Vertex m_vertexEnd = null;
         public Vertex CurrentVertexSelected => m_vertexSelected;
+        public Vertex VertexStarting => m_vertexStarting;
+        public Vertex VertexEnd => m_vertexEnd;
         public void SelectVertex(Vertex v)
         {
             if (m_vertexSelected != null)
@@ -63,7 +65,7 @@ namespace DijkstrasAlgorithmPresentation
                 m_vertexStarting.SetType(VertexType.Unselected);
             m_vertexStarting = vertex;
             m_vertexStarting.SetType(VertexType.StartingVertex);
-            onPropertyChanged("CurrentVertexSelected");
+            onPropertyChanged("VertexStarting");
         }
         internal void SelectEndVertex(Vertex vertex)
         {
@@ -71,7 +73,7 @@ namespace DijkstrasAlgorithmPresentation
                 m_vertexEnd.SetType(VertexType.Unselected);
             m_vertexEnd = vertex;
             m_vertexEnd.SetType(VertexType.EndVertex);
-            onPropertyChanged("CurrentVertexSelected");
+            onPropertyChanged("VertexEnd");
         }
         public void CancelVertexSelection()
         {

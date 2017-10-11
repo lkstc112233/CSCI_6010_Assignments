@@ -351,82 +351,8 @@ namespace DijkstrasAlgorithmPresentation
             Application.Current.Shutdown();
         }
 
-        private void BeginPresentation(object sender, ExecutedRoutedEventArgs e)
-        {
-            BeginButton.Content = "End the presentation";
-            BeginButton.Command = Commands.EndPresentationCommand;
-            viewModel.BeginPresentation();
-            CommandManager.InvalidateRequerySuggested();
-        }
-
-        private void CanBeginPresentation(object sender, CanExecuteRoutedEventArgs e)
-        {
-            if (viewModel == null)
-                return;
-            e.CanExecute = viewModel.CanBeginPresentation();
-        }
-
-        private void EndPresentation(object sender, ExecutedRoutedEventArgs e)
-        {
-            BeginButton.Content = "Begin the presentation!";
-            BeginButton.Command = Commands.BeginPresentationCommand;
-            viewModel.EndPresentation();
-            CommandManager.InvalidateRequerySuggested();
-        }
-
-        private void CanEndPresentation(object sender, CanExecuteRoutedEventArgs e)
-        {
-            if (viewModel == null)
-                return;
-            e.CanExecute = true;
-        }
         #endregion
 
-
-        DispatcherTimer dispatcherTimer = null;
-
-        private void SolvePresentation(object sender, ExecutedRoutedEventArgs e)
-        {
-            BeginTheShowButton.Content = "End Automatic Presentation";
-            BeginTheShowButton.Command = Commands.StopSolvePresentationCommand;
-
-            dispatcherTimer = new DispatcherTimer();
-            dispatcherTimer.Tick += (Sender, args) =>
-            {
-                if (!viewModel.AlgorithmData.OneStep())
-                {
-                    dispatcherTimer.Stop();
-                    BeginTheShowButton.Content = "Begin Automatic Presentation!";
-                    BeginTheShowButton.Command = Commands.SolvePresentationCommand;
-                }
-            };
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
-            dispatcherTimer.Start();
-            CommandManager.InvalidateRequerySuggested();
-        }
-
-        private void CanSolvePresentation(object sender, CanExecuteRoutedEventArgs e)
-        {
-            if (viewModel == null)
-                return;
-            e.CanExecute = viewModel.CurrentProgramStatus == ProgramStatus.Presenting && !viewModel.AlgorithmData.PathFound;
-        }
-
-        private void StopSolvePresentation(object sender, ExecutedRoutedEventArgs e)
-        {
-            BeginTheShowButton.Content = "Begin Automatic Presentation!";
-            BeginTheShowButton.Command = Commands.SolvePresentationCommand;
-            dispatcherTimer.Stop();
-            dispatcherTimer = null;
-            CommandManager.InvalidateRequerySuggested();
-        }
-
-        private void CanStopSolvePresentation(object sender, CanExecuteRoutedEventArgs e)
-        {
-            if (viewModel == null)
-                return;
-            e.CanExecute = viewModel.CurrentProgramStatus == ProgramStatus.Presenting;
-        }
 
         private void LoadFile(object sender, RoutedEventArgs e)
         {
@@ -493,6 +419,49 @@ namespace DijkstrasAlgorithmPresentation
         private void SolveInAFlash(object sender, RoutedEventArgs e)
         {
             while (viewModel.AlgorithmData.OneStep()) ;
+        }
+        
+        private void BeginPresentation(object sender, RoutedEventArgs e)
+        {
+            if (viewModel.CurrentProgramStatus != ProgramStatus.Presenting)
+            {
+                BeginButton.Content = "End the presentation";
+                viewModel.BeginPresentation();
+            }
+            else
+            {
+                BeginButton.Content = "Begin the presentation!";
+                viewModel.EndPresentation();
+            }
+        }
+
+        DispatcherTimer dispatcherTimer = null;
+
+        private void SolvePresentation(object sender, RoutedEventArgs e)
+        {
+            if (dispatcherTimer == null)
+            {
+                BeginTheShowButton.Content = "End Automatic Presentation";
+
+                dispatcherTimer = new DispatcherTimer();
+                dispatcherTimer.Tick += (Sender, args) =>
+                {
+                    if (!viewModel.AlgorithmData.OneStep())
+                    {
+                        dispatcherTimer.Stop();
+                        BeginTheShowButton.Content = "Begin Automatic Presentation!";
+                        dispatcherTimer = null;
+                    }
+                };
+                dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+                dispatcherTimer.Start();
+            }
+            else
+            {
+                BeginTheShowButton.Content = "Begin Automatic Presentation!";
+                dispatcherTimer.Stop();
+                dispatcherTimer = null;
+            }
         }
     }
 }

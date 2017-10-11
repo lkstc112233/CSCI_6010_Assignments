@@ -17,18 +17,6 @@
         <CommandBinding Command="{x:Static local:Commands.RemoveEdgeCommand}"
                         Executed="RemoveEdge"
                         CanExecute="CanRemoveEdge"  />
-        <CommandBinding Command="{x:Static local:Commands.BeginPresentationCommand}"
-                        Executed="BeginPresentation"
-                        CanExecute="CanBeginPresentation"  />
-        <CommandBinding Command="{x:Static local:Commands.EndPresentationCommand}"
-                        Executed="EndPresentation"
-                        CanExecute="CanEndPresentation"  />
-        <CommandBinding Command="{x:Static local:Commands.SolvePresentationCommand}"
-                        Executed="SolvePresentation"
-                        CanExecute="CanSolvePresentation"  />
-        <CommandBinding Command="{x:Static local:Commands.StopSolvePresentationCommand}"
-                        Executed="StopSolvePresentation"
-                        CanExecute="CanStopSolvePresentation"  />
     </Window.CommandBindings>
     <Grid>
         <Grid.Resources>
@@ -48,6 +36,7 @@
                     <local:EqualsToRevertedBooleanConverter x:Key="NotSameConverter"/>
                     <local:AllTrueConverter x:Key="AllTrueConverter"/>
                     <local:ReverseBooleanConverter x:Key="ReverseBooleanConverter"/>
+                    <local:IsNullToBooleanConverter x:Key="IsNullToBooleanConverter"/>
                 </TabControl.Resources>
                 <TabItem Header="Graph Control">
                     <WrapPanel Orientation="Horizontal">
@@ -103,7 +92,17 @@
                                     Selecting End Vertex
                                 </Button.Content>
                             </Button>
-                            <Button Name="BeginButton" Command="{x:Static local:Commands.BeginPresentationCommand}">Begin The Presentation!</Button>
+                            <Button Name="BeginButton" Click="BeginPresentation">
+                                <Button.IsEnabled>
+                                    <MultiBinding Converter="{StaticResource AllTrueConverter}">
+                                        <Binding Path="VertexStarting" Converter="{StaticResource IsNullToBooleanConverter}"/>
+                                        <Binding Path="VertexEnd" Converter="{StaticResource IsNullToBooleanConverter}"/>
+                                    </MultiBinding>
+                                </Button.IsEnabled>
+                                <Button.Content>
+                                    Begin The Presentation!
+                                </Button.Content>
+                            </Button>
                         </WrapPanel>
                         <WrapPanel Orientation="Horizontal">
                             <Button Click="OneStep">
@@ -117,7 +116,17 @@
                                     One Step Ahead
                                 </Button.Content>
                             </Button>
-                            <Button Name="BeginTheShowButton" Command="{x:Static local:Commands.SolvePresentationCommand}">Begin Automatic Presentation!</Button>
+                            <Button Name="BeginTheShowButton" Click="SolvePresentation">
+                                <Button.IsEnabled>
+                                    <MultiBinding Converter="{StaticResource AllTrueConverter}">
+                                        <Binding Path="CurrentProgramStatus" Converter="{StaticResource IsSameConverter}" ConverterParameter="{x:Static local:ProgramStatus.Presenting}"/>
+                                        <Binding Path="PathFound" Converter="{StaticResource ReverseBooleanConverter}"/>
+                                    </MultiBinding>
+                                </Button.IsEnabled>
+                                <Button.Content>
+                                    Begin Automatic Presentation!
+                                </Button.Content>
+                            </Button>
                             <Button Click="SolveInAFlash">
                                 <Button.IsEnabled>
                                     <MultiBinding Converter="{StaticResource AllTrueConverter}">
