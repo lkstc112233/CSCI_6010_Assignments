@@ -8,15 +8,6 @@
         Title="Dijkstra's Algorithm Presentation" Height="450" Width="700" Closed="parentWindow_Closed"
         AllowDrop="True" Drop="FileDropProcess" DragEnter="FileDragEnterProcess">
     <Window.CommandBindings>
-        <CommandBinding Command="{x:Static local:Commands.LoadFileCommand}"
-                        Executed="LoadFile"
-                        CanExecute="CanLoadFile"  />
-        <CommandBinding Command="{x:Static local:Commands.ResetGraphCommand}"
-                        Executed="ResetGraph"
-                        CanExecute="CanResetGraph"  />
-        <CommandBinding Command="{x:Static local:Commands.AddVertexCommand}"
-                        Executed="AddVertex"
-                        CanExecute="CanAddVertex"  />
         <CommandBinding Command="{x:Static local:Commands.AddEdgeCommand}"
                         Executed="AddEdge"
                         CanExecute="CanAddEdge"  />
@@ -26,36 +17,18 @@
         <CommandBinding Command="{x:Static local:Commands.RemoveEdgeCommand}"
                         Executed="RemoveEdge"
                         CanExecute="CanRemoveEdge"  />
-        <CommandBinding Command="{x:Static local:Commands.ConvertToDirectedCommand}"
-                        Executed="ConvertToDirected"
-                        CanExecute="CanConvertToDirected"  />
-        <CommandBinding Command="{x:Static local:Commands.ConvertToUndirectedCommand}"
-                        Executed="ConvertToUndirected"
-                        CanExecute="CanConvertToUndirected"  />
-        <CommandBinding Command="{x:Static local:Commands.SelectStartingPointCommand}"
-                        Executed="SelectStartingPoint"
-                        CanExecute="CanSelectStartingPoint"  />
-        <CommandBinding Command="{x:Static local:Commands.SelectEndingPointCommand}"
-                        Executed="SelectEndingPoint"
-                        CanExecute="CanSelectEndingPoint"  />
         <CommandBinding Command="{x:Static local:Commands.BeginPresentationCommand}"
                         Executed="BeginPresentation"
                         CanExecute="CanBeginPresentation"  />
         <CommandBinding Command="{x:Static local:Commands.EndPresentationCommand}"
                         Executed="EndPresentation"
                         CanExecute="CanEndPresentation"  />
-        <CommandBinding Command="{x:Static local:Commands.OneStepCommand}"
-                        Executed="OneStep"
-                        CanExecute="CanOneStep"  />
         <CommandBinding Command="{x:Static local:Commands.SolvePresentationCommand}"
                         Executed="SolvePresentation"
                         CanExecute="CanSolvePresentation"  />
         <CommandBinding Command="{x:Static local:Commands.StopSolvePresentationCommand}"
                         Executed="StopSolvePresentation"
                         CanExecute="CanStopSolvePresentation"  />
-        <CommandBinding Command="{x:Static local:Commands.SolveInAFlashCommand}"
-                        Executed="SolveInAFlash"
-                        CanExecute="CanSolveInAFlash"  />
     </Window.CommandBindings>
     <Grid>
         <Grid.Resources>
@@ -70,26 +43,92 @@
                 <local:DebugConverter x:Key="DebugConverter"/>
             </DockPanel.Resources>
             <TabControl DockPanel.Dock="Top">
+                <TabControl.Resources>
+                    <local:EqualsToBooleanConverter x:Key="IsSameConverter"/>
+                    <local:EqualsToRevertedBooleanConverter x:Key="NotSameConverter"/>
+                    <local:AllTrueConverter x:Key="AllTrueConverter"/>
+                    <local:ReverseBooleanConverter x:Key="ReverseBooleanConverter"/>
+                </TabControl.Resources>
                 <TabItem Header="Graph Control">
                     <WrapPanel Orientation="Horizontal">
-                        <Button Command="{x:Static local:Commands.LoadFileCommand}">Load From File</Button>
-                        <Button Command="{x:Static local:Commands.ResetGraphCommand}">Reset Graph</Button>
-                        <Button Command="{x:Static local:Commands.AddVertexCommand}">Add Vertex</Button>
-                        <Button Command="{x:Static local:Commands.ConvertToDirectedCommand}">To Directed Graph</Button>
-                        <Button Command="{x:Static local:Commands.ConvertToUndirectedCommand}">To Undirected Graph</Button>
+                        <Button Click="LoadFile">Load From File</Button>
+                        <Button Click="ResetGraph">Reset Graph</Button>
+                        <Button Click="AddVertex" IsEnabled="{Binding CurrentProgramStatus, Converter={StaticResource IsSameConverter}, ConverterParameter={x:Static local:ProgramStatus.BuildingGraph}}">Add Vertex</Button>
+                        <Button Click="ConvertToDirected">
+                            <Button.IsEnabled>
+                                <MultiBinding Converter="{StaticResource AllTrueConverter}">
+                                    <Binding Path="CurrentProgramStatus" Converter="{StaticResource IsSameConverter}" ConverterParameter="{x:Static local:ProgramStatus.BuildingGraph}"/>
+                                    <Binding Path="graphModel.graph.CanToDirect" />
+                                </MultiBinding>
+                            </Button.IsEnabled>
+                            <Button.Content>
+                                To Directed Graph
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ConvertToUndirected">
+                            <Button.IsEnabled>
+                                <MultiBinding Converter="{StaticResource AllTrueConverter}">
+                                    <Binding Path="CurrentProgramStatus" Converter="{StaticResource IsSameConverter}" ConverterParameter="{x:Static local:ProgramStatus.BuildingGraph}"/>
+                                    <Binding Path="graphModel.graph.CanToUndirect" />
+                                </MultiBinding>
+                            </Button.IsEnabled>
+                            <Button.Content>
+                                To Undirected Graph
+                            </Button.Content>
+                        </Button>
                     </WrapPanel>
                 </TabItem>
                 <TabItem Header="Dijkstra's Algorithm Control">
                     <StackPanel>
                         <WrapPanel Orientation="Horizontal">
-                            <Button Command="{x:Static local:Commands.SelectStartingPointCommand}">Select Starting Vertex</Button>
-                            <Button Command="{x:Static local:Commands.SelectEndingPointCommand}">Selecting End Vertex</Button>
+                            <Button Click="SelectStartingPoint">
+                                <Button.IsEnabled>
+                                    <MultiBinding Converter="{StaticResource AllTrueConverter}">
+                                        <Binding Path="CurrentProgramStatus" Converter="{StaticResource IsSameConverter}" ConverterParameter="{x:Static local:ProgramStatus.BuildingGraph}"/>
+                                        <Binding Path="CurrentStatus" Converter="{StaticResource NotSameConverter}" ConverterParameter="{x:Static local:SelectStatus.SelectAStartingVertex}"/>
+                                    </MultiBinding>
+                                </Button.IsEnabled>
+                                <Button.Content>
+                                    Select Starting Vertex
+                                </Button.Content>
+                            </Button>
+                            <Button Click="SelectEndPoint">
+                                <Button.IsEnabled>
+                                    <MultiBinding Converter="{StaticResource AllTrueConverter}">
+                                        <Binding Path="CurrentProgramStatus" Converter="{StaticResource IsSameConverter}" ConverterParameter="{x:Static local:ProgramStatus.BuildingGraph}"/>
+                                        <Binding Path="CurrentStatus" Converter="{StaticResource NotSameConverter}" ConverterParameter="{x:Static local:SelectStatus.SelectAnEndVertex}"/>
+                                    </MultiBinding>
+                                </Button.IsEnabled>
+                                <Button.Content>
+                                    Selecting End Vertex
+                                </Button.Content>
+                            </Button>
                             <Button Name="BeginButton" Command="{x:Static local:Commands.BeginPresentationCommand}">Begin The Presentation!</Button>
                         </WrapPanel>
                         <WrapPanel Orientation="Horizontal">
-                            <Button Command="{x:Static local:Commands.OneStepCommand}">One Step Ahead</Button>
+                            <Button Click="OneStep">
+                                <Button.IsEnabled>
+                                    <MultiBinding Converter="{StaticResource AllTrueConverter}">
+                                        <Binding Path="CurrentProgramStatus" Converter="{StaticResource IsSameConverter}" ConverterParameter="{x:Static local:ProgramStatus.Presenting}"/>
+                                        <Binding Path="PathFound" Converter="{StaticResource ReverseBooleanConverter}"/>
+                                    </MultiBinding>
+                                </Button.IsEnabled>
+                                <Button.Content>
+                                    One Step Ahead
+                                </Button.Content>
+                            </Button>
                             <Button Name="BeginTheShowButton" Command="{x:Static local:Commands.SolvePresentationCommand}">Begin Automatic Presentation!</Button>
-                            <Button Command="{x:Static local:Commands.SolveInAFlashCommand}">Solve the problem in a Flash!</Button>
+                            <Button Click="SolveInAFlash">
+                                <Button.IsEnabled>
+                                    <MultiBinding Converter="{StaticResource AllTrueConverter}">
+                                        <Binding Path="CurrentProgramStatus" Converter="{StaticResource IsSameConverter}" ConverterParameter="{x:Static local:ProgramStatus.Presenting}"/>
+                                        <Binding Path="PathFound" Converter="{StaticResource ReverseBooleanConverter}"/>
+                                    </MultiBinding>
+                                </Button.IsEnabled>
+                                <Button.Content>
+                                    Solve the problem in a Flash!
+                                </Button.Content>
+                            </Button>
                         </WrapPanel>
                     </StackPanel>
                 </TabItem>

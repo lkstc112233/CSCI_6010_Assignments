@@ -102,7 +102,7 @@ namespace DijkstrasAlgorithmPresentation
                             args.Handled = true;
                         }
                         else
-                            CancelSelectionAndResetStatus(); 
+                            CancelSelectionAndResetStatus();
                         break;
                     case SelectStatus.SelectAStartingVertex:
                         if (presenter.Content is Vertex)
@@ -129,14 +129,14 @@ namespace DijkstrasAlgorithmPresentation
                         break;
                 }
             };
-            
+
 
         }
 
         MouseButtonEventHandler moveStart;
         MouseButtonEventHandler moveEnd;
         MouseEventHandler moving;
-        
+
         MouseButtonEventHandler selectPresenter;
 
         private class EdgeEntry
@@ -253,7 +253,7 @@ namespace DijkstrasAlgorithmPresentation
             viewModel.CurrentStatus = SelectStatus.SelectAnElement;
         }
 
-#region Commands
+        #region Commands
 
         private void AddEdge(object sender, ExecutedRoutedEventArgs e)
         {
@@ -288,7 +288,7 @@ namespace DijkstrasAlgorithmPresentation
 
         private void CanRemoveEdge(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = viewModel.CurrentEdgeSelected != null && viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph; 
+            e.CanExecute = viewModel.CurrentEdgeSelected != null && viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph;
         }
 
         private void RemoveVertex(object sender, ExecutedRoutedEventArgs e)
@@ -309,45 +309,11 @@ namespace DijkstrasAlgorithmPresentation
 
         private void CanRemoveVertex(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = viewModel.CurrentVertexSelected != null && viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph; 
-        }
-
-        private void ConvertToDirected(object sender, ExecutedRoutedEventArgs e)
-        {
-            viewModel.graphModel.graph.ToDirectedGraph();
-            CommandManager.InvalidateRequerySuggested();
-        }
-
-        private void CanConvertToDirected(object sender, CanExecuteRoutedEventArgs e)
-        {
-            if (viewModel == null)
-                return;
-            e.CanExecute = viewModel.graphModel.graph.CanToDirect && viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph;
-        }
-
-        private void ConvertToUndirected(object sender, ExecutedRoutedEventArgs e)
-        {
-            if (MessageBox.Show("You cannot restore this operation.\nAll conflicting edges will be merged.\nAre you sure you want to convert the graph to undirected graph?",
-                "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
-            {
-                viewModel.graphModel.graph.ToUndirectedGraph();
-                CancelSelectionAndResetStatus();
-            }
-            CommandManager.InvalidateRequerySuggested();
-        }
-
-        private void CanConvertToUndirected(object sender, CanExecuteRoutedEventArgs e)
-        {
-            if (viewModel == null)
-                return;
-            e.CanExecute = viewModel.graphModel.graph.CanToUndirect && viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph;
+            e.CanExecute = viewModel.CurrentVertexSelected != null && viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph;
         }
 
         private void AddVertex(object sender, ExecutedRoutedEventArgs e)
         {
-            Vertex LatestVertex = CreateVertex();
-            viewModel.SelectVertex(LatestVertex);
-            CommandManager.InvalidateRequerySuggested();
         }
 
         private void CanAddVertex(object sender, CanExecuteRoutedEventArgs e)
@@ -355,37 +321,6 @@ namespace DijkstrasAlgorithmPresentation
             if (viewModel == null)
                 return;
             e.CanExecute = viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph;
-        }
-
-        private void LoadFile(object sender, ExecutedRoutedEventArgs e)
-        {
-            System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
-            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                LoadFile(ofd.FileName);
-            CommandManager.InvalidateRequerySuggested();
-        }
-
-        private void CanLoadFile(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
-        }
-
-        private void ResetGraph(object sender, ExecutedRoutedEventArgs e)
-        {
-            if (MessageBox.Show("You cannot restore this operation.\nAll Vertexex and Edges will be removed.\nAre you sure you want to reset the graph?",
-                "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes || MessageBox.Show(
-                    "Seriously, you can't restore this operation.\nAll information you have so far will be ERASED.\nAre you sure you want to remove all process you have?",
-                "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes)
-                return;
-            viewModel.EndPresentation();
-            viewModel.ClearGraph();
-            CancelSelectionAndResetStatus();
-            CommandManager.InvalidateRequerySuggested();
-        }
-
-        private void CanResetGraph(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
         }
 
         private void FileDropProcess(object sender, DragEventArgs e)
@@ -405,36 +340,10 @@ namespace DijkstrasAlgorithmPresentation
 
         private void FileDragEnterProcess(object sender, DragEventArgs e)
         {
-            if (!(e.Data.GetDataPresent(DataFormats.FileDrop)|| e.Data.GetDataPresent(DataFormats.Text)) || sender == e.Source)
+            if (!(e.Data.GetDataPresent(DataFormats.FileDrop) || e.Data.GetDataPresent(DataFormats.Text)) || sender == e.Source)
             {
                 e.Effects = DragDropEffects.None;
             }
-        }
-
-        private void SelectStartingPoint(object sender, ExecutedRoutedEventArgs e)
-        {
-            viewModel.CurrentStatus=SelectStatus.SelectAStartingVertex;
-            CommandManager.InvalidateRequerySuggested();
-        }
-
-        private void CanSelectStartingPoint(object sender, CanExecuteRoutedEventArgs e)
-        {
-            if (viewModel == null)
-                return;
-            e.CanExecute = viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph && viewModel.CurrentStatus != SelectStatus.SelectAStartingVertex;
-        }
-
-        private void SelectEndingPoint(object sender, ExecutedRoutedEventArgs e)
-        {
-            viewModel.CurrentStatus = SelectStatus.SelectAnEndVertex;
-            CommandManager.InvalidateRequerySuggested();
-        }
-
-        private void CanSelectEndingPoint(object sender, CanExecuteRoutedEventArgs e)
-        {
-            if (viewModel == null)
-                return;
-            e.CanExecute = viewModel.CurrentProgramStatus == ProgramStatus.BuildingGraph && viewModel.CurrentStatus != SelectStatus.SelectAnEndVertex;
         }
 
         private void parentWindow_Closed(object sender, EventArgs e)
@@ -473,18 +382,6 @@ namespace DijkstrasAlgorithmPresentation
         }
         #endregion
 
-        private void OneStep(object sender, ExecutedRoutedEventArgs e)
-        {
-            viewModel.AlgorithmData.OneStep();
-            CommandManager.InvalidateRequerySuggested();
-        }
-
-        private void CanOneStep(object sender, CanExecuteRoutedEventArgs e)
-        {
-            if (viewModel == null)
-                return;
-            e.CanExecute = viewModel.CurrentProgramStatus == ProgramStatus.Presenting && !viewModel.AlgorithmData.PathFound;
-        }
 
         DispatcherTimer dispatcherTimer = null;
 
@@ -517,7 +414,7 @@ namespace DijkstrasAlgorithmPresentation
 
         private void StopSolvePresentation(object sender, ExecutedRoutedEventArgs e)
         {
-            BeginTheShowButton.Content ="Begin Automatic Presentation!";
+            BeginTheShowButton.Content = "Begin Automatic Presentation!";
             BeginTheShowButton.Command = Commands.SolvePresentationCommand;
             dispatcherTimer.Stop();
             dispatcherTimer = null;
@@ -531,17 +428,71 @@ namespace DijkstrasAlgorithmPresentation
             e.CanExecute = viewModel.CurrentProgramStatus == ProgramStatus.Presenting;
         }
 
-        private void SolveInAFlash(object sender, ExecutedRoutedEventArgs e)
+        private void LoadFile(object sender, RoutedEventArgs e)
         {
-            while (viewModel.AlgorithmData.OneStep()) ;
+            System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
+            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                LoadFile(ofd.FileName);
+        }
+
+        private void ResetGraph(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show(
+                "You cannot restore this operation.\nAll Vertexex and Edges will be removed.\nAre you sure you want to reset the graph?",
+                "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes ||
+                MessageBox.Show(
+                    "Seriously, you can't restore this operation.\nAll information you have so far will be ERASED.\nAre you sure you want to remove all process you have?",
+                "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes)
+                return;
+            viewModel.EndPresentation();
+            viewModel.ClearGraph();
+            CancelSelectionAndResetStatus();
+        }
+
+        private void AddVertex(object sender, RoutedEventArgs e)
+        {
+            Vertex LatestVertex = CreateVertex();
+            viewModel.SelectVertex(LatestVertex);
+        }
+
+        private void ConvertToDirected(object sender, RoutedEventArgs e)
+        {
+            viewModel.graphModel.graph.ToDirectedGraph();
+        }
+
+        private void ConvertToUndirected(object sender, ExecutedRoutedEventArgs e)
+        {
             CommandManager.InvalidateRequerySuggested();
         }
 
-        private void CanSolveInAFlash(object sender, CanExecuteRoutedEventArgs e)
+        private void ConvertToUndirected(object sender, RoutedEventArgs e)
         {
-            if (viewModel == null)
-                return;
-            e.CanExecute = viewModel.CurrentProgramStatus == ProgramStatus.Presenting && !viewModel.AlgorithmData.PathFound;
+            if (MessageBox.Show("You cannot restore this operation.\nAll conflicting edges will be merged.\nAre you sure you want to convert the graph to undirected graph?",
+                "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                viewModel.graphModel.graph.ToUndirectedGraph();
+                CancelSelectionAndResetStatus();
+            }
+        }
+
+        private void SelectStartingPoint(object sender, RoutedEventArgs e)
+        {
+            viewModel.CurrentStatus = SelectStatus.SelectAStartingVertex;
+        }
+
+        private void SelectEndPoint(object sender, RoutedEventArgs e)
+        {
+            viewModel.CurrentStatus = SelectStatus.SelectAnEndVertex;
+        }
+
+        private void OneStep(object sender, RoutedEventArgs e)
+        {
+            viewModel.AlgorithmData.OneStep();
+        }
+
+        private void SolveInAFlash(object sender, RoutedEventArgs e)
+        {
+            while (viewModel.AlgorithmData.OneStep()) ;
         }
     }
 }

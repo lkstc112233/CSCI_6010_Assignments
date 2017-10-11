@@ -1,17 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace DijkstrasAlgorithmPresentation
 {
-    public class Dijkstra_s_Algorithm_data
+    public class Dijkstra_s_Algorithm_data : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void onPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
         private Heap<Vertex> heap = new Heap<Vertex>((Vertex a, Vertex b) => { return a.cost < b.cost; });
         private Edge[] answerEdge;
         private Vertex[] answerVertex;
         private Graph graph;
+
+        public delegate void AfterDelegate();
+        public AfterDelegate OnPathFound;
+
         public Dijkstra_s_Algorithm_data(Graph g)
         {
             graph = g;
+            PathFound = false;
             answerEdge = new Edge[graph.EdgeTable.GetLength(0)];
             answerVertex = new Vertex[graph.EdgeTable.GetLength(0)];
         }
@@ -32,7 +44,18 @@ namespace DijkstrasAlgorithmPresentation
         Vertex currentVertex = null;
         Edge currentEdge = null;
         Stack<Edge> appendingEdges = new Stack<Edge>();
-        public bool PathFound = false;
+        private bool m_pathFound = false;
+        public bool PathFound
+        {
+            get { return m_pathFound; }
+            set
+            {
+                m_pathFound = value;
+                onPropertyChanged("PathFound");
+                if (m_pathFound)
+                    OnPathFound();
+            }
+        }
 
         public void ResetStatus()
         {

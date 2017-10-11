@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -120,7 +121,6 @@ namespace DijkstrasAlgorithmPresentation
             }
         }
 
-
         public static T FindVisualChild<T>(DependencyObject depObj) where T : DependencyObject
         {
             if (depObj != null)
@@ -169,7 +169,20 @@ namespace DijkstrasAlgorithmPresentation
             }
             return vertexPresenterDictionary[v];
         }
-        public SelectStatus CurrentStatus = SelectStatus.SelectAnElement;
+
+        private SelectStatus m_CurrentStatus = SelectStatus.SelectAnElement;
+        public SelectStatus CurrentStatus
+        {
+            get
+            {
+                return m_CurrentStatus;
+            }
+            set
+            {
+                m_CurrentStatus = value;
+                onPropertyChanged("CurrentStatus");
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void onPropertyChanged(string name)
@@ -203,7 +216,33 @@ namespace DijkstrasAlgorithmPresentation
             }
         }
 
-        public Dijkstra_s_Algorithm_data AlgorithmData;
+        private Dijkstra_s_Algorithm_data m_AlgorithmData;
+        public Dijkstra_s_Algorithm_data AlgorithmData
+        {
+            get
+            {
+                return m_AlgorithmData;
+            }
+            set
+            {
+                m_AlgorithmData = value;
+                onPropertyChanged("AlgorithmData");
+            }
+        }
+
+        private bool m_PathFound;
+        public bool PathFound
+        {
+            get
+            {
+                return m_PathFound;
+            }
+            set
+            {
+                m_PathFound = value;
+                onPropertyChanged("PathFound");
+            }
+        }
 
         internal void BeginPresentation()
         {
@@ -211,9 +250,9 @@ namespace DijkstrasAlgorithmPresentation
                 return;
             CurrentProgramStatus = ProgramStatus.Presenting;
 
-            // TODO: preparation.
-
+            PathFound = false;
             AlgorithmData = new Dijkstra_s_Algorithm_data(graphModel.graph);
+            AlgorithmData.OnPathFound = () => PathFound = true;
             AlgorithmData.setStartPoint(m_vertexStarting);
             AlgorithmData.setEndPoint(m_vertexEnd);
         }
