@@ -503,7 +503,7 @@ namespace DijkstrasAlgorithmPresentation
                     BeginTheShowButton.Command = Commands.SolvePresentationCommand;
                 }
             };
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 2);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
             dispatcherTimer.Start();
             CommandManager.InvalidateRequerySuggested();
         }

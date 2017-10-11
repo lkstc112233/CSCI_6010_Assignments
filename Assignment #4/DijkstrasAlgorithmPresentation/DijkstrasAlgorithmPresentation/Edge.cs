@@ -16,6 +16,8 @@ namespace DijkstrasAlgorithmPresentation
         ListedEdge,
         ScanningEdge,
         ScannedEdge,
+        PartOfAnswerEdge,
+        NotPartOfAnswerEdge,
     }
 
     public class Edge : INotifyPropertyChanged
@@ -49,6 +51,10 @@ namespace DijkstrasAlgorithmPresentation
                     return Colors.Cyan;
                 switch (m_type)
                 {
+                    case EdgeType.PartOfAnswerEdge:
+                        return Color.FromRgb(0x8E, 0xBA, 0x43);
+                    case EdgeType.NotPartOfAnswerEdge:
+                        return Colors.Silver;
                     case EdgeType.ScannedEdge:
                         return Color.FromRgb(0xB7, 0xB8, 0xB6);
                     case EdgeType.ScanningEdge:

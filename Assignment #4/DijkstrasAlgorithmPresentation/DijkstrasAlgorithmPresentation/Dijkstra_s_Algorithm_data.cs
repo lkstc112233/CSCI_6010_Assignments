@@ -1,17 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace DijkstrasAlgorithmPresentation
 {
     public class Dijkstra_s_Algorithm_data
     {
         private Heap<Vertex> heap = new Heap<Vertex>((Vertex a, Vertex b) => { return a.cost < b.cost; });
+        private Edge[] answerEdge;
+        private Vertex[] answerVertex;
         private Graph graph;
         public Dijkstra_s_Algorithm_data(Graph g)
         {
             graph = g;
+            answerEdge = new Edge[graph.EdgeTable.GetLength(0)];
+            answerVertex = new Vertex[graph.EdgeTable.GetLength(0)];
         }
         public void setStartPoint(Vertex v)
         {
+            DepartureVertex = v;
             v.cost = 0;
             heap.Add(v);
         } 
@@ -20,6 +26,7 @@ namespace DijkstrasAlgorithmPresentation
             TargetVertex = v;
         }
 
+        Vertex DepartureVertex = null;
         Vertex TargetVertex = null;
 
         Vertex currentVertex = null;
@@ -42,7 +49,10 @@ namespace DijkstrasAlgorithmPresentation
             if (appendingEdges.Count > 0)
                 return appendingEdges.Pop();
             if (heap.IsEmpty())
+            {
+                currentVertex.SetType(VertexType.ScannedVertex);
                 return null;
+            }
             var v = heap.GetMin();
             if (ReferenceEquals(v, TargetVertex))
             {
@@ -72,9 +82,9 @@ namespace DijkstrasAlgorithmPresentation
             if (currentEdge != null)
                 currentEdge.SetType(EdgeType.ScannedEdge);
             currentEdge = TakeNextEdge();
-            currentEdge.SetType(EdgeType.ScanningEdge);
             if (currentEdge == null)
                 return false;
+            currentEdge.SetType(EdgeType.ScanningEdge);
             Vertex nextVertex;
             if (currentEdge.oneway)
             {
@@ -89,27 +99,45 @@ namespace DijkstrasAlgorithmPresentation
             }
             if (nextVertex.cost < 0)
             {
+                answerEdge[nextVertex.id] = currentEdge;
+                answerVertex[nextVertex.id] = currentVertex;
                 nextVertex.cost = currentVertex.cost + currentEdge.weight;
                 nextVertex.SetType(VertexType.ListedVertex);
                 heap.Add(nextVertex);
             }
             else if (currentVertex.cost + currentEdge.weight < nextVertex.cost)
             {
+                answerEdge[nextVertex.id] = currentEdge;
+                answerVertex[nextVertex.id] = currentVertex;
                 nextVertex.cost = currentVertex.cost + currentEdge.weight;
                 heap.Update(nextVertex);
-            }
-            else
-            {
-                
-                // We just ignore this edge.
             }
             if (ReferenceEquals(nextVertex, TargetVertex))
             {
                 nextVertex.SetType(VertexType.EndVertex);
                 PathFound = true;
+                ShowAnswers();
                 return false;
             }
             return true;
+        }
+
+        private void ShowAnswers()
+        {
+            foreach (Vertex vertex in graph.vertexes)
+                vertex.SetType(VertexType.NotPartOfAnswerVertex);
+            foreach (Edge edge in graph.edges)
+                edge.SetType(EdgeType.NotPartOfAnswerEdge);
+            Vertex v;
+            v = TargetVertex;
+            while (answerEdge[v.id]!=null)
+            {
+                answerEdge[v.id].SetType(EdgeType.PartOfAnswerEdge);
+                v = answerVertex[v.id];
+                v.SetType(VertexType.PartOfAnswerVertex);
+            }
+            TargetVertex.SetType(VertexType.EndVertex);
+            DepartureVertex.SetType(VertexType.StartingVertex);
         }
     }
 }

@@ -20,6 +20,8 @@ namespace DijkstrasAlgorithmPresentation
         ListedVertex,
         ScanningVertex,
         ScannedVertex,
+        PartOfAnswerVertex,
+        NotPartOfAnswerVertex,
     }
     public class Vertex : INotifyPropertyChanged
     {
@@ -43,9 +45,12 @@ namespace DijkstrasAlgorithmPresentation
                     case VertexType.ListedVertex:
                         return Color.FromRgb(0x80, 0xBD, 0x9E);
                     case VertexType.ScannedVertex:
+                    case VertexType.NotPartOfAnswerVertex:
                         return Colors.Silver;
                     case VertexType.ScanningVertex:
                         return Color.FromRgb(0x89, 0xDA, 0x59);
+                    case VertexType.PartOfAnswerVertex:
+                        return Color.FromRgb(0x8E, 0xBA, 0x43);
                     case VertexType.Unselected:
                     case VertexType.UnscannedVertex:
                     default:
