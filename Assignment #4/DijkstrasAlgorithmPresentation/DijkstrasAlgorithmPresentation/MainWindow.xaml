@@ -92,17 +92,7 @@
                                     Selecting End Vertex
                                 </Button.Content>
                             </Button>
-                            <Button Name="BeginButton" Click="BeginPresentation">
-                                <Button.IsEnabled>
-                                    <MultiBinding Converter="{StaticResource AllTrueConverter}">
-                                        <Binding Path="VertexStarting" Converter="{StaticResource IsNullToBooleanConverter}"/>
-                                        <Binding Path="VertexEnd" Converter="{StaticResource IsNullToBooleanConverter}"/>
-                                    </MultiBinding>
-                                </Button.IsEnabled>
-                                <Button.Content>
-                                    Begin The Presentation!
-                                </Button.Content>
-                            </Button>
+                            <Button Name="BeginButton" Click="BeginPresentation" IsEnabled="{Binding VertexStarting,Converter={StaticResource IsNullToBooleanConverter}}">Begin The Presentation!</Button>
                         </WrapPanel>
                         <WrapPanel Orientation="Horizontal">
                             <Button Click="OneStep">

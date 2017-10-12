@@ -74,6 +74,8 @@ namespace DijkstrasAlgorithmPresentation
             if (heap.IsEmpty())
             {
                 currentVertex.SetType(VertexType.ScannedVertex);
+                if (TargetVertex == null)
+                    ShowAnswers();
                 PathFound = true;
                 return null;
             }
@@ -154,13 +156,28 @@ namespace DijkstrasAlgorithmPresentation
                 edge.SetType(EdgeType.NotPartOfAnswerEdge);
             Vertex v;
             v = TargetVertex;
-            while (answerEdge[v.id]!=null)
+            if (v == null)
             {
-                answerEdge[v.id].SetType(EdgeType.PartOfAnswerEdge);
-                v = answerVertex[v.id];
-                v.SetType(VertexType.PartOfAnswerVertex);
+                foreach (Edge e in answerEdge)
+                {
+                    if (e != null)
+                    {
+                        e.SetType(EdgeType.PartOfAnswerEdge);
+                        e.start.SetType(VertexType.PartOfAnswerVertex);
+                        e.end.SetType(VertexType.PartOfAnswerVertex);
+                    }
+                }
             }
-            TargetVertex.SetType(VertexType.EndVertex);
+            else
+            {
+                while (answerEdge[v.id] != null)
+                {
+                    answerEdge[v.id].SetType(EdgeType.PartOfAnswerEdge);
+                    v = answerVertex[v.id];
+                    v.SetType(VertexType.PartOfAnswerVertex);
+                }
+                TargetVertex.SetType(VertexType.EndVertex);
+            }
             DepartureVertex.SetType(VertexType.StartingVertex);
         }
     }

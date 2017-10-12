@@ -275,7 +275,7 @@ namespace DijkstrasAlgorithmPresentation
 
         internal void BeginPresentation()
         {
-            if (VertexEnd == null || VertexStarting == null)
+            if (VertexStarting == null)
                 return;
             CurrentProgramStatus = ProgramStatus.Presenting;
 
