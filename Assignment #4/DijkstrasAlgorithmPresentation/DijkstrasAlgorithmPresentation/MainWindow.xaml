@@ -81,7 +81,7 @@
                                     Select Starting Vertex
                                 </Button.Content>
                             </Button>
-                            <Button Click="SelectEndPoint">
+                            <Button Name="SelectEndPointButton" Click="SelectEndPoint">
                                 <Button.IsEnabled>
                                     <MultiBinding Converter="{StaticResource AllTrueConverter}">
                                         <Binding Path="CurrentProgramStatus" Converter="{StaticResource IsSameConverter}" ConverterParameter="{x:Static local:ProgramStatus.BuildingGraph}"/>

@@ -405,7 +405,16 @@ namespace DijkstrasAlgorithmPresentation
 
         private void SelectEndPoint(object sender, RoutedEventArgs e)
         {
-            viewModel.CurrentStatus = SelectStatus.SelectAnEndVertex;
+            if (viewModel.VertexEnd == null)
+            {
+                SelectEndPointButton.Content = "Deselect End Vertex"; 
+                viewModel.CurrentStatus = SelectStatus.SelectAnEndVertex;
+            }
+            else
+            {
+                SelectEndPointButton.Content = "Selecting End Vertex"; 
+                viewModel.CancelSelectEndVertex();
+            }
         }
 
         private void OneStep(object sender, RoutedEventArgs e)

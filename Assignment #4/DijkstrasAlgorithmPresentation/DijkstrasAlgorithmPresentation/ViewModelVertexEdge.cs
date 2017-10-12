@@ -98,6 +98,14 @@ namespace DijkstrasAlgorithmPresentation
             VertexEnd = vertex;
             VertexEnd.SetType(VertexType.EndVertex);
         }
+        internal void CancelSelectEndVertex()
+        {
+            if (VertexEnd == null)
+                return;
+            if (VertexStarting != VertexEnd)
+                VertexEnd.SetType(VertexType.Unselected);
+            VertexEnd = null;
+        }
         public void CancelVertexSelection()
         {
             if (CurrentVertexSelected != null)
