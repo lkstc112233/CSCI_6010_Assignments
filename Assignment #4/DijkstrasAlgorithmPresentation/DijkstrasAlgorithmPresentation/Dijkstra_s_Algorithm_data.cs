@@ -108,7 +108,11 @@ namespace DijkstrasAlgorithmPresentation
                 currentEdge.SetType(EdgeType.ScannedEdge);
             currentEdge = TakeNextEdge();
             if (currentEdge == null)
+            {
+                if (TargetVertex != null)
+                    ShowAnswers();
                 return false;
+            }
             currentEdge.SetType(EdgeType.ScanningEdge);
             Vertex nextVertex;
             if (currentEdge.oneway)
