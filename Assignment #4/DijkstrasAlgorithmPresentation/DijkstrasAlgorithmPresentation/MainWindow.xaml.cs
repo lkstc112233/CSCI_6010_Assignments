@@ -151,7 +151,7 @@ namespace DijkstrasAlgorithmPresentation
                 this.edgeid = edgeid;
                 this.startid = startId;
                 this.endid = endid;
-                this.weight = weight;
+                this.weight = weight < 0?0:weight;
             }
         }
 

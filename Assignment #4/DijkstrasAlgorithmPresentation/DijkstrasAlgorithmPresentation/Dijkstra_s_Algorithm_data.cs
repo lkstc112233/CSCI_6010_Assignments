@@ -74,8 +74,7 @@ namespace DijkstrasAlgorithmPresentation
             if (heap.IsEmpty())
             {
                 currentVertex.SetType(VertexType.ScannedVertex);
-                if (TargetVertex == null)
-                    ShowAnswers();
+                ShowAnswers();
                 PathFound = true;
                 return null;
             }
@@ -137,13 +136,6 @@ namespace DijkstrasAlgorithmPresentation
                 answerVertex[nextVertex.id] = currentVertex;
                 nextVertex.cost = currentVertex.cost + currentEdge.weight;
                 heap.Update(nextVertex);
-            }
-            if (ReferenceEquals(nextVertex, TargetVertex))
-            {
-                nextVertex.SetType(VertexType.EndVertex);
-                PathFound = true;
-                ShowAnswers();
-                return false;
             }
             return true;
         }
