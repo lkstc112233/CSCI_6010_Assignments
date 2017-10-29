@@ -33,8 +33,18 @@ public class Polynomial {
 			head = term;
 			return;
 		}
-		Literal ptr = head;
-
+		Literal ptrThis = head;
+		Literal ptrLast = null;
+		while (ptrThis != null) {
+			if (ptrThis.exponent < exp) {
+				ptrLast.next = term;
+				term.next = ptrThis;
+				return;
+			}
+			ptrLast = ptrThis;
+			ptrThis = ptrThis.next;
+		}
+		ptrLast.next = term;
 	}
 
 	public Polynomial add(Polynomial rhs) {
