@@ -112,14 +112,21 @@ public class Polynomial {
 		// using “^” to signify exponents
 		StringBuilder sb = new StringBuilder();
 		Literal l = head;
+		String prefix = "";
 		while (l != null) {
-			if (l.coefficient != 1)
+			if (l.exponent != 0) {
+				if (l.coefficient != 1)
+					sb.append(l.coefficient);
+				sb.append('x');
+				if (l.exponent != 1) {
+					sb.append('^');
+					sb.append(l.exponent);
+				}
+			} else {
 				sb.append(l.coefficient);
-			sb.append('x');
-			if (l.exponent != 1) {
-				sb.append('^');
-				sb.append(l.exponent);
 			}
+			sb.append(prefix);
+			prefix = " + ";
 		}
 		return sb.toString();
 	}
