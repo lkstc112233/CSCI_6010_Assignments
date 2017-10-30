@@ -86,12 +86,41 @@ public class Polynomial {
 	}
 
 	public Polynomial multiply(Polynomial rhs) {
-		// to be implemented
-		return this;
+		Polynomial result = new Polynomial();
+		Literal ptr = rhs.head;
+		while (ptr != null) {
+			result = result.add(this.multiply(ptr));
+			ptr = ptr.next;
+		}
+		return result;
+	}
+
+	private Polynomial multiply(Literal rhs) {
+		if (rhs.coefficient == 0)
+			return new Polynomial();
+		Polynomial result = new Polynomial(this);
+		Literal ptr = this.head;
+		while (ptr != null) {
+			ptr.coefficient *= rhs.coefficient;
+			ptr.exponent += rhs.exponent;
+			ptr = ptr.next;
+		}
+		return result;
 	}
 
 	public String toString() {
-		// to be implemented use “^” to signify exponents
-		return super.toString();
+		// using “^” to signify exponents
+		StringBuilder sb = new StringBuilder();
+		Literal l = head;
+		while (l != null) {
+			if (l.coefficient != 1)
+				sb.append(l.coefficient);
+			sb.append('x');
+			if (l.exponent != 1) {
+				sb.append('^');
+				sb.append(l.exponent);
+			}
+		}
+		return sb.toString();
 	}
 }
