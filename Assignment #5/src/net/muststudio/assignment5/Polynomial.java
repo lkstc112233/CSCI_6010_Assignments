@@ -127,6 +127,7 @@ public class Polynomial {
 			}
 			sb.append(prefix);
 			prefix = " + ";
+			l = l.next;
 		}
 		return sb.toString();
 	}
