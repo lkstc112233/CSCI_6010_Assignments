@@ -48,9 +48,41 @@ public class Polynomial {
 	}
 
 	public Polynomial add(Polynomial rhs) {
-		// to be implemented
-		return this;
-
+		if (rhs.head == null)
+			return new Polynomial(this);
+		else if (head == null)
+			return new Polynomial(rhs);
+		Polynomial result;
+		Literal ptrThat;
+		if (head.exponent >= rhs.head.exponent) {
+			result = new Polynomial(this);
+			ptrThat = rhs.head;
+		} else {
+			result = new Polynomial(rhs);
+			ptrThat = head;
+		}
+		Literal ptrThis = result.head;
+		while (ptrThat != null) {
+			if (ptrThis.exponent == ptrThat.exponent) {
+				ptrThis.coefficient += ptrThat.coefficient;
+				ptrThat = ptrThat.next;
+			} else if (ptrThis.next == null) {
+				while (ptrThat != null) {
+					ptrThis.next = new Literal(ptrThat);
+					ptrThis = ptrThis.next;
+					ptrThat = ptrThat.next;
+				}
+				break;
+			} else if (ptrThis.next.exponent < ptrThat.exponent) {
+				Literal post = ptrThis.next;
+				ptrThis.next = new Literal(ptrThat);
+				ptrThis.next.next = post;
+				ptrThat = ptrThat.next;
+			} else {
+				ptrThis = ptrThis.next;
+			}
+		}
+		return result;
 	}
 
 	public Polynomial multiply(Polynomial rhs) {
