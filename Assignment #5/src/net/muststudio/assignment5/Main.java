@@ -58,13 +58,13 @@ public class Main {
 		}
 		System.out.println("Polynomial 1: " + poly1.toString());
 		System.out.println("Polynomial 2: " + poly2.toString());
-		System.out.println("Polynomial 1 + Polynimial 2: " + poly1.add(poly2));
-		System.out.println("Polynomial 1 * Polynimial 2: " + poly1.multiply(poly2));
-		System.out.println("Polynomial 1 + Polynimial 1: " + poly1.add(poly1));
-		System.out.println("Polynomial 2 + Polynimial 2: " + poly2.add(poly2));
-		System.out.println("Polynomial 1 * Polynimial 1: " + poly1.multiply(poly1));
-		System.out.println("Polynomial 2 * Polynimial 2: " + poly2.multiply(poly2));
-		System.out.println("Polynomial 2 + Polynimial 1: " + poly2.add(poly1));
-		System.out.println("Polynomial 2 * Polynimial 1: " + poly2.multiply(poly1));
+		System.out.println("Polynomial 1 + Polynomial 2: " + poly1.add(poly2));
+		System.out.println("Polynomial 1 * Polynomial 2: " + poly1.multiply(poly2));
+		System.out.println("Polynomial 1 + Polynomial 1: " + poly1.add(poly1));
+		System.out.println("Polynomial 2 + Polynomial 2: " + poly2.add(poly2));
+		System.out.println("Polynomial 1 * Polynomial 1: " + poly1.multiply(poly1));
+		System.out.println("Polynomial 2 * Polynomial 2: " + poly2.multiply(poly2));
+		System.out.println("Polynomial 2 + Polynomial 1: " + poly2.add(poly1));
+		System.out.println("Polynomial 2 * Polynomial 1: " + poly2.multiply(poly1));
 	}
 }
