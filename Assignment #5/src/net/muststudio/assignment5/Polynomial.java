@@ -13,7 +13,7 @@ public class Polynomial {
 			return;
 		}
 		Literal ptr = previous.head;
-		head = new Literal(head);
+		head = new Literal(ptr);
 		Literal tail = head;
 		while (ptr.next != null) {
 			tail.next = new Literal(ptr.next);
@@ -99,7 +99,7 @@ public class Polynomial {
 		if (rhs.coefficient == 0)
 			return new Polynomial();
 		Polynomial result = new Polynomial(this);
-		Literal ptr = this.head;
+		Literal ptr = result.head;
 		while (ptr != null) {
 			ptr.coefficient *= rhs.coefficient;
 			ptr.exponent += rhs.exponent;
@@ -114,6 +114,7 @@ public class Polynomial {
 		Literal l = head;
 		String prefix = "";
 		while (l != null) {
+			sb.append(prefix);
 			if (l.exponent != 0) {
 				if (l.coefficient != 1)
 					sb.append(l.coefficient);
@@ -125,7 +126,6 @@ public class Polynomial {
 			} else {
 				sb.append(l.coefficient);
 			}
-			sb.append(prefix);
 			prefix = " + ";
 			l = l.next;
 		}
