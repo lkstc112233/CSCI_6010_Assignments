@@ -29,8 +29,6 @@ namespace FinancialTsunamiPresentation
 
         public Edge[,] EdgeTable;
 
-        private bool DefaultEdgeTypeOneway = true;
-
         private bool m_CanToDirect = false;
         public bool CanToDirect { get { return m_CanToDirect; } }
         private bool m_CanToUndirect = true;
@@ -104,7 +102,6 @@ namespace FinancialTsunamiPresentation
             edg.start = vstart;
             edg.end = vend;
             edg.id = getNextAvailableEdgeId();
-            edg.oneway = DefaultEdgeTypeOneway;
             AddEdge(edg);
             return edg;
         }
@@ -112,54 +109,13 @@ namespace FinancialTsunamiPresentation
         private void AddEdge(Edge e)
         {
             edges.Add(e);
-            if (!e.oneway)
-                EdgeTable[e.end.id, e.start.id] = e;
             EdgeTable[e.start.id, e.end.id] = e;
         }
 
         public void RemoveEdge(Edge e)
         {
-            if (!e.oneway)
-                EdgeTable[e.end.id, e.start.id] = null;
             EdgeTable[e.start.id, e.end.id] = null;
             edges.Remove(e);
-        }
-
-        public void ToUndirectedGraph()
-        {
-            NowCannotToUndirect();
-            NowCanToDirect();
-            DefaultEdgeTypeOneway = false;
-            List<Edge> duplicates = new List<Edge>();
-            foreach (Edge e in edges)
-            {
-                if (e.oneway)
-                    if (EdgeTable[e.end.id, e.start.id] == null)
-                        EdgeTable[e.end.id, e.start.id] = e;
-                    else if (e.start.id > e.end.id)
-                    {
-                        duplicates.Add(e);
-                        continue;
-                    }
-                    else
-                        EdgeTable[e.end.id, e.start.id] = e;
-                e.oneway = false;
-            }
-            foreach (Edge e in duplicates)
-                edges.Remove(e);
-        }
-
-        public void ToDirectedGraph()
-        {
-            NowCanToUndirect();
-            NowCannotToDirect();
-            DefaultEdgeTypeOneway = true;
-            foreach (Edge e in edges)
-            {
-                if (!e.oneway)
-                    EdgeTable[e.end.id, e.start.id] = null;
-                e.oneway = true;
-            }
         }
 
         private void ExpandCapacity()

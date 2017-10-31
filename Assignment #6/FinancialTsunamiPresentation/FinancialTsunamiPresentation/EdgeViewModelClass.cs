@@ -44,13 +44,11 @@ namespace FinancialTsunamiPresentation
             BindingOperations.SetBinding(this, Y2Property, getOnewayBinding(endPresentser, Canvas.TopProperty, converter));
 
             MultiBinding multiBinding = new MultiBinding();
-            multiBinding.Bindings.Add(getBinding(edge, new PropertyPath("oneway"), null, BindingMode.OneWay));
             multiBinding.Bindings.Add(getOnewayBinding(startPresentser, Canvas.LeftProperty, converter));
             multiBinding.Bindings.Add(getOnewayBinding(endPresentser, Canvas.LeftProperty, converter));
             multiBinding.Converter = new LabelPositionConverter();
             BindingOperations.SetBinding(this, LeftEdgeProperty, multiBinding);
             multiBinding = new MultiBinding();
-            multiBinding.Bindings.Add(getBinding(edge, new PropertyPath("oneway"), null, BindingMode.OneWay));
             multiBinding.Bindings.Add(getOnewayBinding(startPresentser, Canvas.TopProperty, converter));
             multiBinding.Bindings.Add(getOnewayBinding(endPresentser, Canvas.TopProperty, converter));
             multiBinding.Converter = new LabelPositionConverter();
@@ -90,11 +88,7 @@ namespace FinancialTsunamiPresentation
         {
             public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
             {
-                bool oneway = (bool)values[0];
-                if (oneway)
-                    return ((double)values[1] * 1.0 / 3.0) + ((double)values[2] * 2.0 / 3.0);
-                else
-                    return ((double)values[1] + (double)values[2]) / 2.0;
+                return ((double)values[0] * 1.0 / 3.0) + ((double)values[1] * 2.0 / 3.0);
             }
 
             public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

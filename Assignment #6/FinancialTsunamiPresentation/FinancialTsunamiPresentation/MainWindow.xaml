@@ -43,28 +43,6 @@
                         <Button Click="LoadFile">Load From File</Button>
                         <Button Click="ResetGraph">Reset Graph</Button>
                         <Button Click="AddVertex" IsEnabled="{Binding CurrentProgramStatus, Converter={StaticResource IsSameConverter}, ConverterParameter={x:Static local:ProgramStatus.BuildingGraph}}">Add Vertex</Button>
-                        <Button Click="ConvertToDirected">
-                            <Button.IsEnabled>
-                                <MultiBinding Converter="{StaticResource AllTrueConverter}">
-                                    <Binding Path="CurrentProgramStatus" Converter="{StaticResource IsSameConverter}" ConverterParameter="{x:Static local:ProgramStatus.BuildingGraph}"/>
-                                    <Binding Path="graphModel.graph.CanToDirect" />
-                                </MultiBinding>
-                            </Button.IsEnabled>
-                            <Button.Content>
-                                To Directed Graph
-                            </Button.Content>
-                        </Button>
-                        <Button Click="ConvertToUndirected">
-                            <Button.IsEnabled>
-                                <MultiBinding Converter="{StaticResource AllTrueConverter}">
-                                    <Binding Path="CurrentProgramStatus" Converter="{StaticResource IsSameConverter}" ConverterParameter="{x:Static local:ProgramStatus.BuildingGraph}"/>
-                                    <Binding Path="graphModel.graph.CanToUndirect" />
-                                </MultiBinding>
-                            </Button.IsEnabled>
-                            <Button.Content>
-                                To Undirected Graph
-                            </Button.Content>
-                        </Button>
                     </WrapPanel>
                 </TabItem>
                 <TabItem Header="Financial Tsunami Control">

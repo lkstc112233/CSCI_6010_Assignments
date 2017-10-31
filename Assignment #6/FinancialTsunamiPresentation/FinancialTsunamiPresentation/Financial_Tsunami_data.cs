@@ -115,17 +115,9 @@ namespace FinancialTsunamiPresentation
             }
             currentEdge.SetType(EdgeType.ScanningEdge);
             Vertex nextVertex;
-            if (currentEdge.oneway)
-            {
+            
                 nextVertex = currentEdge.end;
-            }
-            else
-            {
-                if (currentEdge.start == currentVertex)
-                    nextVertex = currentEdge.end;
-                else
-                    nextVertex = currentEdge.start;
-            }
+            
             if (nextVertex.cost < 0)
             {
                 answerEdge[nextVertex.id] = currentEdge;

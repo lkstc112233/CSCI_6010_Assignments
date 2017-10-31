@@ -25,23 +25,10 @@ namespace FinancialTsunamiPresentation
         public Vertex start { get; set; }
         public Vertex end { get; set; }
         public int id { get; set; }
-        private bool m_oneway = true;
 
         private EdgeType m_type = EdgeType.Unselected;
         private bool m_selected = false;
 
-        public bool oneway
-        {
-            get
-            {
-                return m_oneway;
-            }
-            set
-            {
-                m_oneway = value;
-                NotifyPropertyChanged("oneway");
-            }
-        }
         
         public Color color
         {

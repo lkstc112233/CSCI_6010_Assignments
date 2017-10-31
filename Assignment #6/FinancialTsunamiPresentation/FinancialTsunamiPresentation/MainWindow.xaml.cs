@@ -378,26 +378,6 @@ namespace FinancialTsunamiPresentation
             viewModel.SelectVertex(LatestVertex);
         }
 
-        private void ConvertToDirected(object sender, RoutedEventArgs e)
-        {
-            viewModel.graphModel.graph.ToDirectedGraph();
-        }
-
-        private void ConvertToUndirected(object sender, ExecutedRoutedEventArgs e)
-        {
-            CommandManager.InvalidateRequerySuggested();
-        }
-
-        private void ConvertToUndirected(object sender, RoutedEventArgs e)
-        {
-            if (MessageBox.Show("You cannot restore this operation.\nAll conflicting edges will be merged.\nAre you sure you want to convert the graph to undirected graph?",
-                "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
-            {
-                viewModel.graphModel.graph.ToUndirectedGraph();
-                CancelSelectionAndResetStatus();
-            }
-        }
-
         private void SelectStartingPoint(object sender, RoutedEventArgs e)
         {
             viewModel.CurrentStatus = SelectStatus.SelectAStartingVertex;

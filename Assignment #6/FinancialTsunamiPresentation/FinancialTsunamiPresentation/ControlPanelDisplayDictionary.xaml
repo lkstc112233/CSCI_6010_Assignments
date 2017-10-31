@@ -28,8 +28,6 @@
         <DataTemplate.Resources>
             <local:ColorSelectionToIsCheckedConverter x:Key="ColorConverter"/>
             <local:PositiveDoubleToPersistantStringConverter x:Key="SmartConverter"/>
-            <BooleanToVisibilityConverter x:Key="IsOnewayToVisibilityConverter"/>
-            <local:RevertedBooleanToVisibilityConverter x:Key="NotOnewayToVisibilityConverter"/>
             <local:EqualsToVisibilityConverter x:Key="EqualsToVisibilityConverter"/>
         </DataTemplate.Resources>
         <StackPanel>
@@ -37,21 +35,13 @@
                 <TextBlock>Edge No.</TextBlock>
                 <TextBlock Text="{Binding id}"/>
             </StackPanel>
-            <StackPanel Visibility="{Binding oneway,Converter={StaticResource IsOnewayToVisibilityConverter}}">
+            <StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock>Starts from Vertex No.</TextBlock>
                     <TextBlock Text="{Binding start.id}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock>And edge to Vertex No.</TextBlock>
-                    <TextBlock Text="{Binding end.id}"/>
-                </StackPanel>
-            </StackPanel>
-            <StackPanel Visibility="{Binding oneway,Converter={StaticResource NotOnewayToVisibilityConverter}}">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock>Connecting Vertex No.</TextBlock>
-                    <TextBlock Text="{Binding start.id}"/>
-                    <TextBlock Text=" and Vertex No."/>
                     <TextBlock Text="{Binding end.id}"/>
                 </StackPanel>
             </StackPanel>
@@ -84,7 +74,6 @@
             <local:UIElementToYConverter x:Key="ElementToY"/>
             <local:MarginMakerConverter x:Key="marginMakerConverter"/>
             <local:TextCentralConverter x:Key="textCentralMarginMakerConverter"/>
-            <BooleanToVisibilityConverter x:Key="IsOnewayToVisibilityConverter"/>
         </DataTemplate.Resources>
         <Canvas>
             <Canvas.Resources>
@@ -97,8 +86,7 @@
                   StrokeThickness="2"
                   Stroke="{StaticResource LineBrush}">
             </Line>
-            <Path Canvas.Left="{Binding LeftEdgeHere}" Canvas.Top="{Binding TopEdgeHere}" 
-                  Visibility="{Binding edge.oneway, Converter={StaticResource IsOnewayToVisibilityConverter}}"
+            <Path Canvas.Left="{Binding LeftEdgeHere}" Canvas.Top="{Binding TopEdgeHere}"
                   Data="M 0,0 L 6,10 0,6 -6,10 0,0" Stroke="{StaticResource LineBrush}" Fill="{StaticResource LineBrush}"
                   RenderTransformOrigin="0, 0">
                 <Path.RenderTransform>
