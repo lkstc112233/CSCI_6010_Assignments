@@ -8,3 +8,8 @@ Assignment #4/DijkstrasAlgorithmPresentation/.vs/DijkstrasAlgorithmPresentation/
 Assignment #4/DijkstrasAlgorithmPresentation/.vs/DijkstrasAlgorithmPresentation/v15/sqlite3/storage.ide
 *.cache
 *.ide
+Assignment #6/DijkstrasAlgorithmPresentation/DijkstrasAlgorithmPresentation/obj/**
+Assignment #6/DijkstrasAlgorithmPresentation/DijkstrasAlgorithmPresentation/bin/**
+Assignment #6/DijkstrasAlgorithmPresentation/.vs/**
+Assignment #6/DijkstrasAlgorithmPresentation/.vs/DijkstrasAlgorithmPresentation/v15/.suo
+Assignment #6/DijkstrasAlgorithmPresentation/.vs/DijkstrasAlgorithmPresentation/v15/sqlite3/storage.ide
