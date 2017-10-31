@@ -1,0 +1,189 @@
+﻿<Window x:Class="FinancialTsunamiPresentation.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FinancialTsunamiPresentation"
+        mc:Ignorable="d" Name="parentWindow"
+        Title="Financial Tsunami Presentation" Height="450" Width="700" Closed="parentWindow_Closed"
+        AllowDrop="True" Drop="FileDropProcess" DragEnter="FileDragEnterProcess">
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static local:Commands.AddEdgeCommand}"
+                        Executed="AddEdge"
+                        CanExecute="CanAddEdge"  />
+        <CommandBinding Command="{x:Static local:Commands.RemoveVertexCommand}"
+                        Executed="RemoveVertex"
+                        CanExecute="CanRemoveVertex"  />
+        <CommandBinding Command="{x:Static local:Commands.RemoveEdgeCommand}"
+                        Executed="RemoveEdge"
+                        CanExecute="CanRemoveEdge"  />
+    </Window.CommandBindings>
+    <Grid>
+        <Grid.Resources>
+            <ResourceDictionary Source="ControlPanelDisplayDictionary.xaml"/>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <DockPanel>
+            <DockPanel.Resources>
+                <local:DebugConverter x:Key="DebugConverter"/>
+            </DockPanel.Resources>
+            <TabControl DockPanel.Dock="Top">
+                <TabControl.Resources>
+                    <local:EqualsToBooleanConverter x:Key="IsSameConverter"/>
+                    <local:EqualsToRevertedBooleanConverter x:Key="NotSameConverter"/>
+                    <local:AllTrueConverter x:Key="AllTrueConverter"/>
+                    <local:ReverseBooleanConverter x:Key="ReverseBooleanConverter"/>
+                    <local:IsNullToBooleanConverter x:Key="IsNullToBooleanConverter"/>
+                </TabControl.Resources>
+                <TabItem Header="Graph Control">
+                    <WrapPanel Orientation="Horizontal">
+                        <Button Click="LoadFile">Load From File</Button>
+                        <Button Click="ResetGraph">Reset Graph</Button>
+                        <Button Click="AddVertex" IsEnabled="{Binding CurrentProgramStatus, Converter={StaticResource IsSameConverter}, ConverterParameter={x:Static local:ProgramStatus.BuildingGraph}}">Add Vertex</Button>
+                        <Button Click="ConvertToDirected">
+                            <Button.IsEnabled>
+                                <MultiBinding Converter="{StaticResource AllTrueConverter}">
+                                    <Binding Path="CurrentProgramStatus" Converter="{StaticResource IsSameConverter}" ConverterParameter="{x:Static local:ProgramStatus.BuildingGraph}"/>
+                                    <Binding Path="graphModel.graph.CanToDirect" />
+                                </MultiBinding>
+                            </Button.IsEnabled>
+                            <Button.Content>
+                                To Directed Graph
+                            </Button.Content>
+                        </Button>
+                        <Button Click="ConvertToUndirected">
+                            <Button.IsEnabled>
+                                <MultiBinding Converter="{StaticResource AllTrueConverter}">
+                                    <Binding Path="CurrentProgramStatus" Converter="{StaticResource IsSameConverter}" ConverterParameter="{x:Static local:ProgramStatus.BuildingGraph}"/>
+                                    <Binding Path="graphModel.graph.CanToUndirect" />
+                                </MultiBinding>
+                            </Button.IsEnabled>
+                            <Button.Content>
+                                To Undirected Graph
+                            </Button.Content>
+                        </Button>
+                    </WrapPanel>
+                </TabItem>
+                <TabItem Header="Financial Tsunami Control">
+                    <StackPanel>
+                        <WrapPanel Orientation="Horizontal">
+                            <Button Click="SelectStartingPoint">
+                                <Button.IsEnabled>
+                                    <MultiBinding Converter="{StaticResource AllTrueConverter}">
+                                        <Binding Path="CurrentProgramStatus" Converter="{StaticResource IsSameConverter}" ConverterParameter="{x:Static local:ProgramStatus.BuildingGraph}"/>
+                                        <Binding Path="CurrentStatus" Converter="{StaticResource NotSameConverter}" ConverterParameter="{x:Static local:SelectStatus.SelectAStartingVertex}"/>
+                                    </MultiBinding>
+                                </Button.IsEnabled>
+                                <Button.Content>
+                                    Select Starting Vertex
+                                </Button.Content>
+                            </Button>
+                            <Button Name="SelectEndPointButton" Click="SelectEndPoint">
+                                <Button.IsEnabled>
+                                    <MultiBinding Converter="{StaticResource AllTrueConverter}">
+                                        <Binding Path="CurrentProgramStatus" Converter="{StaticResource IsSameConverter}" ConverterParameter="{x:Static local:ProgramStatus.BuildingGraph}"/>
+                                        <Binding Path="CurrentStatus" Converter="{StaticResource NotSameConverter}" ConverterParameter="{x:Static local:SelectStatus.SelectAnEndVertex}"/>
+                                    </MultiBinding>
+                                </Button.IsEnabled>
+                                <Button.Content>
+                                    Selecting End Vertex
+                                </Button.Content>
+                            </Button>
+                            <Button Name="BeginButton" Click="BeginPresentation" IsEnabled="{Binding VertexStarting,Converter={StaticResource IsNullToBooleanConverter}}">Begin The Presentation!</Button>
+                        </WrapPanel>
+                        <WrapPanel Orientation="Horizontal">
+                            <Button Click="OneStep">
+                                <Button.IsEnabled>
+                                    <MultiBinding Converter="{StaticResource AllTrueConverter}">
+                                        <Binding Path="CurrentProgramStatus" Converter="{StaticResource IsSameConverter}" ConverterParameter="{x:Static local:ProgramStatus.Presenting}"/>
+                                        <Binding Path="PathFound" Converter="{StaticResource ReverseBooleanConverter}"/>
+                                    </MultiBinding>
+                                </Button.IsEnabled>
+                                <Button.Content>
+                                    One Step Ahead
+                                </Button.Content>
+                            </Button>
+                            <Button Name="BeginTheShowButton" Click="SolvePresentation">
+                                <Button.IsEnabled>
+                                    <MultiBinding Converter="{StaticResource AllTrueConverter}">
+                                        <Binding Path="CurrentProgramStatus" Converter="{StaticResource IsSameConverter}" ConverterParameter="{x:Static local:ProgramStatus.Presenting}"/>
+                                        <Binding Path="PathFound" Converter="{StaticResource ReverseBooleanConverter}"/>
+                                    </MultiBinding>
+                                </Button.IsEnabled>
+                                <Button.Content>
+                                    Begin Automatic Presentation!
+                                </Button.Content>
+                            </Button>
+                            <Button Click="SolveInAFlash">
+                                <Button.IsEnabled>
+                                    <MultiBinding Converter="{StaticResource AllTrueConverter}">
+                                        <Binding Path="CurrentProgramStatus" Converter="{StaticResource IsSameConverter}" ConverterParameter="{x:Static local:ProgramStatus.Presenting}"/>
+                                        <Binding Path="PathFound" Converter="{StaticResource ReverseBooleanConverter}"/>
+                                    </MultiBinding>
+                                </Button.IsEnabled>
+                                <Button.Content>
+                                    Solve the problem in a Flash!
+                                </Button.Content>
+                            </Button>
+                        </WrapPanel>
+                    </StackPanel>
+                </TabItem>
+            </TabControl>
+            <ContentPresenter Name="monitor" Content="{Binding Path=graphModel}" >
+                <ContentPresenter.ContentTemplate>
+                    <DataTemplate>
+                        <Canvas Name="container" MouseDown="CancelSelectionAndResetStatus">
+                            <ItemsControl ItemsSource="{Binding Path=edgeModels}" ItemTemplate="{StaticResource EdgePresent}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <Canvas/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemContainerStyle>
+                                    <Style TargetType="ContentPresenter">
+                                        <EventSetter Event="MouseDown"  Handler="selectPresenter"/>
+                                        <Setter Property="Canvas.ZIndex" Value="5"/>
+                                    </Style>
+                                </ItemsControl.ItemContainerStyle>
+                            </ItemsControl>
+                            <ItemsControl Name="VertexesControl" ItemsSource="{Binding Path=graph.vertexes}" ItemTemplate="{StaticResource VertexNode}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <Canvas/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemContainerStyle>
+                                    <Style TargetType="ContentPresenter">
+                                        <EventSetter Event="MouseDown"  Handler="moveStart"/>
+                                        <EventSetter Event="MouseDown"  Handler="selectPresenter"/>
+                                        <EventSetter Event="MouseUp"  Handler="moveEnd"/>
+                                        <EventSetter Event="MouseMove"  Handler="moving"/>
+                                        <Setter Property="Canvas.Left" Value="10"/>
+                                        <Setter Property="Canvas.Top" Value="10"/>
+                                        <Setter Property="Canvas.ZIndex" Value="10"/>
+                                    </Style>
+                                </ItemsControl.ItemContainerStyle>
+                            </ItemsControl>
+                            <Rectangle 
+                                Panel.ZIndex="-99"
+                                Fill="{Binding Path=Background, ElementName=parentWindow}" 
+                                Width="{Binding Path=ActualWidth, ElementName=monitor}" 
+                                Height="{Binding Path=ActualHeight, ElementName=monitor}"/>
+                        </Canvas>
+                    </DataTemplate>
+                </ContentPresenter.ContentTemplate>
+            </ContentPresenter>
+        </DockPanel>
+        <StackPanel Grid.Column="1">
+            <StackPanel Name="VertexSettingPanel" Visibility="{Binding Path=CurrentVertexSelected, Converter={StaticResource IsNullToVisibilityConverter}, TargetNullValue=Collapsed}">
+                <ContentPresenter ContentTemplate="{StaticResource ControlPanelVertexPanel}" Content="{Binding CurrentVertexSelected}"/>
+            </StackPanel>
+            <StackPanel Name="EdgeSettingPanel" Visibility="{Binding Path=CurrentEdgeSelected, Converter={StaticResource IsNullToVisibilityConverter}, TargetNullValue=Collapsed}">
+                <ContentPresenter ContentTemplate="{StaticResource ControlPanelEdgePanel}" Content="{Binding CurrentEdgeSelected}"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,122 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:FinancialTsunamiPresentation">
+    <DataTemplate x:Key="ControlPanelVertexPanel" DataType="{x:Type local:Vertex}">
+        <DataTemplate.Resources>
+            <local:ColorSelectionToIsCheckedConverter x:Key="ColorConverter"/>
+            <local:RadiusSelectionToIsCheckedConverter x:Key="RadiusConverter"/>
+        </DataTemplate.Resources>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock>Vertex No. </TextBlock>
+                <TextBlock Text="{Binding id}"/>
+            </StackPanel>
+            <GroupBox Header="Select a radius for this Vertex">
+                <StackPanel>
+                    <RadioButton IsChecked="{Binding Path=radius, Converter={StaticResource RadiusConverter}, ConverterParameter=15}">Small</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=radius, Converter={StaticResource RadiusConverter}, ConverterParameter=20}">Medium</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=radius, Converter={StaticResource RadiusConverter}, ConverterParameter=30}">Large</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=radius, Converter={StaticResource RadiusConverter}, ConverterParameter=40}">Super Large</RadioButton>
+                </StackPanel>
+            </GroupBox>
+            <Button Command="{x:Static local:Commands.AddEdgeCommand}" Tag="{Binding}">Add Edge</Button>
+            <Button Command="{x:Static local:Commands.RemoveVertexCommand}" Tag="{Binding}">Remove Vertex</Button>
+        </StackPanel>
+    </DataTemplate>
+    <DataTemplate x:Key="ControlPanelEdgePanel" DataType="{x:Type local:Edge}">
+        <DataTemplate.Resources>
+            <local:ColorSelectionToIsCheckedConverter x:Key="ColorConverter"/>
+            <local:PositiveDoubleToPersistantStringConverter x:Key="SmartConverter"/>
+            <BooleanToVisibilityConverter x:Key="IsOnewayToVisibilityConverter"/>
+            <local:RevertedBooleanToVisibilityConverter x:Key="NotOnewayToVisibilityConverter"/>
+            <local:EqualsToVisibilityConverter x:Key="EqualsToVisibilityConverter"/>
+        </DataTemplate.Resources>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock>Edge No.</TextBlock>
+                <TextBlock Text="{Binding id}"/>
+            </StackPanel>
+            <StackPanel Visibility="{Binding oneway,Converter={StaticResource IsOnewayToVisibilityConverter}}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Starts from Vertex No.</TextBlock>
+                    <TextBlock Text="{Binding start.id}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>And edge to Vertex No.</TextBlock>
+                    <TextBlock Text="{Binding end.id}"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Visibility="{Binding oneway,Converter={StaticResource NotOnewayToVisibilityConverter}}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Connecting Vertex No.</TextBlock>
+                    <TextBlock Text="{Binding start.id}"/>
+                    <TextBlock Text=" and Vertex No."/>
+                    <TextBlock Text="{Binding end.id}"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Visibility ="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.CurrentProgramStatus, Converter={StaticResource EqualsToVisibilityConverter}, ConverterParameter={x:Static local:ProgramStatus.BuildingGraph}}">
+                <TextBlock>Set the weight of this edge.</TextBlock>
+                <TextBox Text="{Binding weight, Converter={StaticResource SmartConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                <Slider Visibility="Collapsed" Value="{Binding weight}" Maximum="720"/>
+            </StackPanel>
+            <Button Command="{x:Static local:Commands.RemoveEdgeCommand}" Tag="{Binding}">Remove Edge</Button>
+        </StackPanel>
+    </DataTemplate>
+    <DataTemplate x:Key="VertexNode" DataType="{x:Type local:Vertex}">
+        <DataTemplate.Resources>
+            <local:ColorSelectionToIsCheckedConverter x:Key="ColorConverter"/>
+            <local:EqualsToVisibilityConverter x:Key="EqualsToVisibilityConverter"/>
+        </DataTemplate.Resources>
+        <Grid>
+            <Ellipse Width="{Binding radius}" Height="{Binding radius}">
+                <Ellipse.Fill>
+                    <SolidColorBrush Color="{Binding color}"/>
+                </Ellipse.Fill>
+            </Ellipse>
+            <TextBlock Text="{Binding id}" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},Path=DataContext.CurrentProgramStatus, Converter={StaticResource EqualsToVisibilityConverter}, ConverterParameter={x:Static local:ProgramStatus.BuildingGraph}}"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding cost}" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},Path=DataContext.CurrentProgramStatus, Converter={StaticResource EqualsToVisibilityConverter}, ConverterParameter={x:Static local:ProgramStatus.Presenting}}"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Grid>
+    </DataTemplate>
+    <DataTemplate x:Key="EdgePresent" DataType="{x:Type local:EdgeViewModelClass}">
+        <DataTemplate.Resources>
+            <local:UIElementToXConverter x:Key="ElementToX"/>
+            <local:UIElementToYConverter x:Key="ElementToY"/>
+            <local:MarginMakerConverter x:Key="marginMakerConverter"/>
+            <local:TextCentralConverter x:Key="textCentralMarginMakerConverter"/>
+            <BooleanToVisibilityConverter x:Key="IsOnewayToVisibilityConverter"/>
+        </DataTemplate.Resources>
+        <Canvas>
+            <Canvas.Resources>
+                <SolidColorBrush x:Key="LineBrush" Color="{Binding edge.color}"/>
+            </Canvas.Resources>
+            <Line X1="{Binding X1}"
+                  Y1="{Binding Y1}"
+                  X2="{Binding X2}"
+                  Y2="{Binding Y2}" 
+                  StrokeThickness="2"
+                  Stroke="{StaticResource LineBrush}">
+            </Line>
+            <Path Canvas.Left="{Binding LeftEdgeHere}" Canvas.Top="{Binding TopEdgeHere}" 
+                  Visibility="{Binding edge.oneway, Converter={StaticResource IsOnewayToVisibilityConverter}}"
+                  Data="M 0,0 L 6,10 0,6 -6,10 0,0" Stroke="{StaticResource LineBrush}" Fill="{StaticResource LineBrush}"
+                  RenderTransformOrigin="0, 0">
+                <Path.RenderTransform>
+                    <RotateTransform CenterX="0" CenterY="0" Angle="{Binding RotatingAngle}"/>
+                </Path.RenderTransform>
+            </Path>
+            <TextBlock Name="ThisTextBlock" Text="{Binding edge.weight}"
+                       HorizontalAlignment="Left" VerticalAlignment="Top">
+                <TextBlock.Margin>
+                    <MultiBinding Converter="{StaticResource textCentralMarginMakerConverter}">
+                        <Binding Path="LeftEdgeHere"/>
+                        <Binding Path="ActualWidth" ElementName="ThisTextBlock"/>
+                        <Binding Path="TopEdgeHere"/>
+                        <Binding Path="ActualHeight" ElementName="ThisTextBlock"/>
+                    </MultiBinding>
+                </TextBlock.Margin>
+            </TextBlock>
+        </Canvas>
+    </DataTemplate>
+    <local:IsNullToVisibilityConverter x:Key="IsNullToVisibilityConverter"/>
+</ResourceDictionary>

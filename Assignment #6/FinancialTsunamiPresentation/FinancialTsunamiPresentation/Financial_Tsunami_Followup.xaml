@@ -1,0 +1,11 @@
+﻿<Window x:Class="FinancialTsunamiPresentation.Financial_Tsunami_Followup_Window"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FinancialTsunamiPresentation"
+        mc:Ignorable="d"
+        Title="Financial_Tsunami_Followup" Height="307.725" Width="479.614">
+    <Grid>
+    </Grid>
+</Window>
