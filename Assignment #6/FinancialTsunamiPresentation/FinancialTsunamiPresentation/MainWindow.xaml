@@ -48,28 +48,6 @@
                 <TabItem Header="Financial Tsunami Control">
                     <StackPanel>
                         <WrapPanel Orientation="Horizontal">
-                            <Button Click="SelectStartingPoint">
-                                <Button.IsEnabled>
-                                    <MultiBinding Converter="{StaticResource AllTrueConverter}">
-                                        <Binding Path="CurrentProgramStatus" Converter="{StaticResource IsSameConverter}" ConverterParameter="{x:Static local:ProgramStatus.BuildingGraph}"/>
-                                        <Binding Path="CurrentStatus" Converter="{StaticResource NotSameConverter}" ConverterParameter="{x:Static local:SelectStatus.SelectAStartingVertex}"/>
-                                    </MultiBinding>
-                                </Button.IsEnabled>
-                                <Button.Content>
-                                    Select Starting Vertex
-                                </Button.Content>
-                            </Button>
-                            <Button Name="SelectEndPointButton" Click="SelectEndPoint">
-                                <Button.IsEnabled>
-                                    <MultiBinding Converter="{StaticResource AllTrueConverter}">
-                                        <Binding Path="CurrentProgramStatus" Converter="{StaticResource IsSameConverter}" ConverterParameter="{x:Static local:ProgramStatus.BuildingGraph}"/>
-                                        <Binding Path="CurrentStatus" Converter="{StaticResource NotSameConverter}" ConverterParameter="{x:Static local:SelectStatus.SelectAnEndVertex}"/>
-                                    </MultiBinding>
-                                </Button.IsEnabled>
-                                <Button.Content>
-                                    Selecting End Vertex
-                                </Button.Content>
-                            </Button>
                             <Button Name="BeginButton" Click="BeginPresentation" IsEnabled="{Binding VertexStarting,Converter={StaticResource IsNullToBooleanConverter}}">Begin The Presentation!</Button>
                         </WrapPanel>
                         <WrapPanel Orientation="Horizontal">

@@ -104,26 +104,6 @@ namespace FinancialTsunamiPresentation
                         else
                             CancelSelectionAndResetStatus();
                         break;
-                    case SelectStatus.SelectAStartingVertex:
-                        if (presenter.Content is Vertex)
-                        {
-                            CancelSelectionAndResetStatus();
-                            viewModel.SelectStartVertex(presenter.Content as Vertex);
-                            args.Handled = true;
-                        }
-                        else
-                            CancelSelectionAndResetStatus();
-                        break;
-                    case SelectStatus.SelectAnEndVertex:
-                        if (presenter.Content is Vertex)
-                        {
-                            CancelSelectionAndResetStatus();
-                            viewModel.SelectEndVertex(presenter.Content as Vertex);
-                            args.Handled = true;
-                        }
-                        else
-                            CancelSelectionAndResetStatus();
-                        break;
                     default:
                         CancelSelectionAndResetStatus();
                         break;
@@ -377,26 +357,7 @@ namespace FinancialTsunamiPresentation
             Vertex LatestVertex = CreateVertex();
             viewModel.SelectVertex(LatestVertex);
         }
-
-        private void SelectStartingPoint(object sender, RoutedEventArgs e)
-        {
-            viewModel.CurrentStatus = SelectStatus.SelectAStartingVertex;
-        }
-
-        private void SelectEndPoint(object sender, RoutedEventArgs e)
-        {
-            if (viewModel.VertexEnd == null)
-            {
-                SelectEndPointButton.Content = "Deselect End Vertex"; 
-                viewModel.CurrentStatus = SelectStatus.SelectAnEndVertex;
-            }
-            else
-            {
-                SelectEndPointButton.Content = "Selecting End Vertex"; 
-                viewModel.CancelSelectEndVertex();
-            }
-        }
-
+        
         private void OneStep(object sender, RoutedEventArgs e)
         {
             viewModel.AlgorithmData.OneStep();

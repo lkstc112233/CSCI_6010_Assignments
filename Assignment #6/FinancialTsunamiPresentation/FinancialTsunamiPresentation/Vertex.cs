@@ -115,6 +115,20 @@ namespace FinancialTsunamiPresentation
             }
         }
 
+        private double m_balance = -1;
+        public double balance
+        {
+            get
+            {
+                return m_balance;
+            }
+            set
+            {
+                m_balance = value;
+                NotifyPropertyChanged("balance");
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void NotifyPropertyChanged(string propName)
         {

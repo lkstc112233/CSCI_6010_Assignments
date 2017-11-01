@@ -14,8 +14,6 @@ namespace FinancialTsunamiPresentation
     {
         SelectAnElement,
         EdgeBuilding,
-        SelectAStartingVertex,
-        SelectAnEndVertex,
     }
 
     enum ProgramStatus
@@ -46,8 +44,6 @@ namespace FinancialTsunamiPresentation
             }
         }
         private Vertex m_vertexSelected = null;
-        private Vertex m_vertexStarting = null;
-        private Vertex m_vertexEnd = null;
         public Vertex CurrentVertexSelected
         {
             get => m_vertexSelected;
@@ -57,54 +53,13 @@ namespace FinancialTsunamiPresentation
                 onPropertyChanged("CurrentVertexSelected");
             }
         }
-
-        public Vertex VertexStarting
-        {
-            get => m_vertexStarting;
-            private set
-            {
-                m_vertexStarting = value;
-                onPropertyChanged("VertexStarting");
-            }
-        }
-
-        public Vertex VertexEnd
-        {
-            get => m_vertexEnd;
-            private set
-            {
-                m_vertexEnd = value;
-                onPropertyChanged("VertexEnd");
-            }
-        }
+        
         public void SelectVertex(Vertex v)
         {
             if (CurrentVertexSelected != null)
                 CancelVertexSelection();
             CurrentVertexSelected = v;
             CurrentVertexSelected.Select();
-        }
-        internal void SelectStartVertex(Vertex vertex)
-        {
-            if (VertexStarting != null && VertexStarting != VertexEnd)
-                VertexStarting.SetType(VertexType.Unselected);
-            VertexStarting = vertex;
-            VertexStarting.SetType(VertexType.StartingVertex);
-        }
-        internal void SelectEndVertex(Vertex vertex)
-        {
-            if (VertexEnd != null && VertexStarting != VertexEnd)
-                VertexEnd.SetType(VertexType.Unselected);
-            VertexEnd = vertex;
-            VertexEnd.SetType(VertexType.EndVertex);
-        }
-        internal void CancelSelectEndVertex()
-        {
-            if (VertexEnd == null)
-                return;
-            if (VertexStarting != VertexEnd)
-                VertexEnd.SetType(VertexType.Unselected);
-            VertexEnd = null;
         }
         public void CancelVertexSelection()
         {
@@ -283,15 +238,11 @@ namespace FinancialTsunamiPresentation
 
         internal void BeginPresentation()
         {
-            if (VertexStarting == null)
-                return;
             CurrentProgramStatus = ProgramStatus.Presenting;
 
             PathFound = false;
             AlgorithmData = new Financial_Tsunami_data(graphModel.graph);
             AlgorithmData.OnPathFound = () => PathFound = true;
-            AlgorithmData.setStartPoint(VertexStarting);
-            AlgorithmData.setEndPoint(VertexEnd);
         }
 
         internal void EndPresentation()
@@ -302,10 +253,6 @@ namespace FinancialTsunamiPresentation
 
             AlgorithmData.ResetStatus();
             graphModel.graph.ResetCosts();
-            if (VertexStarting != null)
-                VertexStarting.SetType(VertexType.StartingVertex);
-            if (VertexEnd != null)
-                VertexEnd.SetType(VertexType.EndVertex);
         }
 
         internal void ClearGraph()
@@ -313,8 +260,6 @@ namespace FinancialTsunamiPresentation
             graphModel.graph.ClearGraph();
             CurrentEdgeSelected = null;
             CurrentVertexSelected = null;
-            VertexStarting = null;
-            VertexEnd = null;
         }
     }
 }
