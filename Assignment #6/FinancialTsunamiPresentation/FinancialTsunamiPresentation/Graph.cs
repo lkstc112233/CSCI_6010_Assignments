@@ -50,30 +50,7 @@ namespace FinancialTsunamiPresentation
             vertexesIdIncreasmenter = 0;
             edgesIdIncreasmenter = 0;
         }
-
-        public void NowCanToDirect()
-        {
-            m_CanToDirect = true;
-            NotifyPropertyChanged("CanToDirect");
-        }
-
-        public void NowCanToUndirect()
-        {
-            m_CanToUndirect = true;
-            NotifyPropertyChanged("CanToUndirect");
-        }
-        public void NowCannotToDirect()
-        {
-            m_CanToDirect = false;
-            NotifyPropertyChanged("CanToDirect");
-        }
-
-        public void NowCannotToUndirect()
-        {
-            m_CanToUndirect = false;
-            NotifyPropertyChanged("CanToUndirect");
-        }
-
+        
         public Vertex createVertex()
         {
             Vertex LatestVertex = new Vertex();
@@ -115,6 +92,7 @@ namespace FinancialTsunamiPresentation
         public void RemoveEdge(Edge e)
         {
             EdgeTable[e.start.id, e.end.id] = null;
+            e.start = null; // Deregister listener.
             edges.Remove(e);
         }
 

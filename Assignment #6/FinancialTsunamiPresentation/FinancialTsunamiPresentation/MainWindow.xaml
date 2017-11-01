@@ -48,6 +48,13 @@
                 <TabItem Header="Financial Tsunami Control">
                     <StackPanel>
                         <WrapPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel.Resources>
+                                    <local:PositiveDoubleToPersistantStringConverter x:Key="SmartConverter"/>
+                                </StackPanel.Resources>
+                                <TextBlock>Bank Safe Limit:</TextBlock>
+                                <TextBox IsEnabled="{Binding Path=CurrentProgramStatus, Converter={StaticResource IsSameConverter}, ConverterParameter={x:Static local:ProgramStatus.BuildingGraph}}" Width="100" Text="{local:SettingBinding Path=BankSafeLimit, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource SmartConverter}}" />
+                            </StackPanel>
                             <Button Name="BeginButton" Click="BeginPresentation">Begin The Presentation!</Button>
                         </WrapPanel>
                         <WrapPanel Orientation="Horizontal">

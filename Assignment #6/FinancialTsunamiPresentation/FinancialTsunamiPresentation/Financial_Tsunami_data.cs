@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace FinancialTsunamiPresentation
 {
@@ -11,9 +12,8 @@ namespace FinancialTsunamiPresentation
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-        
-        private Edge[] answerEdge;
-        private Vertex[] answerVertex;
+
+        public double limit { get; set; } = 200;
         private Graph graph;
 
         public delegate void AfterDelegate();
@@ -23,13 +23,10 @@ namespace FinancialTsunamiPresentation
         {
             graph = g;
             PathFound = false;
-            answerEdge = new Edge[graph.EdgeTable.GetLength(0)];
-            answerVertex = new Vertex[graph.EdgeTable.GetLength(0)];
         }
 
         Vertex currentVertex = null;
-        Edge currentEdge = null;
-        Stack<Edge> appendingEdges = new Stack<Edge>();
+        List<Vertex> listToCheck = null;
         private bool m_pathFound = false;
         public bool PathFound
         {
@@ -45,15 +42,46 @@ namespace FinancialTsunamiPresentation
 
         public void ResetStatus()
         {
-            currentEdge = null;
-            currentEdge = null;
-            appendingEdges.Clear();
+            currentVertex = null;
+            listToCheck = null;
+        }
+
+        private void reloadVertexes()
+        {
+            listToCheck = graph.vertexes.Where(vtx => vtx.safe).ToList();
+        }
+
+        private Vertex getNextVertex()
+        {
+            if (listToCheck == null)
+                reloadVertexes();
+            if (listToCheck.Count == 0)
+                return null;
+            Vertex result = listToCheck[listToCheck.Count - 1];
+            listToCheck.RemoveAt(listToCheck.Count - 1);
+            return result;
         }
 
         public bool OneStep()
         {
             if (PathFound)
                 return false;
+            currentVertex = getNextVertex();
+            if (currentVertex == null)
+            {
+                PathFound = true;
+                return false;
+            }
+            double balance = currentVertex.balance;
+            for (int i = 0; i < graph.EdgeTable.GetLength(0); ++i)
+                if (graph.EdgeTable[currentVertex.id, i] != null)
+                    if (graph.EdgeTable[currentVertex.id, i].end.safe)
+                        balance += graph.EdgeTable[currentVertex.id, i].weight;
+            if (balance < limit)
+            {
+                currentVertex.safe = false;
+                reloadVertexes();
+            }
             return true;
         }
 
