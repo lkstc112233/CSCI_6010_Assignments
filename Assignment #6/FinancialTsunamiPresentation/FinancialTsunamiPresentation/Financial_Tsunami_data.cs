@@ -11,8 +11,7 @@ namespace FinancialTsunamiPresentation
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-
-        private Heap<Vertex> heap = new Heap<Vertex>((Vertex a, Vertex b) => { return a.cost < b.cost; });
+        
         private Edge[] answerEdge;
         private Vertex[] answerVertex;
         private Graph graph;
@@ -49,8 +48,6 @@ namespace FinancialTsunamiPresentation
             currentEdge = null;
             currentEdge = null;
             appendingEdges.Clear();
-            while (!heap.IsEmpty())
-                heap.RemoveMin();
         }
 
         public bool OneStep()

@@ -48,7 +48,7 @@
                 <TabItem Header="Financial Tsunami Control">
                     <StackPanel>
                         <WrapPanel Orientation="Horizontal">
-                            <Button Name="BeginButton" Click="BeginPresentation" IsEnabled="{Binding VertexStarting,Converter={StaticResource IsNullToBooleanConverter}}">Begin The Presentation!</Button>
+                            <Button Name="BeginButton" Click="BeginPresentation">Begin The Presentation!</Button>
                         </WrapPanel>
                         <WrapPanel Orientation="Horizontal">
                             <Button Click="OneStep">

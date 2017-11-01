@@ -9,50 +9,40 @@ using System.Windows.Media;
 
 namespace FinancialTsunamiPresentation
 {
-    public enum EdgeType
-    {
-        Unselected,
-        UnscannedEdge,
-        ListedEdge,
-        ScanningEdge,
-        ScannedEdge,
-        PartOfAnswerEdge,
-        NotPartOfAnswerEdge,
-    }
-
     public class Edge : INotifyPropertyChanged
     {
-        public Vertex start { get; set; }
+        private Vertex m_vertexStart = null;
+        public Vertex start
+        {
+            get => m_vertexStart;
+            set {
+                if (m_vertexStart != null)
+                    m_vertexStart.PropertyChanged -= M_vertexStart_PropertyChanged;
+                m_vertexStart = value;
+                if (m_vertexStart != null)
+                    m_vertexStart.PropertyChanged += M_vertexStart_PropertyChanged;
+            }
+        }
+
+        private void M_vertexStart_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName.Equals("colorReal"))
+                NotifyPropertyChanged("color");
+        }
+
         public Vertex end { get; set; }
         public int id { get; set; }
-
-        private EdgeType m_type = EdgeType.Unselected;
+        
         private bool m_selected = false;
 
-        
+
         public Color color
         {
             get
             {
                 if (m_selected)
                     return Colors.Cyan;
-                switch (m_type)
-                {
-                    case EdgeType.PartOfAnswerEdge:
-                        return Color.FromRgb(0x8E, 0xBA, 0x43);
-                    case EdgeType.NotPartOfAnswerEdge:
-                        return Colors.Silver;
-                    case EdgeType.ScannedEdge:
-                        return Color.FromRgb(0xB7, 0xB8, 0xB6);
-                    case EdgeType.ScanningEdge:
-                        return Color.FromRgb(0x34, 0x67, 0x5C);
-                    case EdgeType.ListedEdge:
-                        return Color.FromRgb(0xB3, 0xC1, 0x00);
-                    case EdgeType.Unselected:
-                    case EdgeType.UnscannedEdge:
-                    default:
-                        return Color.FromRgb(0x4C, 0xB5, 0xF5);
-                }
+                return m_vertexStart != null ? m_vertexStart.colorReal : Colors.Gray;
             }
         }
 
@@ -65,12 +55,6 @@ namespace FinancialTsunamiPresentation
         public void NotSelectEdge()
         {
             m_selected = false;
-            NotifyPropertyChanged("color");
-        }
-
-        public void SetType(EdgeType type)
-        {
-            m_type = type;
             NotifyPropertyChanged("color");
         }
 
