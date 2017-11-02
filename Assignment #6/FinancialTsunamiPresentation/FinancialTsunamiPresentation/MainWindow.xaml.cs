@@ -141,17 +141,15 @@ namespace FinancialTsunamiPresentation
 
         private class EdgeEntry
         {
-            public int edgeid = 0;
             public int startid = 0;
             public int endid = 0;
             public double weight = 0;
 
-            public EdgeEntry(int edgeid, int startId, int endid, double weight)
+            public EdgeEntry(int startId, int endid, double weight)
             {
-                this.edgeid = edgeid;
                 this.startid = startId;
                 this.endid = endid;
-                this.weight = weight < 0?0:weight;
+                this.weight = weight < 0 ? 0 : weight;
             }
         }
 
@@ -178,47 +176,47 @@ namespace FinancialTsunamiPresentation
             List<string> data = dataT.ToList();
             data.RemoveAll(str => str.Equals(""));
             List<EdgeEntry> edgeEntries = new List<EdgeEntry>();
+            int number = 0;
+            double limit = 0;
             try
             {
-                for (int i = 0; i < data.Count(); ++i)
+                if (!int.TryParse(data[0], out number))
+                    return;
+                if (!double.TryParse(data[1], out limit))
+                    return;
+                int i = 2;
+                int startid = 0;
+                double balance = -1;
+                while (i < data.Count && double.TryParse(data[i], out balance))
                 {
-                    int edgeid = 0;
-                    int startid = 0;
-                    int endid = 0;
-                    double weight = 0;
-                    if (!int.TryParse(data[i], out edgeid))
+                    i += 1;
+                    int dataCount = 0;
+                    if (!int.TryParse(data[i], out dataCount))
                         break;
                     i += 1;
-                    if (!int.TryParse(data[i], out startid))
-                        break;
-                    i += 1;
-                    if (!int.TryParse(data[i], out endid))
-                        break;
-                    i += 1;
-                    if (!double.TryParse(data[i], out weight))
-                        break;
-                    edgeEntries.Add(new EdgeEntry(edgeid, startid, endid, weight));
+                    for (int j = 0; j < dataCount; ++j)
+                    {
+                        int endid = 0;
+                        double weight = 0;
+                        if (!int.TryParse(data[i], out endid))
+                            break;
+                        i += 1;
+                        if (!double.TryParse(data[i], out weight))
+                            break;
+                        i += 1;
+                        edgeEntries.Add(new EdgeEntry(startid, endid, weight));
+                    }
+                    startid += 1;
                 }
             }
-            catch (IndexOutOfRangeException)
-            {
-
-            }
+            catch (IndexOutOfRangeException) { }
             if (edgeEntries.Count() == 0)
                 return;
-            int maxVertexId = -1;
-            foreach (EdgeEntry e in edgeEntries)
-            {
-                if (e.startid > maxVertexId)
-                    maxVertexId = e.startid;
-                if (e.endid > maxVertexId)
-                    maxVertexId = e.endid;
-            }
+            int maxVertexId = number;
 
             ResetPresentationThingsAndGraph();
 
             List<Vertex> temp = new List<Vertex>();
-            temp.Add(null);
             for (int i = 0; i < maxVertexId; ++i)
                 temp.Add(CreateVertex());
             foreach (EdgeEntry e in edgeEntries)

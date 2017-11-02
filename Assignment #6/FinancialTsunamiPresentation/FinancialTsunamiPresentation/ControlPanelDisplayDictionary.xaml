@@ -6,12 +6,16 @@
         <DataTemplate.Resources>
             <local:ColorSelectionToIsCheckedConverter x:Key="ColorConverter"/>
             <local:RadiusSelectionToIsCheckedConverter x:Key="RadiusConverter"/>
+            <local:PositiveDoubleToPersistantStringConverter x:Key="SmartConverter"/>
         </DataTemplate.Resources>
         <StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock>Vertex No. </TextBlock>
                 <TextBlock Text="{Binding id}"/>
             </StackPanel>
+            <GroupBox Header="Bank Balance">
+                <TextBox Text="{Binding cost, Converter={StaticResource SmartConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+            </GroupBox>
             <GroupBox Header="Select a radius for this Vertex">
                 <StackPanel>
                     <RadioButton IsChecked="{Binding Path=radius, Converter={StaticResource RadiusConverter}, ConverterParameter=15}">Small</RadioButton>

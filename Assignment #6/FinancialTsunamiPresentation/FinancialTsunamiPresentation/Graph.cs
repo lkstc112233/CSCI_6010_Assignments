@@ -50,30 +50,7 @@ namespace FinancialTsunamiPresentation
             vertexesIdIncreasmenter = 0;
             edgesIdIncreasmenter = 0;
         }
-
-        public void NowCanToDirect()
-        {
-            m_CanToDirect = true;
-            NotifyPropertyChanged("CanToDirect");
-        }
-
-        public void NowCanToUndirect()
-        {
-            m_CanToUndirect = true;
-            NotifyPropertyChanged("CanToUndirect");
-        }
-        public void NowCannotToDirect()
-        {
-            m_CanToDirect = false;
-            NotifyPropertyChanged("CanToDirect");
-        }
-
-        public void NowCannotToUndirect()
-        {
-            m_CanToUndirect = false;
-            NotifyPropertyChanged("CanToUndirect");
-        }
-
+        
         public Vertex createVertex()
         {
             Vertex LatestVertex = new Vertex();
@@ -134,7 +111,7 @@ namespace FinancialTsunamiPresentation
         {
             if (++vertexesIdIncreasmenter >= currentMaxiumCapacity)
                 ExpandCapacity();
-            return vertexesIdIncreasmenter;
+            return vertexesIdIncreasmenter - 1;
         }
 
         private int getNextAvailableEdgeId()
