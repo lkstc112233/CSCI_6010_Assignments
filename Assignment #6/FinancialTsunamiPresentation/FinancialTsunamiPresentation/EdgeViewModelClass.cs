@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace FinancialTsunamiPresentation
 {
@@ -38,6 +39,12 @@ namespace FinancialTsunamiPresentation
         {
             contentEdge = e;
             IValueConverter converter = new EclipseConverter();
+            Binding binding = new Binding();
+            binding.Source = start;
+            binding.Path = new PropertyPath("color");
+            binding.Mode = BindingMode.OneWay;
+            BindingOperations.SetBinding(this, ColorProperty, binding);
+
             BindingOperations.SetBinding(this, X1Property, getOnewayBinding(startPresentser, Canvas.LeftProperty, converter));
             BindingOperations.SetBinding(this, X2Property, getOnewayBinding(endPresentser, Canvas.LeftProperty, converter));
             BindingOperations.SetBinding(this, Y1Property, getOnewayBinding(startPresentser, Canvas.TopProperty, converter));
@@ -80,6 +87,8 @@ namespace FinancialTsunamiPresentation
         public static readonly DependencyProperty LeftEdgeProperty = DependencyProperty.Register("LeftEdgeHere", typeof(double), typeof(EdgeViewModelClass));
         public double TopEdgeHere { get { return (double)GetValue(TopEdgeProperty); } set { SetValue(TopEdgeProperty, value); } }
         public static readonly DependencyProperty TopEdgeProperty = DependencyProperty.Register("TopEdgeHere", typeof(double), typeof(EdgeViewModelClass));
+        public Color color { get { return (Color)GetValue(ColorProperty); } set { SetValue(ColorProperty, value); } }
+        public static readonly DependencyProperty ColorProperty = DependencyProperty.Register("color", typeof(Color), typeof(EdgeViewModelClass));
 
         public ContentPresenter startPresentser => ViewModelVertexEdge.findVertexPresenter(start);
         public ContentPresenter endPresentser => ViewModelVertexEdge.findVertexPresenter(end);

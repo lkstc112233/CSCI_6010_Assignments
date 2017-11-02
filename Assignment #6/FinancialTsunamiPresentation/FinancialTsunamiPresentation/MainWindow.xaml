@@ -48,29 +48,14 @@
                 <TabItem Header="Financial Tsunami Control">
                     <StackPanel>
                         <WrapPanel Orientation="Horizontal">
-                            <Button Click="SelectStartingPoint">
-                                <Button.IsEnabled>
-                                    <MultiBinding Converter="{StaticResource AllTrueConverter}">
-                                        <Binding Path="CurrentProgramStatus" Converter="{StaticResource IsSameConverter}" ConverterParameter="{x:Static local:ProgramStatus.BuildingGraph}"/>
-                                        <Binding Path="CurrentStatus" Converter="{StaticResource NotSameConverter}" ConverterParameter="{x:Static local:SelectStatus.SelectAStartingVertex}"/>
-                                    </MultiBinding>
-                                </Button.IsEnabled>
-                                <Button.Content>
-                                    Select Starting Vertex
-                                </Button.Content>
-                            </Button>
-                            <Button Name="SelectEndPointButton" Click="SelectEndPoint">
-                                <Button.IsEnabled>
-                                    <MultiBinding Converter="{StaticResource AllTrueConverter}">
-                                        <Binding Path="CurrentProgramStatus" Converter="{StaticResource IsSameConverter}" ConverterParameter="{x:Static local:ProgramStatus.BuildingGraph}"/>
-                                        <Binding Path="CurrentStatus" Converter="{StaticResource NotSameConverter}" ConverterParameter="{x:Static local:SelectStatus.SelectAnEndVertex}"/>
-                                    </MultiBinding>
-                                </Button.IsEnabled>
-                                <Button.Content>
-                                    Selecting End Vertex
-                                </Button.Content>
-                            </Button>
-                            <Button Name="BeginButton" Click="BeginPresentation" IsEnabled="{Binding VertexStarting,Converter={StaticResource IsNullToBooleanConverter}}">Begin The Presentation!</Button>
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel.Resources>
+                                    <local:PositiveDoubleToPersistantStringConverter x:Key="SmartConverter"/>
+                                </StackPanel.Resources>
+                                <TextBlock>Bank Safe Limit:</TextBlock>
+                                <TextBox IsEnabled="{Binding Path=CurrentProgramStatus, Converter={StaticResource IsSameConverter}, ConverterParameter={x:Static local:ProgramStatus.BuildingGraph}}" Width="100" Text="{local:SettingBinding Path=BankSafeLimit, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource SmartConverter}}" />
+                            </StackPanel>
+                            <Button Name="BeginButton" Click="BeginPresentation">Begin The Presentation!</Button>
                         </WrapPanel>
                         <WrapPanel Orientation="Horizontal">
                             <Button Click="OneStep">

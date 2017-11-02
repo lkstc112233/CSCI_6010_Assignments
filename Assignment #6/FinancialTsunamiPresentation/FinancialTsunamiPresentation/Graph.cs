@@ -92,6 +92,7 @@ namespace FinancialTsunamiPresentation
         public void RemoveEdge(Edge e)
         {
             EdgeTable[e.start.id, e.end.id] = null;
+            e.start = null; // Deregister listener.
             edges.Remove(e);
         }
 
@@ -123,12 +124,7 @@ namespace FinancialTsunamiPresentation
         {
             foreach (Vertex v in vertexes)
             {
-                v.cost = -1;
-                v.SetType(VertexType.UnscannedVertex);
-            }
-            foreach(Edge e in edges)
-            {
-                e.SetType(EdgeType.UnscannedEdge);
+                v.safe = true;
             }
         }
     }

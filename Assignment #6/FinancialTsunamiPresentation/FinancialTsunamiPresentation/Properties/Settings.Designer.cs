@@ -22,5 +22,17 @@ namespace FinancialTsunamiPresentation.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("201")]
+        public double BankSafeLimit {
+            get {
+                return ((double)(this["BankSafeLimit"]));
+            }
+            set {
+                this["BankSafeLimit"] = value;
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace FinancialTsunamiPresentation
 {
@@ -12,9 +13,7 @@ namespace FinancialTsunamiPresentation
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        private Heap<Vertex> heap = new Heap<Vertex>((Vertex a, Vertex b) => { return a.cost < b.cost; });
-        private Edge[] answerEdge;
-        private Vertex[] answerVertex;
+        public double limit { get; set; } = 200;
         private Graph graph;
 
         public delegate void AfterDelegate();
@@ -24,26 +23,10 @@ namespace FinancialTsunamiPresentation
         {
             graph = g;
             PathFound = false;
-            answerEdge = new Edge[graph.EdgeTable.GetLength(0)];
-            answerVertex = new Vertex[graph.EdgeTable.GetLength(0)];
         }
-        public void setStartPoint(Vertex v)
-        {
-            DepartureVertex = v;
-            v.cost = 0;
-            heap.Add(v);
-        } 
-        public void setEndPoint(Vertex v)
-        {
-            TargetVertex = v;
-        }
-
-        Vertex DepartureVertex = null;
-        Vertex TargetVertex = null;
 
         Vertex currentVertex = null;
-        Edge currentEdge = null;
-        Stack<Edge> appendingEdges = new Stack<Edge>();
+        List<Vertex> listToCheck = null;
         private bool m_pathFound = false;
         public bool PathFound
         {
@@ -59,114 +42,51 @@ namespace FinancialTsunamiPresentation
 
         public void ResetStatus()
         {
-            TargetVertex = null;
-            currentEdge = null;
-            currentEdge = null;
-            appendingEdges.Clear();
-            while (!heap.IsEmpty())
-                heap.RemoveMin();
+            currentVertex = null;
+            listToCheck = null;
         }
 
-        private Edge TakeNextEdge()
+        private void reloadVertexes()
         {
-            if (appendingEdges.Count > 0)
-                return appendingEdges.Pop();
-            if (heap.IsEmpty())
-            {
-                currentVertex.SetType(VertexType.ScannedVertex);
-                ShowAnswers();
-                PathFound = true;
+            listToCheck = graph.vertexes.Where(vtx => vtx.safe).ToList();
+        }
+
+        private Vertex getNextVertex()
+        {
+            if (listToCheck == null)
+                reloadVertexes();
+            if (listToCheck.Count == 0)
                 return null;
-            }
-            var v = heap.GetMin();
-            if (ReferenceEquals(v, TargetVertex))
-            {
-                PathFound = true;
-                return null;
-            }
-            heap.RemoveMin();
-            if (currentVertex != null)
-                currentVertex.SetType(VertexType.ScannedVertex);
-            currentVertex = v;
-            currentVertex.SetType(VertexType.ScanningVertex);
-            for (int i = 0; i < graph.EdgeTable.GetLength(0); ++i)
-            {
-                if (graph.EdgeTable[v.id, i] != null)
-                {
-                    appendingEdges.Push(graph.EdgeTable[v.id, i]);
-                    graph.EdgeTable[v.id, i].SetType(EdgeType.ListedEdge);
-                }
-            }
-            return TakeNextEdge();
+            Vertex result = listToCheck[listToCheck.Count - 1];
+            listToCheck.RemoveAt(listToCheck.Count - 1);
+            return result;
         }
 
         public bool OneStep()
         {
             if (PathFound)
                 return false;
-            if (currentEdge != null)
-                currentEdge.SetType(EdgeType.ScannedEdge);
-            currentEdge = TakeNextEdge();
-            if (currentEdge == null)
+            currentVertex = getNextVertex();
+            if (currentVertex == null)
             {
-                if (TargetVertex != null)
-                    ShowAnswers();
+                PathFound = true;
                 return false;
             }
-            currentEdge.SetType(EdgeType.ScanningEdge);
-            Vertex nextVertex;
-            
-                nextVertex = currentEdge.end;
-            
-            if (nextVertex.cost < 0)
+            double balance = currentVertex.balance;
+            for (int i = 0; i < graph.EdgeTable.GetLength(0); ++i)
+                if (graph.EdgeTable[currentVertex.id, i] != null)
+                    if (graph.EdgeTable[currentVertex.id, i].end.safe)
+                        balance += graph.EdgeTable[currentVertex.id, i].weight;
+            if (balance < limit)
             {
-                answerEdge[nextVertex.id] = currentEdge;
-                answerVertex[nextVertex.id] = currentVertex;
-                nextVertex.cost = currentVertex.cost + currentEdge.weight;
-                nextVertex.SetType(VertexType.ListedVertex);
-                heap.Add(nextVertex);
-            }
-            else if (currentVertex.cost + currentEdge.weight < nextVertex.cost)
-            {
-                answerEdge[nextVertex.id] = currentEdge;
-                answerVertex[nextVertex.id] = currentVertex;
-                nextVertex.cost = currentVertex.cost + currentEdge.weight;
-                heap.Update(nextVertex);
+                currentVertex.safe = false;
+                reloadVertexes();
             }
             return true;
         }
 
         private void ShowAnswers()
         {
-            foreach (Vertex vertex in graph.vertexes)
-                vertex.SetType(VertexType.NotPartOfAnswerVertex);
-            foreach (Edge edge in graph.edges)
-                edge.SetType(EdgeType.NotPartOfAnswerEdge);
-            Vertex v;
-            v = TargetVertex;
-            if (v == null)
-            {
-                foreach (Edge e in answerEdge)
-                {
-                    if (e != null)
-                    {
-                        e.SetType(EdgeType.PartOfAnswerEdge);
-                        e.start.SetType(VertexType.PartOfAnswerVertex);
-                        e.end.SetType(VertexType.PartOfAnswerVertex);
-                    }
-                }
-            }
-            else
-            {
-                while (answerEdge[v.id] != null)
-                {
-                    answerEdge[v.id].SetType(EdgeType.PartOfAnswerEdge);
-                    v = answerVertex[v.id];
-                    v.SetType(VertexType.PartOfAnswerVertex);
-                }
-                TargetVertex.SetType(VertexType.EndVertex);
-            }
-            DepartureVertex.SetType(VertexType.StartingVertex);
         }
     }
 }
