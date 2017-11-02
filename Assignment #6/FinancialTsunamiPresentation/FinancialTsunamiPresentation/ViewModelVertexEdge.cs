@@ -242,6 +242,7 @@ namespace FinancialTsunamiPresentation
 
             PathFound = false;
             AlgorithmData = new Financial_Tsunami_data(graphModel.graph);
+            AlgorithmData.limit = Properties.Settings.Default.BankSafeLimit;
             AlgorithmData.OnPathFound = () => PathFound = true;
         }
 

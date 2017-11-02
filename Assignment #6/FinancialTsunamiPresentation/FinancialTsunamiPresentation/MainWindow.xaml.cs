@@ -156,6 +156,7 @@ namespace FinancialTsunamiPresentation
             List<string> data = dataT.ToList();
             data.RemoveAll(str => str.Equals(""));
             List<EdgeEntry> edgeEntries = new List<EdgeEntry>();
+            List<double> weights = new List<double>();
             int number = 0;
             double limit = 0;
             try
@@ -169,6 +170,7 @@ namespace FinancialTsunamiPresentation
                 double balance = -1;
                 while (i < data.Count && double.TryParse(data[i], out balance))
                 {
+                    weights.Add(balance);
                     i += 1;
                     int dataCount = 0;
                     if (!int.TryParse(data[i], out dataCount))
@@ -198,7 +200,11 @@ namespace FinancialTsunamiPresentation
 
             List<Vertex> temp = new List<Vertex>();
             for (int i = 0; i < maxVertexId; ++i)
-                temp.Add(CreateVertex());
+            {
+                var vertex = CreateVertex();
+                vertex.balance = weights[i];
+                temp.Add(vertex);
+            }
             foreach (EdgeEntry e in edgeEntries)
                 AddEdge(temp[e.startid], temp[e.endid]).weight = e.weight;
             viewModel.RearrangeVertexes();

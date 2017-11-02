@@ -14,7 +14,7 @@
                 <TextBlock Text="{Binding id}"/>
             </StackPanel>
             <GroupBox Header="Bank Balance">
-                <TextBox Text="{Binding cost, Converter={StaticResource SmartConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Text="{Binding balance, Converter={StaticResource SmartConverter}, UpdateSourceTrigger=PropertyChanged}"/>
             </GroupBox>
             <GroupBox Header="Select a radius for this Vertex">
                 <StackPanel>
