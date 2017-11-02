@@ -71,7 +71,7 @@ namespace FinancialTsunamiPresentation
             }
         }
 
-        private double m_radius = 20;
+        private double m_radius = 40;
         public double radius
         {
             get

@@ -18,10 +18,10 @@
             </GroupBox>
             <GroupBox Header="Select a radius for this Vertex">
                 <StackPanel>
-                    <RadioButton IsChecked="{Binding Path=radius, Converter={StaticResource RadiusConverter}, ConverterParameter=15}">Small</RadioButton>
-                    <RadioButton IsChecked="{Binding Path=radius, Converter={StaticResource RadiusConverter}, ConverterParameter=20}">Medium</RadioButton>
-                    <RadioButton IsChecked="{Binding Path=radius, Converter={StaticResource RadiusConverter}, ConverterParameter=30}">Large</RadioButton>
-                    <RadioButton IsChecked="{Binding Path=radius, Converter={StaticResource RadiusConverter}, ConverterParameter=40}">Super Large</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=radius, Converter={StaticResource RadiusConverter}, ConverterParameter=30}">Small</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=radius, Converter={StaticResource RadiusConverter}, ConverterParameter=40}">Medium</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=radius, Converter={StaticResource RadiusConverter}, ConverterParameter=50}">Large</RadioButton>
+                    <RadioButton IsChecked="{Binding Path=radius, Converter={StaticResource RadiusConverter}, ConverterParameter=60}">Super Large</RadioButton>
                 </StackPanel>
             </GroupBox>
             <Button Command="{x:Static local:Commands.AddEdgeCommand}" Tag="{Binding}">Add Edge</Button>
@@ -63,13 +63,15 @@
             <local:EqualsToVisibilityConverter x:Key="EqualsToVisibilityConverter"/>
         </DataTemplate.Resources>
         <Grid>
-            <Ellipse Width="{Binding radius}" Height="{Binding radius}">
+            <Ellipse Width="{Binding radius}" Height="{Binding radius}" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <Ellipse.Fill>
                     <SolidColorBrush Color="{Binding color}"/>
                 </Ellipse.Fill>
             </Ellipse>
-            <TextBlock Text="{Binding id}" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},Path=DataContext.CurrentProgramStatus, Converter={StaticResource EqualsToVisibilityConverter}, ConverterParameter={x:Static local:ProgramStatus.BuildingGraph}}"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <TextBlock Text="{Binding cost}" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},Path=DataContext.CurrentProgramStatus, Converter={StaticResource EqualsToVisibilityConverter}, ConverterParameter={x:Static local:ProgramStatus.Presenting}}"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="{Binding id}" HorizontalAlignment="Center"/>
+                <TextBlock Text="{Binding balance}" HorizontalAlignment="Center"/>
+            </StackPanel>
         </Grid>
     </DataTemplate>
     <DataTemplate x:Key="EdgePresent" DataType="{x:Type local:EdgeViewModelClass}">
