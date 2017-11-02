@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +28,41 @@ namespace FinancialTsunamiPresentation
             InitializeComponent();
         }
 
+    }
+
+    public class AutomaticVertexContentConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is ObservableCollection<Vertex>)
+            {
+                var container = new List<int>();
+                var list =value as ObservableCollection<Vertex>;
+                foreach (var v in list)
+                {
+                    if (!v.safe)
+                        container.Add(v.id);
+                }
+                switch (container.Count)
+                {
+                    case 0:
+                        return "There are no unsafe banks.";
+                    case 1:
+                        return "Unsafe bank is " + container[0];
+                    default:
+                        string s = "Unsafe banks are ";
+                        foreach (var i in container)
+                            s += i + " ";
+                        return s;
+                }
+            }
+            return Binding.DoNothing;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class Heap<T>

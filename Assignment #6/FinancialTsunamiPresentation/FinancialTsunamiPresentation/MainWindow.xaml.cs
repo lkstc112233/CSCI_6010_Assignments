@@ -332,13 +332,7 @@ namespace FinancialTsunamiPresentation
 
         private void ResetPresentationThingsAndGraph()
         {
-            if (dispatcherTimer != null)
-            {
-                dispatcherTimer.Stop();
-                dispatcherTimer = null;
-            }
             viewModel.EndPresentation();
-            BeginTheShowButton.Content = "Begin Automatic Presentation!";
             BeginButton.Content = "Begin The Presentation!";
             viewModel.ClearGraph();
             CancelSelectionAndResetStatus();
@@ -361,11 +355,6 @@ namespace FinancialTsunamiPresentation
             Vertex LatestVertex = CreateVertex();
             viewModel.SelectVertex(LatestVertex);
         }
-        
-        private void OneStep(object sender, RoutedEventArgs e)
-        {
-            viewModel.AlgorithmData.OneStep();
-        }
 
         private void SolveInAFlash(object sender, RoutedEventArgs e)
         {
@@ -385,34 +374,12 @@ namespace FinancialTsunamiPresentation
                 viewModel.EndPresentation();
             }
         }
-
-        DispatcherTimer dispatcherTimer = null;
-
-        private void SolvePresentation(object sender, RoutedEventArgs e)
+        
+        private void ShowResults(object sender, RoutedEventArgs e)
         {
-            if (dispatcherTimer == null)
-            {
-                BeginTheShowButton.Content = "End Automatic Presentation";
-
-                dispatcherTimer = new DispatcherTimer();
-                dispatcherTimer.Tick += (Sender, args) =>
-                {
-                    if (!viewModel.AlgorithmData.OneStep())
-                    {
-                        dispatcherTimer.Stop();
-                        BeginTheShowButton.Content = "Begin Automatic Presentation!";
-                        dispatcherTimer = null;
-                    }
-                };
-                dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
-                dispatcherTimer.Start();
-            }
-            else
-            {
-                BeginTheShowButton.Content = "Begin Automatic Presentation!";
-                dispatcherTimer.Stop();
-                dispatcherTimer = null;
-            }
+            Financial_Tsunami_Followup_Window result = new Financial_Tsunami_Followup_Window();
+            result.Presenter.Content = viewModel.graphModel.graph;
+            result.Show();
         }
     }
 }

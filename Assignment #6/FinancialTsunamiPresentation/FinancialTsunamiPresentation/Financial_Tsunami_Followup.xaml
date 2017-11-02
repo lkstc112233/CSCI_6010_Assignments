@@ -5,7 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FinancialTsunamiPresentation"
         mc:Ignorable="d"
-        Title="Financial_Tsunami_Followup" Height="307.725" Width="479.614">
+        Title="Financial_Tsunami_Followup" Height="80.225" Width="455.614">
     <Grid>
+        <Grid.Resources>
+            <local:AutomaticVertexContentConverter x:Key="ContentConverter"/>
+        </Grid.Resources>
+        <ContentPresenter Name="Presenter">
+            <ContentPresenter.ContentTemplate>
+                <DataTemplate DataType="{x:Type local:Graph}">
+                    <Grid>
+                        <TextBox IsReadOnly="True" Text="{Binding vertexes, Converter={StaticResource ContentConverter}, Mode=OneTime}"/>
+                    </Grid>
+                </DataTemplate>
+            </ContentPresenter.ContentTemplate>
+        </ContentPresenter>
     </Grid>
 </Window>

@@ -58,28 +58,6 @@
                             <Button Name="BeginButton" Click="BeginPresentation">Begin The Presentation!</Button>
                         </WrapPanel>
                         <WrapPanel Orientation="Horizontal">
-                            <Button Click="OneStep">
-                                <Button.IsEnabled>
-                                    <MultiBinding Converter="{StaticResource AllTrueConverter}">
-                                        <Binding Path="CurrentProgramStatus" Converter="{StaticResource IsSameConverter}" ConverterParameter="{x:Static local:ProgramStatus.Presenting}"/>
-                                        <Binding Path="PathFound" Converter="{StaticResource ReverseBooleanConverter}"/>
-                                    </MultiBinding>
-                                </Button.IsEnabled>
-                                <Button.Content>
-                                    One Step Ahead
-                                </Button.Content>
-                            </Button>
-                            <Button Name="BeginTheShowButton" Click="SolvePresentation">
-                                <Button.IsEnabled>
-                                    <MultiBinding Converter="{StaticResource AllTrueConverter}">
-                                        <Binding Path="CurrentProgramStatus" Converter="{StaticResource IsSameConverter}" ConverterParameter="{x:Static local:ProgramStatus.Presenting}"/>
-                                        <Binding Path="PathFound" Converter="{StaticResource ReverseBooleanConverter}"/>
-                                    </MultiBinding>
-                                </Button.IsEnabled>
-                                <Button.Content>
-                                    Begin Automatic Presentation!
-                                </Button.Content>
-                            </Button>
                             <Button Click="SolveInAFlash">
                                 <Button.IsEnabled>
                                     <MultiBinding Converter="{StaticResource AllTrueConverter}">
@@ -88,7 +66,18 @@
                                     </MultiBinding>
                                 </Button.IsEnabled>
                                 <Button.Content>
-                                    Solve the problem in a Flash!
+                                    Solve the problem
+                                </Button.Content>
+                            </Button>
+                            <Button Click="ShowResults">
+                                <Button.IsEnabled>
+                                    <MultiBinding Converter="{StaticResource AllTrueConverter}">
+                                        <Binding Path="CurrentProgramStatus" Converter="{StaticResource IsSameConverter}" ConverterParameter="{x:Static local:ProgramStatus.Presenting}"/>
+                                        <Binding Path="PathFound"/>
+                                    </MultiBinding>
+                                </Button.IsEnabled>
+                                <Button.Content>
+                                    Show Results
                                 </Button.Content>
                             </Button>
                         </WrapPanel>
